@@ -1,5 +1,6 @@
 package com.todomypet.userservice.domain.node;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
@@ -7,10 +8,12 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import java.time.LocalDateTime;
+
 @Node("User")
 @Getter
+@Builder
 public class User {
-
     @Id
     @GeneratedValue(generatorClass = UUIDStringGenerator.class)
     private String id;
@@ -27,18 +30,34 @@ public class User {
     @Property("bio")
     private String bio;
 
-    @Property("profile_pic_url")
+    @Property("profilePicUrl")
     private String profilePicUrl;
 
-    @Property("oauth_key")
-    private String oauthKey;
+    @Property("oauthKey")
+    private String oauth_key;
 
-    @Property("personal_code")
-    private String personalCode;
+//    @Property("personal_code")
+//    private String personalCode;
+
+//    private Integer petCount;
+//    private Integer achCount;
+//    private Integer attendCount;
+//    private Integer petEvolveCount;
+//    private Integer petCompleteCount;
+//    private Integer attendContinueCount;
 
     @Property("protected")
-    private boolean isProtected;
+    private Boolean Protected;
 
-    @Property("refresh_token")
+    @Property("cratedAt")
+    private LocalDateTime createdAt;
+
+    @Property("deletedAt")
+    private LocalDateTime deletedAt;
+
+    @Property("refreshToken")
     private String refreshToken;
+
+    @Property("deleted")
+    private Boolean deleted;
 }
