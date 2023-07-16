@@ -21,9 +21,16 @@ public class SignController {
     }
 
     @GetMapping("/users/duplication-check")
-    public SuccessResDTO<DuplicationCheckResDTO> EmailDuplicationCheck(@RequestBody DuplicationCheckReqDTO duplicationCheckReqDTO) {
+    public SuccessResDTO<DuplicationCheckResDTO> emailDuplicationCheck(@RequestBody DuplicationCheckReqDTO duplicationCheckReqDTO) {
         DuplicationCheckResDTO response = DuplicationCheckResDTO.builder()
                 .response(signService.duplicationCheck(duplicationCheckReqDTO.getCheckedEmail())).build();
+        return new SuccessResDTO<>(response);
+    }
+
+    @GetMapping("/users/send-check-email")
+    public SuccessResDTO<SendCheckEmailResDTO> sendCheckEmail(@RequestBody SendCheckEmailReqDTO request) throws Exception {
+        String code = signService.sendCheckEmail(request.getReceiveEmail());
+        SendCheckEmailResDTO response = SendCheckEmailResDTO.builder().checkCode(code).build();
         return new SuccessResDTO<>(response);
     }
 }

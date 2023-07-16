@@ -20,6 +20,7 @@ public class SignServiceImpl implements SignService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final MailService mailService;
 
     @Override
     public String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile) {
@@ -69,5 +70,10 @@ public class SignServiceImpl implements SignService {
             return Boolean.TRUE;
         };
         return Boolean.FALSE;
+    }
+
+    @Override
+    public String sendCheckEmail(String receiveEmail) throws Exception {
+        return mailService.sendMail(receiveEmail);
     }
 }

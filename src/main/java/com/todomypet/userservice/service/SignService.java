@@ -8,4 +8,6 @@ public interface SignService {
     String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile);
 
     Boolean duplicationCheck(String checkedId);
+
+    String sendCheckEmail(String receiveEmail) throws Exception;
 }
