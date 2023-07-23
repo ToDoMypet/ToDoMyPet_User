@@ -93,6 +93,11 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
+    public void setRefreshToken(String userId, String refreshToken) {
+        userRepository.setRefreshToken(userId, refreshToken);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.getOneUserByEmail(username).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_EXISTS));

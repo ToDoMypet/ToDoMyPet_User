@@ -14,4 +14,6 @@ public interface SignService extends UserDetailsService {
     String sendCheckEmail(String receiveEmail) throws Exception;
 
     GetUserDetailsDTO getUserDetailsByEmail(String email);
+
+    void setRefreshToken(String userId, String refreshToken);
 }

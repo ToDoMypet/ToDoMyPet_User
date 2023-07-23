@@ -62,14 +62,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String userEmail = ((User)authResult.getPrincipal()).getUsername();
         GetUserDetailsDTO userDetailsDTO = signService.getUserDetailsByEmail(userEmail);
 
-        String token = Jwts.builder()
+        String accessToken = Jwts.builder()
                 .setSubject(userDetailsDTO.getId())
                 .setExpiration(new Date(System.currentTimeMillis() +
-                        Long.parseLong(env.getProperty("token.expiration_time"))))
-                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
+                        Long.parseLong(env.getProperty("token.access_token_expiration_time"))))
+                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.access_token_secret"))
                 .compact();
 
-        response.addHeader("token", token);
-        response.addHeader("userId", userDetailsDTO.getId());
+        String refreshToken = Jwts.builder()
+                .setSubject(userDetailsDTO.getId())
+                .setExpiration(new Date(System.currentTimeMillis() +
+                        Long.parseLong(env.getProperty("token.refresh_token_expiration_time"))))
+                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.refresh_token_secret"))
+                .compact();
+
+        signService.setRefreshToken(userDetailsDTO.getId(), refreshToken);
+
+        response.addHeader("access_token", accessToken);
+        response.addHeader("refresh_token", refreshToken);
     }
 }

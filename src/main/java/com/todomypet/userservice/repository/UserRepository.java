@@ -20,4 +20,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
     Integer getUserCountByEmail(String checkedEmail);
+
+    @Query("MATCH (user:User{id:$userId}) SET user.refreshToken = $refreshToken")
+    void setRefreshToken(String userId, String refreshToken);
 }
