@@ -14,12 +14,12 @@ public class SignUpReqDTO {
     @NotBlank
     private String email;
 
-    @Min(value = 8) @Max(value = 20)
+    @Size(min = 8, max = 20)
     private String password;
 
-    @Min(value = 1) @Max(value = 15)
+    @Size(min = 1, max = 15)
     private String nickname;
 
-    @Max(value = 80)
+    @Size(max = 80)
     private String bio;
 }

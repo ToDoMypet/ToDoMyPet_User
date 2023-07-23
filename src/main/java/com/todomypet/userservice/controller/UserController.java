@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users/my")
-    public SuccessResDTO<UserInfoResDTO> getOneUserInfo(@RequestHeader String userId) {
+    @GetMapping("/my-page")
+    public SuccessResDTO<UserInfoResDTO> getMyPage(@RequestHeader String userId) {
         UserInfoResDTO response = userService.getOneUserInfo(userId);
         return new SuccessResDTO<UserInfoResDTO>(response);
     }
