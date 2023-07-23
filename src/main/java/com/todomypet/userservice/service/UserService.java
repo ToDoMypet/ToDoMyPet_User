@@ -1,7 +1,9 @@
 package com.todomypet.userservice.service;
 
+import com.todomypet.userservice.dto.MyPageResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
 
 public interface UserService {
-    UserInfoResDTO getOneUserInfo(String userId);
+
+    MyPageResDTO getMyPage(String userId);
 }

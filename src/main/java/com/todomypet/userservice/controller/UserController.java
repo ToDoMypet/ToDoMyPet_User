@@ -1,5 +1,6 @@
 package com.todomypet.userservice.controller;
 
+import com.todomypet.userservice.dto.MyPageResDTO;
 import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
 import com.todomypet.userservice.service.UserService;
@@ -16,8 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/my-page")
-    public SuccessResDTO<UserInfoResDTO> getMyPage(@RequestHeader String userId) {
-        UserInfoResDTO response = userService.getOneUserInfo(userId);
-        return new SuccessResDTO<UserInfoResDTO>(response);
+    public SuccessResDTO<MyPageResDTO> getMyPage(@RequestHeader String userId) {
+        MyPageResDTO response = userService.getMyPage(userId);
+        return new SuccessResDTO<MyPageResDTO>(response);
     }
 }
