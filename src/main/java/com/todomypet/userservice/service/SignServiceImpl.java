@@ -6,6 +6,7 @@ import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
+import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class SignServiceImpl implements SignService {
     private final S3Uploader s3Uploader;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
+    private final UserMapper userMapper;
 
     @Override
     public String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile) {
@@ -87,8 +89,7 @@ public class SignServiceImpl implements SignService {
     @Override
     public GetUserDetailsDTO getUserDetailsByEmail(String email) {
         User user = userRepository.getOneUserByEmail(email).orElseThrow();
-        // todo: mapstruct 적용
-        GetUserDetailsDTO getUserDetailsDTO = GetUserDetailsDTO.builder().id(user.getId()).build();
+        GetUserDetailsDTO getUserDetailsDTO = userMapper.userToGetUserDetailsDTO(user);
         return getUserDetailsDTO;
     }
 
