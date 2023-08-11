@@ -3,6 +3,7 @@ package com.todomypet.userservice.mapper;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.MyPageResDTO;
+import com.todomypet.userservice.dto.UserInfoResDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -12,4 +13,6 @@ public interface UserMapper {
     MyPageResDTO userToMyPageResDTO(User user);
 
     GetUserDetailsDTO userToGetUserDetailsDTO(User user);
+
+    UserInfoResDTO userToUserInfoResDTO(User user);
 }

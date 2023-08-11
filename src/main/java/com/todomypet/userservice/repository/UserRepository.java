@@ -1,6 +1,7 @@
 package com.todomypet.userservice.repository;
 
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.UserInfoResDTO;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,4 +24,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) SET user.refreshToken = $refreshToken")
     void setRefreshToken(String userId, String refreshToken);
+
+    @Query("MATCH (user:User{personalCode:$personalCode}) RETURN user")
+    Optional<User> getOneUserByPersonalCode(String personalCode);
 }

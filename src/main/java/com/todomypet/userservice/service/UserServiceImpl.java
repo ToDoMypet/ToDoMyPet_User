@@ -25,4 +25,15 @@ public class UserServiceImpl implements UserService {
         MyPageResDTO myPageResDTO = userMapper.userToMyPageResDTO(user);
         return myPageResDTO;
     }
+
+    @Override
+    public UserInfoResDTO getUserByPersonalCode(String personalCode) {
+        User user = userRepository.getOneUserByPersonalCode(personalCode).orElse(null);
+
+        if (user == null) {
+            return null;
+        } else {
+            return userMapper.userToUserInfoResDTO(user);
+        }
+    }
 }

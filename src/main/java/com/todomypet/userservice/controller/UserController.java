@@ -5,10 +5,7 @@ import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
 import com.todomypet.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,5 +17,12 @@ public class UserController {
     public SuccessResDTO<MyPageResDTO> getMyPage(@RequestHeader String userId) {
         MyPageResDTO response = userService.getMyPage(userId);
         return new SuccessResDTO<MyPageResDTO>(response);
+    }
+
+    @GetMapping("/search/{personalCode}")
+    public SuccessResDTO<UserInfoResDTO> getUserByPersonalCode(@RequestHeader String userId,
+                                                               @PathVariable String personalCode) {
+        UserInfoResDTO response = userService.getUserByPersonalCode(personalCode);
+        return new SuccessResDTO<UserInfoResDTO>(response);
     }
 }
