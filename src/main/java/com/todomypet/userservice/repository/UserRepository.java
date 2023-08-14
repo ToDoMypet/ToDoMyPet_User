@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -27,4 +28,9 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{personalCode:$personalCode}) RETURN user")
     Optional<User> getOneUserByPersonalCode(String personalCode);
+
+    @Query("MATCH (user:User{id:$userId}) WITH user " +
+            "MATCH (user)-[:FRIEND]-(t:User) WITH t ORDER BY t.nickname " +
+            "RETURN collect(t)")
+    List<User> getFriendListByUserId(String userId);
 }
