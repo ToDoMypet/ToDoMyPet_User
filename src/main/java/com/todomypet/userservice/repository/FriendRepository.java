@@ -11,4 +11,9 @@ public interface FriendRepository extends Neo4jRepository<Friend, Long> {
             "MATCH (t:User) WHERE u.id = $userId AND t.id = $targetId " +
             "CREATE (u)-[:FRIEND]->(t)")
     void setFriendRelationshipBetweenUserAndUser(String userId, String targetId);
+
+    @Query("MATCH (u:User{id:$userId}) WITH u " +
+            "MATCH (u)-[friend:FRIEND]->(t:User{id:$targetId}) " +
+            "DELETE friend")
+    void deleteFriendRelationshipBetweenUserAndUser(String userId, String targetId);
 }

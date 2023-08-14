@@ -25,4 +25,15 @@ public class FriendServiceImpl implements FriendService {
 
         friendRepository.setFriendRelationshipBetweenUserAndUser(userId, targetId);
     }
+
+    @Override
+    public void deleteFriendRelationship(String userId, String targetId) {
+        User user = userRepository.getOneUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        User target = userRepository.getOneUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        friendRepository.deleteFriendRelationshipBetweenUserAndUser(userId, targetId);
+    }
 }
