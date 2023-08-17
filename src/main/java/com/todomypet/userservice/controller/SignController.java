@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
-@SecurityRequirement(name = "bearer-key")
 @Tag(name = "Sign Controller")
 public class SignController {
 
