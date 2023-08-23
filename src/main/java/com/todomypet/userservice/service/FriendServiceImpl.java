@@ -30,6 +30,8 @@ public class FriendServiceImpl implements FriendService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
         friendRepository.setFriendRelationshipBetweenUserAndUser(userId, targetId);
+        userRepository.increaseFriendCount(userId);
+        userRepository.increaseFriendCount(targetId);
     }
 
     @Override
@@ -41,6 +43,8 @@ public class FriendServiceImpl implements FriendService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
         friendRepository.deleteFriendRelationshipBetweenUserAndUser(userId, targetId);
+        userRepository.decreaseFriendCount(userId);
+        userRepository.decreaseFriendCount(targetId);
     }
 
     @Override
