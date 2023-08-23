@@ -3,6 +3,7 @@ package com.todomypet.userservice.service;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.MyPageResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
+import com.todomypet.userservice.dto.UserProfileResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -35,5 +36,13 @@ public class UserServiceImpl implements UserService {
         } else {
             return userMapper.userToUserInfoResDTO(user);
         }
+    }
+
+    @Override
+    public UserProfileResDTO getUserProfile(String targetId) {
+        User user = userRepository.getOneUserById(targetId).orElseThrow(()
+                -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+        UserProfileResDTO userProfileResDTO = userMapper.userToUserProfileResDTO(user);
+        return userProfileResDTO;
     }
 }

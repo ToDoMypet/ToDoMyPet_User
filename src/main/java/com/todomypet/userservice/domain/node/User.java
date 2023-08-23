@@ -34,19 +34,13 @@ public class User {
     private String profilePicUrl;
 
     @Property("oauthKey")
-    private String oauth_key;
+    private String oauthKey;
 
     @Property("personalCode")
     private String personalCode;
 
     @Property("petCount")
-    private Integer petCount;
-
-    @Property("achCount")
-    private Integer achCount;
-
-    @Property("attendCount")
-    private Integer attendCount;
+    private Integer petAcquireCount;
 
     @Property("petEvolveCount")
     private Integer petEvolveCount;
@@ -54,11 +48,20 @@ public class User {
     @Property("petCompleteCount")
     private Integer petCompleteCount;
 
+    @Property("achCount")
+    private Integer achCount;
+
+    @Property("attendCount")
+    private Integer attendCount;
+
     @Property("attendContinueCount")
     private Integer attendContinueCount;
 
     @Property("friendCount")
     private Integer friendCount;
+
+    @Property("collectionCount")
+    private Integer collectionCount;
 
     @Property("protected")
     private Boolean Protected;

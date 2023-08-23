@@ -3,6 +3,7 @@ package com.todomypet.userservice.controller;
 import com.todomypet.userservice.dto.MyPageResDTO;
 import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
+import com.todomypet.userservice.dto.UserProfileResDTO;
 import com.todomypet.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,8 +20,16 @@ public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "마이페이지", description = "설정 탭에서 확인할 수 있는 회원 정보입니다.")
-    @GetMapping("/my-page")
+
+    @GetMapping("/profile/{targetId}")
+    public SuccessResDTO<UserProfileResDTO> getUserProfile(@Parameter(hidden = true) @RequestHeader String userId,
+                                                           @PathVariable String targetId) {
+        UserProfileResDTO response = userService.getUserProfile(targetId);
+        return new SuccessResDTO<UserProfileResDTO>(response);
+    }
+
+    @Operation(summary = "회원 설정 정보", description = "설정 탭에서 확인할 수 있는 회원 정보입니다.")
+    @GetMapping("/setting/my-profile")
     public SuccessResDTO<MyPageResDTO> getMyPage(@Parameter(hidden = true) @RequestHeader String userId) {
         MyPageResDTO response = userService.getMyPage(userId);
         return new SuccessResDTO<MyPageResDTO>(response);
@@ -34,4 +43,6 @@ public class UserController {
         UserInfoResDTO response = userService.getUserByPersonalCode(personalCode);
         return new SuccessResDTO<UserInfoResDTO>(response);
     }
+
+
 }

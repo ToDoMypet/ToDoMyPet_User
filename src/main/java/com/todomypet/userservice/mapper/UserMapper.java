@@ -4,6 +4,7 @@ import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.MyPageResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
+import com.todomypet.userservice.dto.UserProfileResDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,4 +16,5 @@ public interface UserMapper {
     GetUserDetailsDTO userToGetUserDetailsDTO(User user);
 
     UserInfoResDTO userToUserInfoResDTO(User user);
+    UserProfileResDTO userToUserProfileResDTO(User user);
 }
