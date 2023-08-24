@@ -16,4 +16,6 @@ public interface SignService extends UserDetailsService {
     GetUserDetailsDTO getUserDetailsByEmail(String email);
 
     void setRefreshToken(String userId, String refreshToken);
+
+    void deleteAccount(String userId);
 }

@@ -3,6 +3,7 @@ package com.todomypet.userservice.controller;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -18,12 +19,19 @@ public class SignController {
 
     private final SignService signService;
 
-    @Operation(summary = "회원가입", description = "회원을 등록합니다.")
+    @Operation(summary = "회원 가입", description = "회원을 등록합니다.")
     @PostMapping("/sign-up")
     public SuccessResDTO<SignUpResDTO> signUp(@Valid @RequestPart(value = "signUpInfo") SignUpReqDTO signUpInfo,
                                               @RequestPart(value = "profilePic", required = false) MultipartFile multipartFile) {
         SignUpResDTO response = SignUpResDTO.builder().id(signService.signUp(signUpInfo, multipartFile)).build();
-        return new SuccessResDTO<>(response);
+        return new SuccessResDTO<SignUpResDTO>(response);
+    }
+
+    @Operation(summary = "회원 탈퇴", description = "회원을 탈퇴합니다. soft delete 방식을 사용합니다.")
+    @DeleteMapping("/delete-account")
+    public SuccessResDTO<Void> deleteAccount(@Parameter(hidden = true) @RequestHeader String userId) {
+        signService.deleteAccount(userId);
+        return new SuccessResDTO<Void>(null);
     }
 
     @Operation(summary = "이메일 중복 체크",

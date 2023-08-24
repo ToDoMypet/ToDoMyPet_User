@@ -58,6 +58,7 @@ public class SignServiceImpl implements SignService {
                 .createdAt(LocalDateTime.parse(LocalDateTime.now()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .deleted(Boolean.FALSE)
+                .deletedAt(null)
                 .Protected(Boolean.FALSE)
                 .personalCode(personalCode.toString())
                 .achCount(0)
@@ -97,6 +98,23 @@ public class SignServiceImpl implements SignService {
     @Override
     public void setRefreshToken(String userId, String refreshToken) {
         userRepository.setRefreshToken(userId, refreshToken);
+    }
+
+    @Override
+    public void deleteAccount(String userId) {
+        User user = userRepository.getOneUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+//        if (user.getDeleted()) {
+//            throw new CustomException(ErrorCode.DELETED_USER);
+//        }
+
+        LocalDateTime deletedAt = LocalDateTime.parse(LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
+        System.out.println(userId);
+        System.out.println(deletedAt);
+        userRepository.deleteAccount(userId, deletedAt);
     }
 
     @Override

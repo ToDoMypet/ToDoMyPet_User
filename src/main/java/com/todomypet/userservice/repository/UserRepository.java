@@ -6,6 +6,7 @@ import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,4 +40,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) SET user.friendCount = user.friendCount - 1")
     void decreaseFriendCount(String userId);
+
+    @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt")
+    void deleteAccount(String userId, LocalDateTime deletedAt);
 }
