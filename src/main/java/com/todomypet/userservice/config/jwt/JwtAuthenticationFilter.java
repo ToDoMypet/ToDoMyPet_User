@@ -4,16 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.LoginRequestDTO;
 import com.todomypet.userservice.service.SignService;
-import com.todomypet.userservice.service.UserService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.todomypet.userservice.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -31,7 +28,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private final AuthenticationManager authenticationManager;
     private final SignService signService;
-    private final Environment env;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CookieProvider cookieProvider;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
@@ -59,26 +58,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        log.info("JwtAuthenticationFilter: successfulAuthentication checking");
         String userEmail = ((User)authResult.getPrincipal()).getUsername();
         GetUserDetailsDTO userDetailsDTO = signService.getUserDetailsByEmail(userEmail);
 
-        String accessToken = Jwts.builder()
-                .setSubject(userDetailsDTO.getId())
-                .setExpiration(new Date(System.currentTimeMillis() +
-                        Long.parseLong(env.getProperty("token.access_token_expiration_time"))))
-                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.access_token_secret"))
-                .compact();
+        String userId = userDetailsDTO.getId();
+        String accessToken = jwtTokenProvider.createJwtAccessToken(userId);
+        String refreshToken = jwtTokenProvider.createJwtRefreshToken(userId);
 
-        String refreshToken = Jwts.builder()
-                .setSubject(userDetailsDTO.getId())
-                .setExpiration(new Date(System.currentTimeMillis() +
-                        Long.parseLong(env.getProperty("token.refresh_token_expiration_time"))))
-                .signWith(SignatureAlgorithm.HS512, env.getProperty("token.refresh_token_secret"))
-                .compact();
-
-        signService.setRefreshToken(userDetailsDTO.getId(), refreshToken);
-
-        response.addHeader("access_token", accessToken);
-        response.addHeader("refresh_token", refreshToken);
+        refreshTokenService.updateRefreshToken(userId, refreshToken);
+        Cookie cookie = cookieProvider.of(refreshToken);
+        response.addCookie(cookie);
+        response.addHeader("accessToken", accessToken);
     }
 }

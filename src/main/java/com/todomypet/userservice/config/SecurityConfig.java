@@ -1,11 +1,13 @@
 package com.todomypet.userservice.config;
 
+import com.todomypet.userservice.config.jwt.CookieProvider;
 import com.todomypet.userservice.config.jwt.JwtAuthenticationFilter;
+import com.todomypet.userservice.config.jwt.JwtTokenProvider;
 import com.todomypet.userservice.service.SignService;
+import com.todomypet.userservice.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -21,7 +23,9 @@ public class SecurityConfig {
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final SignService signService;
-    private final Environment env;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final CookieProvider cookieProvider;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -35,7 +39,8 @@ public class SecurityConfig {
                 .httpBasic().disable()
 
                 .addFilter(new JwtAuthenticationFilter(
-                        authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), signService, env)
+                        authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
+                        signService, refreshTokenService, jwtTokenProvider, cookieProvider)
                 );
 
         return http.build();

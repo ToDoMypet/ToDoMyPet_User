@@ -1,8 +1,8 @@
 package com.todomypet.userservice.repository;
 
 import com.todomypet.userservice.domain.node.User;
-import com.todomypet.userservice.dto.UserInfoResDTO;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@EnableNeo4jRepositories
 @Repository
 public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.id = $userId RETURN user")

@@ -2,9 +2,11 @@ package com.todomypet.userservice.repository;
 
 import com.todomypet.userservice.domain.relationship.Friend;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
+@EnableNeo4jRepositories
 @Repository
 public interface FriendRepository extends Neo4jRepository<Friend, Long> {
     @Query("MATCH (u:User) WITH u " +

@@ -72,9 +72,6 @@ public class User {
     @Property("deletedAt")
     private LocalDateTime deletedAt;
 
-    @Property("refreshToken")
-    private String refreshToken;
-
     @Property("deleted")
     private Boolean deleted;
 }

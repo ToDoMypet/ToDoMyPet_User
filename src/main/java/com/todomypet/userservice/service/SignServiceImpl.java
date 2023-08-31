@@ -94,11 +94,11 @@ public class SignServiceImpl implements SignService {
         GetUserDetailsDTO getUserDetailsDTO = userMapper.userToGetUserDetailsDTO(user);
         return getUserDetailsDTO;
     }
-
-    @Override
-    public void setRefreshToken(String userId, String refreshToken) {
-        userRepository.setRefreshToken(userId, refreshToken);
-    }
+//
+//    @Override
+//    public void setRefreshToken(String userId, String refreshToken) {
+//        userRepository.setRefreshToken(userId, refreshToken);
+//    }
 
     @Override
     public void deleteAccount(String userId) {
