@@ -8,6 +8,7 @@ import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,8 +33,9 @@ public class SignServiceImpl implements SignService {
     private final UserMapper userMapper;
 
     @Override
+    @Transactional
     public String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile) {
-        StringBuffer personalCode = new StringBuffer();
+        StringBuilder personalCode = new StringBuilder();
         Random rnd = new Random();
 
         while (true) {
@@ -44,7 +46,8 @@ public class SignServiceImpl implements SignService {
                 personalCode.append(rnd.nextInt(10));
             }
 
-            if (userRepository.getUserCountByPersonalCode(personalCode.toString()) <= 0) {
+            System.out.println(personalCode);
+            if (userRepository.getOneUserByPersonalCode(personalCode.toString()).isEmpty()) {
                 break;
             }
         }
@@ -71,8 +74,7 @@ public class SignServiceImpl implements SignService {
                 .friendCount(0)
                 .build();
 
-        String id = userRepository.save(user).getId();
-        return id;
+        return userRepository.save(user).getId();
     }
 
     @Override

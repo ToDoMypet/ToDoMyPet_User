@@ -4,6 +4,7 @@ import com.todomypet.userservice.domain.node.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.query.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -19,9 +20,6 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.email = $email RETURN user")
     Optional<User> getOneUserByEmail(String email);
 
-    @Query("MATCH (user:User) WHERE user.personalCode = $personalCode RETURN count(user)")
-    Integer getUserCountByPersonalCode(String personalCode);
-
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
     Integer getUserCountByEmail(String checkedEmail);
 
@@ -29,7 +27,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     void setRefreshToken(String userId, String refreshToken);
 
     @Query("MATCH (user:User{personalCode:$personalCode}) RETURN user")
-    Optional<User> getOneUserByPersonalCode(String personalCode);
+    Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
             "MATCH (user)-[:FRIEND]-(t:User) WITH t ORDER BY t.nickname " +
