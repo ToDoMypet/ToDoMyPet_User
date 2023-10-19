@@ -1,6 +1,5 @@
 package com.todomypet.userservice.config;
 
-import com.todomypet.userservice.config.jwt.CookieProvider;
 import com.todomypet.userservice.config.jwt.JwtAuthenticationFilter;
 import com.todomypet.userservice.config.jwt.JwtTokenProvider;
 import com.todomypet.userservice.service.SignService;
@@ -25,7 +24,6 @@ public class SecurityConfig {
     private final SignService signService;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CookieProvider cookieProvider;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
@@ -40,7 +38,7 @@ public class SecurityConfig {
 
                 .addFilter(new JwtAuthenticationFilter(
                         authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
-                        signService, refreshTokenService, jwtTokenProvider, cookieProvider)
+                        signService, refreshTokenService, jwtTokenProvider)
                 );
 
         return http.build();

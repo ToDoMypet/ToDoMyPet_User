@@ -30,7 +30,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final SignService signService;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenProvider jwtTokenProvider;
-    private final CookieProvider cookieProvider;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
