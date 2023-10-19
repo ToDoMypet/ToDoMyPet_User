@@ -35,6 +35,9 @@ public class SignServiceImpl implements SignService {
     @Override
     @Transactional
     public String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile) {
+        if (userRepository.getOneUserByEmail(signUpInfo.getEmail()).isPresent()) {
+            throw new CustomException(ErrorCode.EXISTS_EMAIL);
+        }
         StringBuilder personalCode = new StringBuilder();
         Random rnd = new Random();
 
