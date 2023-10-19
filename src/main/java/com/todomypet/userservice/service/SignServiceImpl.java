@@ -46,7 +46,6 @@ public class SignServiceImpl implements SignService {
                 personalCode.append(rnd.nextInt(10));
             }
 
-            System.out.println(personalCode);
             if (userRepository.getOneUserByPersonalCode(personalCode.toString()).isEmpty()) {
                 break;
             }
