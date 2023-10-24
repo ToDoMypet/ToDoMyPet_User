@@ -34,7 +34,7 @@ public class SignServiceImpl implements SignService {
 
     @Override
     @Transactional
-    public String signUp(SignUpReqDTO signUpInfo, MultipartFile multipartFile) {
+    public String signUp(SignUpReqDTO signUpInfo) {
         if (userRepository.getOneUserByEmail(signUpInfo.getEmail()).isPresent()) {
             throw new CustomException(ErrorCode.EXISTS_EMAIL);
         }
@@ -54,7 +54,11 @@ public class SignServiceImpl implements SignService {
             }
         }
 
-        String imageUrl = s3Uploader.upload(multipartFile);
+        String imageUrl = "";
+        if (signUpInfo.getPassword() != null) {
+            imageUrl = s3Uploader.upload(signUpInfo.getProfilePic());
+        }
+
         User user = User.builder().email(signUpInfo.getEmail())
                 .password(passwordEncoder.encode(signUpInfo.getPassword()))
                 .profilePicUrl(imageUrl)

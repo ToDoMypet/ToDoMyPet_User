@@ -21,9 +21,8 @@ public class SignController {
 
     @Operation(summary = "회원 가입", description = "회원을 등록합니다.")
     @PostMapping("/sign-up")
-    public SuccessResDTO<SignUpResDTO> signUp(@Valid @RequestPart(value = "signUpInfo") SignUpReqDTO signUpInfo,
-                                              @RequestPart(value = "profilePic", required = false) MultipartFile multipartFile) {
-        SignUpResDTO response = SignUpResDTO.builder().id(signService.signUp(signUpInfo, multipartFile)).build();
+    public SuccessResDTO<SignUpResDTO> signUp(@Valid @RequestBody SignUpReqDTO signUpInfo) {
+        SignUpResDTO response = SignUpResDTO.builder().id(signService.signUp(signUpInfo)).build();
         return new SuccessResDTO<SignUpResDTO>(response);
     }
 
