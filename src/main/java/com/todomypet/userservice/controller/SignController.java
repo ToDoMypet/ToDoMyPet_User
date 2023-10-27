@@ -1,6 +1,7 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.service.RefreshTokenService;
 import com.todomypet.userservice.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -8,6 +9,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SignController {
 
     private final SignService signService;
+    private final RefreshTokenService refreshTokenService;
 
     @Operation(summary = "회원 가입", description = "회원을 등록합니다.")
     @PostMapping("/sign-up")
@@ -48,5 +52,18 @@ public class SignController {
         String code = signService.sendCheckEmail(receiveEmail);
         SendCheckEmailResDTO response = SendCheckEmailResDTO.builder().checkCode(code).build();
         return new SuccessResDTO<>(response);
+    }
+
+    @Operation(summary = "토큰 재발급", description = "refresh token을 통해 access token, refresh token을 재발급합니다.")
+    @GetMapping("/reissue-token")
+    public ResponseEntity<SuccessResDTO<Void>> reissueToken(@RequestHeader String refreshToken) {
+        TokenResponseDTO tokens = refreshTokenService.reissueToken(refreshToken);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("accessToken", tokens.getAccessToken());
+        headers.add("refreshToken", tokens.getRefreshToken());
+        SuccessResDTO<Void> response = new SuccessResDTO<>(null);
+
+        return ResponseEntity.ok().headers(headers).body(response);
     }
 }

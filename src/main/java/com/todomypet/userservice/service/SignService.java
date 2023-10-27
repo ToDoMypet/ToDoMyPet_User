@@ -3,6 +3,7 @@ package com.todomypet.userservice.service;
 import com.todomypet.userservice.dto.DuplicationCheckResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
+import com.todomypet.userservice.dto.TokenResponseDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +16,6 @@ public interface SignService extends UserDetailsService {
 
     GetUserDetailsDTO getUserDetailsByEmail(String email);
 
-//    void setRefreshToken(String userId, String refreshToken);
-
     void deleteAccount(String userId);
+
 }

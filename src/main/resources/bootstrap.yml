@@ -7,6 +7,7 @@ spring:
     import: http://3.39.47.157:8888/
     name: user-service
     activate:
+
       on-profile: default
   application:
     name: user-service

@@ -1,6 +1,10 @@
 package com.todomypet.userservice.config.jwt;
 
+import com.todomypet.userservice.dto.TokenResponseDTO;
+import com.todomypet.userservice.exception.CustomException;
+import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.service.RefreshTokenService;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
@@ -21,34 +25,20 @@ public class JwtTokenProvider {
 
     @Value("${token.secret}")
     private String SECRET;
-    private final RefreshTokenService refreshTokenService;
-
-    public JwtTokenProvider(RefreshTokenService refreshTokenService) {
-        this.refreshTokenService = refreshTokenService;
-    }
 
     public String createJwtAccessToken(String userId) {
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userId)
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRED_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-
-        return accessToken;
     }
 
     public String createJwtRefreshToken(String userId) {
-        String refreshToken = Jwts.builder()
+        return Jwts.builder()
                 .setSubject(userId)
                 .setExpiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRED_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
-        return refreshToken;
     }
-
-//    public String reissueJwtRefreshToken() {
-//        String rtkInRedis = refreshTokenService.
-//    }
-
-
 }

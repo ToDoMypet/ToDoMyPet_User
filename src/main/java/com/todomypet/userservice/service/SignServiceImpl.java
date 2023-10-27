@@ -1,12 +1,15 @@
 package com.todomypet.userservice.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.todomypet.userservice.config.jwt.JwtTokenProvider;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
+import com.todomypet.userservice.dto.TokenResponseDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
+import com.todomypet.userservice.repository.RefreshTokenRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
@@ -102,26 +105,19 @@ public class SignServiceImpl implements SignService {
         GetUserDetailsDTO getUserDetailsDTO = userMapper.userToGetUserDetailsDTO(user);
         return getUserDetailsDTO;
     }
-//
-//    @Override
-//    public void setRefreshToken(String userId, String refreshToken) {
-//        userRepository.setRefreshToken(userId, refreshToken);
-//    }
 
     @Override
     public void deleteAccount(String userId) {
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
-//        if (user.getDeleted()) {
-//            throw new CustomException(ErrorCode.DELETED_USER);
-//        }
+        if (user.getDeleted()) {
+            throw new CustomException(ErrorCode.DELETED_USER);
+        }
 
         LocalDateTime deletedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
-        System.out.println(userId);
-        System.out.println(deletedAt);
         userRepository.deleteAccount(userId, deletedAt);
     }
 
