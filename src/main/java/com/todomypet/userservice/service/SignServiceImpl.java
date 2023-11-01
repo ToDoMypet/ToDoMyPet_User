@@ -58,7 +58,7 @@ public class SignServiceImpl implements SignService {
         }
 
         String imageUrl = "";
-        if (signUpInfo.getPassword() != null) {
+        if (signUpInfo.getProfilePic() != null) {
             imageUrl = s3Uploader.upload(signUpInfo.getProfilePic());
         }
 
