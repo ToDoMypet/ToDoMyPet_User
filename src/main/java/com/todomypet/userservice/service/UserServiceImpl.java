@@ -7,6 +7,7 @@ import com.todomypet.userservice.dto.UserProfileResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
+import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final FriendRepository friendRepository;
 
     @Override
     public MyPageResDTO getMyPage(String userId) {
@@ -39,10 +41,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserProfileResDTO getUserProfile(String targetId) {
+    public UserProfileResDTO getUserProfile(String userId, String targetId) {
         User user = userRepository.getOneUserById(targetId).orElseThrow(()
                 -> new CustomException(ErrorCode.USER_NOT_EXISTS));
         UserProfileResDTO userProfileResDTO = userMapper.userToUserProfileResDTO(user);
+        userProfileResDTO.setFriendRelationship(friendRepository.existsFriendByUserAndUser(userId, targetId));
         return userProfileResDTO;
     }
 }

@@ -18,4 +18,9 @@ public interface FriendRepository extends Neo4jRepository<Friend, Long> {
             "MATCH (u)-[friend:FRIEND]->(t:User{id:$targetId}) " +
             "DELETE friend")
     void deleteFriendRelationshipBetweenUserAndUser(String userId, String targetId);
+
+    @Query("MATCH (u:User) WHERE u.id = $userId WITH u " +
+            "MATCH (t:User) WHERE t.id = $targetId " +
+            "RETURN exists((u)-[:FRIEND]-(t))")
+    boolean existsFriendByUserAndUser(String userId, String targetId);
 }

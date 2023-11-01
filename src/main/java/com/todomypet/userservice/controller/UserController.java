@@ -21,14 +21,16 @@ public class UserController {
     private final UserService userService;
 
 
+    @Operation(summary = "회원 정보 조회", description = "회원 정보 페이지입니다. 마이페이지도 같은 API를 사용합니다.")
     @GetMapping("/profile/{targetId}")
     public SuccessResDTO<UserProfileResDTO> getUserProfile(@Parameter(hidden = true) @RequestHeader String userId,
                                                            @PathVariable String targetId) {
-        UserProfileResDTO response = userService.getUserProfile(targetId);
+        UserProfileResDTO response = userService.getUserProfile(userId, targetId);
         return new SuccessResDTO<UserProfileResDTO>(response);
     }
 
-    @Operation(summary = "회원 설정 정보", description = "설정 탭에서 확인할 수 있는 회원 정보입니다.")
+    @Operation(summary = "회원 설정 정보", description = "설정 탭에서 확인할 수 있는 회원 정보입니다." +
+            " * 주의: 마이페이지 탭이 아닙니다. 마이페이지는 회원 정보 조회 API를 사용하세요.")
     @GetMapping("/setting/my-profile")
     public SuccessResDTO<MyPageResDTO> getMyPage(@Parameter(hidden = true) @RequestHeader String userId) {
         MyPageResDTO response = userService.getMyPage(userId);

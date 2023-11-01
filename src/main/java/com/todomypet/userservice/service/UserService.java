@@ -6,9 +6,10 @@ import com.todomypet.userservice.dto.UserProfileResDTO;
 
 public interface UserService {
 
+
     MyPageResDTO getMyPage(String userId);
 
     UserInfoResDTO getUserByPersonalCode(String personalCode);
 
-    UserProfileResDTO getUserProfile(String targetId);
+    UserProfileResDTO getUserProfile(String userId, String targetId);
 }

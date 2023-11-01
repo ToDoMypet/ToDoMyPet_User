@@ -16,5 +16,6 @@ public interface UserMapper {
     GetUserDetailsDTO userToGetUserDetailsDTO(User user);
 
     UserInfoResDTO userToUserInfoResDTO(User user);
+    @Mapping(target = "Protected", source = "protected")
     UserProfileResDTO userToUserProfileResDTO(User user);
 }
