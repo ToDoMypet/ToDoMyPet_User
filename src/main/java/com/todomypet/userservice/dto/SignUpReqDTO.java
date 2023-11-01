@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpReqDTO {
+
     @NotBlank
+    @Email
     private String email;
 
     @Size(min = 8, max = 20)
