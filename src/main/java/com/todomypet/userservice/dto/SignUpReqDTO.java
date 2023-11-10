@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignUpReqDTO {
-
     @NotBlank
     @Email
     private String email;
@@ -24,6 +23,4 @@ public class SignUpReqDTO {
 
     @Size(max = 80)
     private String bio;
-
-    private String profilePic;
 }
