@@ -32,7 +32,6 @@ import java.util.Random;
 public class SignServiceImpl implements SignService {
 
     private final UserRepository userRepository;
-    private final S3Uploader s3Uploader;
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserMapper userMapper;
@@ -59,14 +58,9 @@ public class SignServiceImpl implements SignService {
             }
         }
 
-        String imageUrl = "";
-        if (signUpInfo.getProfilePic() != null) {
-            imageUrl = s3Uploader.upload(signUpInfo.getProfilePic());
-        }
-
         User user = User.builder().email(signUpInfo.getEmail())
                 .password(passwordEncoder.encode(signUpInfo.getPassword()))
-                .profilePicUrl(imageUrl)
+                .profilePicUrl(null)
                 .nickname(signUpInfo.getNickname())
                 .bio(signUpInfo.getBio())
                 .createdAt(LocalDateTime.parse(LocalDateTime.now()
@@ -84,7 +78,6 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(0)
                 .friendCount(0)
                 .build();
-
         return userRepository.save(user).getId();
     }
 
