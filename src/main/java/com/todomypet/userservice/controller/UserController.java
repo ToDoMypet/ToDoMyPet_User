@@ -45,6 +45,4 @@ public class UserController {
         UserInfoResDTO response = userService.getUserByPersonalCode(personalCode);
         return new SuccessResDTO<UserInfoResDTO>(response);
     }
-
-
 }

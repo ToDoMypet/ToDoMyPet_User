@@ -2,6 +2,7 @@ package com.todomypet.userservice.config;
 
 import com.todomypet.userservice.config.jwt.JwtAuthenticationFilter;
 import com.todomypet.userservice.config.jwt.JwtTokenProvider;
+import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.service.SignService;
 import com.todomypet.userservice.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,6 @@ public class SecurityConfig {
         http.csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-
                 .addFilter(new JwtAuthenticationFilter(
                         authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
                         signService, refreshTokenService, jwtTokenProvider)

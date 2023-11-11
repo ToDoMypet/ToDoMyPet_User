@@ -14,6 +14,7 @@ import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,6 +28,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SignServiceImpl implements SignService {
 
     private final UserRepository userRepository;
@@ -122,7 +124,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws CustomException {
         User user = userRepository.getOneUserByEmail(username).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_EXISTS));
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
