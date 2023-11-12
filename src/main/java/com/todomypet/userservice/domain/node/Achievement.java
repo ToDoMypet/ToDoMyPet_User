@@ -1,10 +1,14 @@
 package com.todomypet.userservice.domain.node;
 
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
 
 @Node("Achievement")
+@Builder
+@Getter
 public class Achievement {
 
     @Id
@@ -14,7 +18,7 @@ public class Achievement {
     private String achName;
 
     @Property("achType")
-    private String achType;
+    private AchievementType achType;
 
     @Property("achDiff")
     private int achDiff;
