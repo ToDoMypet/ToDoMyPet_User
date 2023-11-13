@@ -42,4 +42,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt")
     void deleteAccount(String userId, LocalDateTime deletedAt);
+
+    @Query("MATCH (user:User{id:$userId} SET user.achCount = user.achCount + 1")
+    void increaseAchieveCount(String userId);
 }
