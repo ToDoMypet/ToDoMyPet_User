@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,13 +59,38 @@ public class AchievementServiceImpl implements AchievementService {
     public GetAchievementListResDTO getAchievementList(String userId) {
         AchievementType[] arr = {AchievementType.ATTENDANCE, AchievementType.ACHIEVE, AchievementType.EVOLUTION,
                 AchievementType.GRADUATION, AchievementType.ACQUIREMENT};
+        GetAchievementListResDTO getAchievementListResDTO = new GetAchievementListResDTO();
 
         for (int i = 0; i < arr.length; i++) {
-            GetAchievementResDTO getAchievementResDTO = achievementRepository.getAchievementList(userId, arr[i]);
-            System.out.println(getAchievementResDTO.getId());
-            System.out.println(getAchievementResDTO.getAchName());
-            System.out.println(getAchievementResDTO.isAchieved());
+            List<Achievement> achievementList = achievementRepository.getAchievementList(arr[i]);
+            List<GetAchievementResDTO> getAchievementResList = new ArrayList<>();
+            for (int j = 0; j < achievementList.size(); j++) {
+                GetAchievementResDTO getAchievementResDTO = GetAchievementResDTO.builder()
+                        .achieved(achieveRepository.existsAchieveBetweenUserAndAchievement(userId,
+                                achievementList.get(j).getId()))
+                        .id(achievementList.get(j).getId())
+                        .achName(achievementList.get(j).getAchName())
+                        .build();
+                getAchievementResList.add(getAchievementResDTO);
+            }
+            switch (i) {
+                case 0 -> {
+                    getAchievementListResDTO.setAttendance(getAchievementResList);
+                }
+                case 1 -> {
+                    getAchievementListResDTO.setAchievement(getAchievementResList);
+                }
+                case 2 -> {
+                    getAchievementListResDTO.setEvolution(getAchievementResList);
+                }
+                case 3 -> {
+                    getAchievementListResDTO.setGraduation(getAchievementResList);
+                }
+                case 4 -> {
+                    getAchievementListResDTO.setAcquirement(getAchievementResList);
+                }
+            }
         }
-        return null;
+        return getAchievementListResDTO;
     }
 }

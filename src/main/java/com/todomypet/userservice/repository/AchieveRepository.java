@@ -10,12 +10,12 @@ import org.springframework.stereotype.Repository;
 @EnableNeo4jRepositories
 public interface AchieveRepository extends Neo4jRepository<Achieve, Long> {
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (a:Achievement{achievementId:$achievementId}) " +
+            "MATCH (a:Achievement{id:$achievementId}) " +
             "CREATE (u)-[:ACHIEVEMENT{achievedAt: $achievedAt}]->(a)")
     void createAchieveBetweenUserAndAchievement(String userId, String achievementId, String achievedAt);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (a:Achievement{achievementId:$achievementId}) " +
-            "EXISTS (u)-[:ACHIEVE]->(a)")
+            "MATCH (a:Achievement{id:$achievementId}) " +
+            "RETURN EXISTS((u)-[:ACHIEVE]->(a))")
     boolean existsAchieveBetweenUserAndAchievement(String userId, String achievementId);
 }

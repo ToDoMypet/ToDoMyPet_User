@@ -5,6 +5,9 @@ import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.schema.Property;
+import org.springframework.data.neo4j.core.schema.Relationship;
+
+import java.util.Set;
 
 @Node("Achievement")
 @Builder
@@ -31,4 +34,7 @@ public class Achievement {
 
     @Property("achDescribe")
     private String achDescribe;
+
+    @Relationship(type = "ACHIEVE", direction = Relationship.Direction.INCOMING)
+    private Set<User> user;
 }

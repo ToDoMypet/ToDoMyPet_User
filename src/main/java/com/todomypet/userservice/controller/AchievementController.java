@@ -35,7 +35,7 @@ public class AchievementController {
     @Operation(summary = "***공사중***")
     @GetMapping("")
     public SuccessResDTO<GetAchievementListResDTO> getAchievementList(@RequestHeader String userId) {
-        achievementService.getAchievementList(userId);
-        return new SuccessResDTO<>(null);
+        GetAchievementListResDTO response = achievementService.getAchievementList(userId);
+        return new SuccessResDTO<>(response);
     }
 }
