@@ -6,6 +6,7 @@ import com.todomypet.userservice.dto.AchieveResDTO;
 import com.todomypet.userservice.dto.AddAchievementReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
+import com.todomypet.userservice.repository.AchieveRepository;
 import com.todomypet.userservice.repository.AchievementRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class AchievementServiceImpl implements AchievementService {
 
     private final AchievementRepository achievementRepository;
+    private final AchieveRepository achieveRepository;
     private final UserRepository userRepository;
 
     @Transactional
@@ -42,13 +44,13 @@ public class AchievementServiceImpl implements AchievementService {
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
-        if (achievementRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId())) {
+        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId())) {
             throw new CustomException(ErrorCode.ALREADY_ACHIEVE);
         };
 
         userRepository.increaseAchieveCount(userId);
 
-        achievementRepository.createAchieveBetweenUserAndAchievement(userId,
+        achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt.toString());
     }
 }

@@ -31,4 +31,9 @@ public class AchievementController {
         achievementService.achieve(userId, achieveReqDTO);
         return new SuccessResDTO<Void>(null);
     }
+
+//    @GetMapping("/")
+//    public SuccessResDTO<getAchievementListResDTO> getAchievementList(@RequestHeader String userId) {
+//        return new SuccessResDTO<>();
+//    }
 }
