@@ -1,9 +1,6 @@
 package com.todomypet.userservice.controller;
 
-import com.todomypet.userservice.dto.MyPageResDTO;
-import com.todomypet.userservice.dto.SuccessResDTO;
-import com.todomypet.userservice.dto.UserInfoResDTO;
-import com.todomypet.userservice.dto.UserProfileResDTO;
+import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -21,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
 
-    @Operation(summary = "회원 정보 조회", description = "회원 정보 페이지입니다. 마이페이지도 같은 API를 사용합니다.")
+    @Operation(summary = "회원 정보 조회", description = "회원 정보 페이지입니다.")
     @GetMapping("/profile/{targetId}")
     public SuccessResDTO<UserProfileResDTO> getUserProfile(@Parameter(hidden = true) @RequestHeader String userId,
                                                            @PathVariable String targetId) {
@@ -29,10 +26,11 @@ public class UserController {
         return new SuccessResDTO<UserProfileResDTO>(response);
     }
 
+    @Operation(summary = "내 정보 조회", description = "인증 사용자 정보 페이지입니다.")
     @GetMapping("/profile/my")
-    public SuccessResDTO<UserProfileResDTO> getMyProfile(@Parameter(hidden = true) @RequestHeader String userId) {
-        UserProfileResDTO response = userService.getUserProfile(userId, userId);
-        return new SuccessResDTO<UserProfileResDTO>(response);
+    public SuccessResDTO<MyProfileResDTO> getMyProfile(@Parameter(hidden = true) @RequestHeader String userId) {
+        MyProfileResDTO response = userService.getMyProfile(userId);
+        return new SuccessResDTO<MyProfileResDTO>(response);
     }
 
     @Operation(summary = "회원 설정 정보", description = "설정 탭에서 확인할 수 있는 회원 정보입니다." +

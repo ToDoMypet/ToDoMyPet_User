@@ -10,5 +10,5 @@ public class MyPageResDTO {
     private String bio;
     private String profilePicUrl;
     private String personalCode;
-    private Boolean Protected;
+    private Boolean protect;
 }

@@ -2,12 +2,10 @@ package com.todomypet.userservice.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Builder
 @Getter
-@Setter
-public class UserProfileResDTO {
+public class MyProfileResDTO {
     private String id;
     private String nickname;
     private String profilePicUrl;
@@ -15,6 +13,4 @@ public class UserProfileResDTO {
     private int collectionCount;
     private int achCount;
     private int friendCount;
-    private boolean protect;
-    private boolean friendRelationship;
 }

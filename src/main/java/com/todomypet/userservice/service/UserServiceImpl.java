@@ -2,6 +2,7 @@ package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.MyPageResDTO;
+import com.todomypet.userservice.dto.MyProfileResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
 import com.todomypet.userservice.dto.UserProfileResDTO;
 import com.todomypet.userservice.exception.CustomException;
@@ -47,5 +48,12 @@ public class UserServiceImpl implements UserService {
         UserProfileResDTO userProfileResDTO = userMapper.userToUserProfileResDTO(user);
         userProfileResDTO.setFriendRelationship(friendRepository.existsFriendByUserAndUser(userId, targetId));
         return userProfileResDTO;
+    }
+
+    @Override
+    public MyProfileResDTO getMyProfile(String userId) {
+        User user = userRepository.getOneUserById(userId).orElseThrow(()
+                -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+        return userMapper.userToMyProfileResDTO(user);
     }
 }
