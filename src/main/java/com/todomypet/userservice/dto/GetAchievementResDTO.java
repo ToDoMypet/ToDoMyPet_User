@@ -1,11 +1,12 @@
 package com.todomypet.userservice.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-@Builder
 @Getter
-public class getAchievementResDTO {
+@Setter
+public class GetAchievementResDTO {
+    private String id;
     private String achName;
     private boolean achieved;
 }

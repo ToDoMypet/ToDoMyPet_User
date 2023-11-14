@@ -1,9 +1,8 @@
 package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.Achievement;
-import com.todomypet.userservice.dto.AchieveReqDTO;
-import com.todomypet.userservice.dto.AchieveResDTO;
-import com.todomypet.userservice.dto.AddAchievementReqDTO;
+import com.todomypet.userservice.domain.node.AchievementType;
+import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AchieveRepository;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +52,19 @@ public class AchievementServiceImpl implements AchievementService {
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt.toString());
+    }
+
+    @Override
+    public GetAchievementListResDTO getAchievementList(String userId) {
+        AchievementType[] arr = {AchievementType.ATTENDANCE, AchievementType.ACHIEVE, AchievementType.EVOLUTION,
+                AchievementType.GRADUATION, AchievementType.ACQUIREMENT};
+
+        for (int i = 0; i < arr.length; i++) {
+            GetAchievementResDTO getAchievementResDTO = achievementRepository.getAchievementList(userId, arr[i]);
+            System.out.println(getAchievementResDTO.getId());
+            System.out.println(getAchievementResDTO.getAchName());
+            System.out.println(getAchievementResDTO.isAchieved());
+        }
+        return null;
     }
 }
