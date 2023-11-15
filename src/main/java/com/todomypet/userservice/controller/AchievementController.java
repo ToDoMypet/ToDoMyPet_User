@@ -26,13 +26,13 @@ public class AchievementController {
     }
 
     @Operation(summary = "업적 달성", description = "업적을 달성합니다.")
-    @PostMapping("/achieve")
+    @PostMapping("")
     public SuccessResDTO<Void> achieve(@RequestHeader String userId, @RequestBody AchieveReqDTO achieveReqDTO) {
         achievementService.achieve(userId, achieveReqDTO);
         return new SuccessResDTO<Void>(null);
     }
 
-    @Operation(summary = "***공사중***")
+    @Operation(summary = "업적 리스트", description = "마이페이지의 업적 리스트를 불러옵니다.")
     @GetMapping("")
     public SuccessResDTO<GetAchievementListResDTO> getAchievementList(@RequestHeader String userId) {
         GetAchievementListResDTO response = achievementService.getAchievementList(userId);
