@@ -41,6 +41,14 @@ public class UserController {
         return new SuccessResDTO<MyPageResDTO>(response);
     }
 
+    @Operation(summary = "회원 설정 정보 수정", description = "설정 탭에서 회원 정보를 수정합니다.")
+    @PutMapping("/setting/my-profile")
+    public SuccessResDTO<Void> updateMyPage(@Parameter(hidden = true) @RequestHeader String userId,
+                                            @RequestBody UpdateMyPageReqDTO updateMyPageReqDTO) {
+        userService.updateMyPage(userId, updateMyPageReqDTO);
+        return new SuccessResDTO<Void>(null);
+    }
+
     @Operation(summary = "개인 코드로 유저 검색",
             description = "개인 코드를 통해 유저를 검색합니다. 검색 결과가 없을 시 null이 return됩니다.")
     @GetMapping("/search/{personalCode}")

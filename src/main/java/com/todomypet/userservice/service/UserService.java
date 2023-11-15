@@ -1,9 +1,6 @@
 package com.todomypet.userservice.service;
 
-import com.todomypet.userservice.dto.MyPageResDTO;
-import com.todomypet.userservice.dto.MyProfileResDTO;
-import com.todomypet.userservice.dto.UserInfoResDTO;
-import com.todomypet.userservice.dto.UserProfileResDTO;
+import com.todomypet.userservice.dto.*;
 
 public interface UserService {
 
@@ -14,4 +11,5 @@ public interface UserService {
 
     UserProfileResDTO getUserProfile(String userId, String targetId);
     MyProfileResDTO getMyProfile(String userId);
+    void updateMyPage(String userId, UpdateMyPageReqDTO updateMyPageReqDTO);
 }
