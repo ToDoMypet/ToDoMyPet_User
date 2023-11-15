@@ -42,6 +42,8 @@ public class AchievementServiceImpl implements AchievementService {
     @Transactional
     @Override
     public void achieve(String userId, AchieveReqDTO achieveReqDTO) {
+        achievementRepository.getAchievementById(achieveReqDTO.getAchievementId())
+                .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 

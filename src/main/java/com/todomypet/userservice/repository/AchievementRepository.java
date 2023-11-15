@@ -9,10 +9,14 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @EnableNeo4jRepositories
 @Repository
 public interface AchievementRepository extends Neo4jRepository<Achievement, String> {
     @Query("MATCH (a:Achievement{achType:$achievementType}) RETURN a ORDER BY a.id ASC")
     List<Achievement> getAchievementList(AchievementType achievementType);
+
+    @Query("MATCH (a:Achievement{id:$achievementId}) RETURN a")
+    Optional<Achievement> getAchievementById(String achievementId);
 }
