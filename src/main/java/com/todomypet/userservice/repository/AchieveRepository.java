@@ -18,4 +18,9 @@ public interface AchieveRepository extends Neo4jRepository<Achieve, Long> {
             "MATCH (a:Achievement{id:$achievementId}) " +
             "RETURN EXISTS((u)-[:ACHIEVE]->(a))")
     boolean existsAchieveBetweenUserAndAchievement(String userId, String achievementId);
+
+    @Query("MATCH (u:User{id:$userId}) WITH u " +
+            "MATCH (u)-[ach:ACHIEVE]->(a:Achievement{id:$achievementId}) " +
+            "RETURN ach")
+    Achieve findByUserIdAndAchievementId(String userId, String achievementId);
 }

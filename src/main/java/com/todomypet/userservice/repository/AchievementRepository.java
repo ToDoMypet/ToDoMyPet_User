@@ -2,7 +2,6 @@ package com.todomypet.userservice.repository;
 
 import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
-import com.todomypet.userservice.dto.GetAchievementResDTO;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.query.Query;

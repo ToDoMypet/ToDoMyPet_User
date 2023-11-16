@@ -1,4 +1,4 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.achievement;
 
 import com.todomypet.userservice.domain.node.AchievementType;
 import lombok.AllArgsConstructor;

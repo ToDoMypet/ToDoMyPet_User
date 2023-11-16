@@ -1,6 +1,5 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.achievement;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 

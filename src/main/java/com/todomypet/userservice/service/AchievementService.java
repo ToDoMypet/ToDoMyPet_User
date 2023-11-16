@@ -1,12 +1,13 @@
 package com.todomypet.userservice.service;
 
-import com.todomypet.userservice.dto.AchieveReqDTO;
-import com.todomypet.userservice.dto.AchieveResDTO;
-import com.todomypet.userservice.dto.AddAchievementReqDTO;
-import com.todomypet.userservice.dto.GetAchievementListResDTO;
+import com.todomypet.userservice.dto.achievement.AchieveReqDTO;
+import com.todomypet.userservice.dto.achievement.AddAchievementReqDTO;
+import com.todomypet.userservice.dto.achievement.GetAchievementDetailResDTO;
+import com.todomypet.userservice.dto.achievement.GetAchievementListResDTO;
 
 public interface AchievementService {
     String addAchievement(AddAchievementReqDTO addAchievementReqDTO);
     void achieve(String userId, AchieveReqDTO achieveReqDTO);
     GetAchievementListResDTO getAchievementList(String userId);
+    GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId);
 }

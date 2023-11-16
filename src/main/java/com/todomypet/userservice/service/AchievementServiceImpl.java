@@ -2,7 +2,8 @@ package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
-import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.domain.relationship.Achieve;
+import com.todomypet.userservice.dto.achievement.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AchieveRepository;
@@ -94,5 +95,23 @@ public class AchievementServiceImpl implements AchievementService {
             }
         }
         return getAchievementListResDTO;
+    }
+
+    @Override
+    @Transactional
+    public GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId) {
+        Achievement achievement = achievementRepository.getAchievementById(achievementId)
+                .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
+        if (!achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievementId)) {
+            throw new CustomException(ErrorCode.DID_NOT_ACHIEVED_ACHIEVEMENT);
+        };
+        Achieve achieve = achieveRepository.findByUserIdAndAchievementId(userId, achievementId);
+        return GetAchievementDetailResDTO.builder()
+                .achName(achievement.getAchName())
+                .achType(achievement.getAchType())
+                .achDescribe(achievement.getAchDescribe())
+                .achievedAt(achieve.getAchievedAt().toString())
+                .achDiff(achievement.getAchDiff())
+                .build();
     }
 }
