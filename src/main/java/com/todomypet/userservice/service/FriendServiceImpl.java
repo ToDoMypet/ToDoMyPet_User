@@ -59,4 +59,21 @@ public class FriendServiceImpl implements FriendService {
         }
         return response;
     }
+
+    @Override
+    public List<UserInfoResDTO> searchFriendsByNickname(String userId, String nickname) {
+
+        if (nickname == null) {
+            throw new CustomException(ErrorCode.NICKNAME_IS_NULL);
+        }
+        User u = userRepository.getOneUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+
+        List<User> searchedFriends = userRepository.getFriendListByUserIdAndNickname(userId, nickname);
+        List<UserInfoResDTO> response = new ArrayList<>();
+        for (User user:searchedFriends) {
+            response.add(userMapper.userToUserInfoResDTO(user));
+        }
+        return response;
+    }
 }

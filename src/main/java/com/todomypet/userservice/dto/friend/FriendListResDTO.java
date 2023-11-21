@@ -1,5 +1,6 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.friend;
 
+import com.todomypet.userservice.dto.UserInfoResDTO;
 import lombok.Builder;
 import lombok.Getter;
 

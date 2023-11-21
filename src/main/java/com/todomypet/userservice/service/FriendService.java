@@ -10,4 +10,5 @@ public interface FriendService {
     void deleteFriendRelationship(String userId, String targetId);
 
     List<UserInfoResDTO> getFriendsList(String userId);
-}
+    List<UserInfoResDTO> searchFriendsByNickname(String userId, String nickname);
+ }

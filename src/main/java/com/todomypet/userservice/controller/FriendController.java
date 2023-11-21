@@ -1,6 +1,6 @@
 package com.todomypet.userservice.controller;
 
-import com.todomypet.userservice.dto.FriendListResDTO;
+import com.todomypet.userservice.dto.friend.FriendListResDTO;
 import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.dto.UserInfoResDTO;
 import com.todomypet.userservice.service.FriendService;
@@ -42,6 +42,15 @@ public class FriendController {
     SuccessResDTO<FriendListResDTO> getFriendsList(@Parameter(hidden = true) @RequestHeader String userId) {
         List<UserInfoResDTO> friends = friendService.getFriendsList(userId);
         FriendListResDTO response = FriendListResDTO.builder().friends(friends).build();
+        return new SuccessResDTO<FriendListResDTO>(response);
+    }
+
+    @Operation(summary = "친구 검색", description = "친구 목록에서 닉네임으로 검색을 진행합니다.")
+    @GetMapping("/friends/search/{nickname}")
+    SuccessResDTO<FriendListResDTO> searchFriendsByNickname(@RequestHeader String userId,
+                                                            @PathVariable(value = "nickname", required = false) String nickname) {
+        List<UserInfoResDTO> searchedFriends = friendService.searchFriendsByNickname(userId, nickname);
+        FriendListResDTO response = FriendListResDTO.builder().friends(searchedFriends).build();
         return new SuccessResDTO<FriendListResDTO>(response);
     }
 }

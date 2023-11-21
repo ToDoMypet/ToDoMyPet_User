@@ -34,6 +34,11 @@ public interface UserRepository extends Neo4jRepository<User, String> {
             "RETURN collect(t)")
     List<User> getFriendListByUserId(String userId);
 
+    @Query("MATCH (user:User{id:$userId}) WITH user " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname CONTAINS $nickname WITH t ORDER BY t.nickname " +
+            "RETURN collect(t)")
+    List<User> getFriendListByUserIdAndNickname(String userId, String nickname);
+
     @Query("MATCH (user:User{id:$userId}) SET user.friendCount = user.friendCount + 1")
     void increaseFriendCount(String userId);
 
