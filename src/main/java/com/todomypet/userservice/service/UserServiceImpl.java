@@ -7,6 +7,7 @@ import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,14 +57,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateMyPage(String userId, UpdateMyPageReqDTO updateMyPageReqDTO) {
 
-        String imageUrl = "";
         if (updateMyPageReqDTO.getProfilePicUrl() != null) {
-            imageUrl = s3Uploader.upload(updateMyPageReqDTO.getProfilePicUrl());
+            String imageUrl = s3Uploader.upload(updateMyPageReqDTO.getProfilePicUrl());
+            userRepository.updateMyProfileImage(userId, imageUrl);
+        } else if (updateMyPageReqDTO.getProfilePicUrl().equals("")) {
+            userRepository.updateMyProfileImage(userId, "");
         }
 
         userRepository.updateMyPage(userId, updateMyPageReqDTO.getNickname(), updateMyPageReqDTO.getBio(),
-                imageUrl, updateMyPageReqDTO.getProtect());
+                updateMyPageReqDTO.getProtect());
     }
 }

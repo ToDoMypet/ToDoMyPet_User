@@ -62,7 +62,6 @@ public class FriendServiceImpl implements FriendService {
 
     @Override
     public List<UserInfoResDTO> searchFriendsByNickname(String userId, String nickname) {
-
         if (nickname == null) {
             throw new CustomException(ErrorCode.NICKNAME_IS_NULL);
         }
