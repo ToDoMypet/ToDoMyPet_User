@@ -63,13 +63,11 @@ public class UserServiceImpl implements UserService {
     public void updateMyPage(String userId, UpdateMyPageReqDTO updateMyPageReqDTO) {
         log.info(">>> 회원 정보 수정 : " + userId);
 
-        if (updateMyPageReqDTO.getProfilePicUrl() != null) {
-            if (updateMyPageReqDTO.getProfilePicUrl().equals("clear")) {
-                userRepository.updateMyProfileImage(userId, "");
-            } else {
-                String imageUrl = s3Uploader.upload(updateMyPageReqDTO.getProfilePicUrl());
-                userRepository.updateMyProfileImage(userId, imageUrl);
-            }
+        if (updateMyPageReqDTO.getProfilePicUrl().equals("clear")) {
+            userRepository.updateMyProfileImage(userId, null);
+        } else if (!updateMyPageReqDTO.getProfilePicUrl().equals("unwavering")){
+            String imageUrl = s3Uploader.upload(updateMyPageReqDTO.getProfilePicUrl());
+            userRepository.updateMyProfileImage(userId, imageUrl);
         }
 
         userRepository.updateMyPage(userId, updateMyPageReqDTO.getNickname(), updateMyPageReqDTO.getBio(),
