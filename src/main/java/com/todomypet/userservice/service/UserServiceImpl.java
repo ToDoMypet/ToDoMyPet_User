@@ -9,10 +9,12 @@ import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -59,11 +61,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateMyPage(String userId, UpdateMyPageReqDTO updateMyPageReqDTO) {
+        log.info(">>> 회원 정보 수정 : " + userId);
 
         if (updateMyPageReqDTO.getProfilePicUrl() != null) {
             String imageUrl = s3Uploader.upload(updateMyPageReqDTO.getProfilePicUrl());
             userRepository.updateMyProfileImage(userId, imageUrl);
-        } else if (updateMyPageReqDTO.getProfilePicUrl().equals("")) {
+        } else if (updateMyPageReqDTO.getProfilePicUrl().equals("clear")) {
             userRepository.updateMyProfileImage(userId, "");
         }
 
