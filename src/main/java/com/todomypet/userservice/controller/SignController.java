@@ -66,4 +66,10 @@ public class SignController {
 
         return ResponseEntity.ok().headers(headers).body(response);
     }
+
+    @GetMapping("/check-password/{password}")
+    public SuccessResDTO<Boolean> checkPassword(@RequestHeader String userId, @PathVariable String password) {
+        boolean response = signService.checkPassword(userId, password);
+        return new SuccessResDTO<Boolean>(response);
+    }
 }

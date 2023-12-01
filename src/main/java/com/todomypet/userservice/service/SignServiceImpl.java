@@ -116,6 +116,13 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
+    public boolean checkPassword(String userId, String password) {
+        log.info(">>> 비밀번호 확인 진입: " + userId);
+        String pw = userRepository.getPasswordByUserId(userId);
+        return passwordEncoder.matches(password, pw);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws CustomException {
         User user = userRepository.getOneUserByEmail(username).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_EXISTS));

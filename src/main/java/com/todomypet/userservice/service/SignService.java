@@ -18,4 +18,5 @@ public interface SignService extends UserDetailsService {
 
     void deleteAccount(String userId);
 
+    boolean checkPassword(String userId, String password);
 }

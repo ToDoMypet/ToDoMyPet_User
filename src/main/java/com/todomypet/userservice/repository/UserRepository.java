@@ -54,4 +54,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) SET user.nickname = $nickname, user.bio = $bio, " +
             "user.protected = $protect")
     void updateMyPage(String userId, String nickname, String bio, boolean protect);
+
+    @Query("MATCH (user:User{id:$userId}) RETURN user.password")
+    String getPasswordByUserId(String userId);
 }
