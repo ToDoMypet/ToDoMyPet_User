@@ -67,6 +67,7 @@ public class SignController {
         return ResponseEntity.ok().headers(headers).body(response);
     }
 
+    @Operation(summary = "비밀번호 확인", description = "입력된 비밀번호가 로그인된 사용자의 비밀번호와 일치하는지 대조합니다.")
     @GetMapping("/check-password/{password}")
     public SuccessResDTO<Boolean> checkPassword(@RequestHeader String userId, @PathVariable String password) {
         boolean response = signService.checkPassword(userId, password);
