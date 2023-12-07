@@ -126,6 +126,9 @@ public class SignServiceImpl implements SignService {
     public UserDetails loadUserByUsername(String username) throws CustomException {
         User user = userRepository.getOneUserByEmail(username).orElseThrow(() ->
                 new CustomException(ErrorCode.USER_NOT_EXISTS));
+        if (user.getDeleted()) {
+            throw new CustomException(ErrorCode.DELETED_USER);
+        }
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
                 true, true, true, true, new ArrayList<>());
     }
