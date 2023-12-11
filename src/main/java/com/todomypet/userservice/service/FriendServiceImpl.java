@@ -8,6 +8,7 @@ import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,9 @@ public class FriendServiceImpl implements FriendService {
     private final NotificationServiceClient notificationServiceClient;
 
     @Override
+    @Transactional
     public void setFriendRelationship(String userId, String targetId) {
+        log.info(">>> 친구 관계 생성: " + userId + ", " + targetId);
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
@@ -47,7 +50,9 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
+    @Transactional
     public void deleteFriendRelationship(String userId, String targetId) {
+        log.info(">>> 친구 관계 삭제: " + userId + ", " + targetId);
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
