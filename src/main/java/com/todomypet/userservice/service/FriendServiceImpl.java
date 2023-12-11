@@ -2,12 +2,14 @@ package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.UserInfoResDTO;
+import com.todomypet.userservice.dto.friend.SendFriendNotificationReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,11 +17,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FriendServiceImpl implements FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Override
     public void setFriendRelationship(String userId, String targetId) {
@@ -32,6 +36,14 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.setFriendRelationshipBetweenUserAndUser(userId, targetId);
         userRepository.increaseFriendCount(userId);
         userRepository.increaseFriendCount(targetId);
+
+        try {
+            notificationServiceClient.sendNotification(SendFriendNotificationReqDTO.builder()
+                    .userId(targetId).type("FRIEND").senderProfilePicUrl(user.getProfilePicUrl())
+                    .senderName(user.getNickname()).notificationDataId(userId).build());
+        } catch (Exception e) {
+            log.error(">>> 알림 전송 실패: " + userId);
+        }
     }
 
     @Override
