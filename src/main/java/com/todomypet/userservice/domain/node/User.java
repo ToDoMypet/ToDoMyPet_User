@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -72,4 +73,7 @@ public class User {
 
     @Property("deleted")
     private Boolean deleted;
+
+    @Property("lastAttendAt")
+    private LocalDate lastAttendAt;
 }

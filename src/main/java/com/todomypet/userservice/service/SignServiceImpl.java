@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -69,13 +70,14 @@ public class SignServiceImpl implements SignService {
                 .Protected(Boolean.FALSE)
                 .personalCode(personalCode.toString())
                 .achCount(0)
-                .attendCount(0)
+                .attendCount(1)
                 .collectionCount(0)
                 .petAcquireCount(0)
                 .petEvolveCount(0)
                 .petCompleteCount(0)
-                .attendContinueCount(0)
+                .attendContinueCount(1)
                 .friendCount(0)
+                .lastAttendAt(LocalDate.now().minusDays(1))
                 .build();
 
         String savedUserId = userRepository.save(user).getId();
