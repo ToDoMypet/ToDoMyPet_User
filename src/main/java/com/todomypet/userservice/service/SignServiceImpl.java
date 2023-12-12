@@ -77,7 +77,11 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(0)
                 .friendCount(0)
                 .build();
-        return userRepository.save(user).getId();
+
+        String savedUserId = userRepository.save(user).getId();
+        userRepository.setDefaultBackground(savedUserId);
+
+        return savedUserId;
     }
 
     @Override

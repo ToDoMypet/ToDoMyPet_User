@@ -57,4 +57,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) RETURN user.password")
     String getPasswordByUserId(String userId);
+
+    @Query("MATCH (user:User{id:$userId}) WITH user MATCH (b:Background{id:\"01\"}) CREATE (user)-[:SELECT]->(b)")
+    void setDefaultBackground(String userId);
 }
