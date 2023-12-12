@@ -24,7 +24,7 @@ public class FriendServiceImpl implements FriendService {
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final NotificationServiceClient notificationServiceClient;
+//    private final NotificationServiceClient notificationServiceClient;
 
     @Override
     @Transactional
@@ -40,13 +40,13 @@ public class FriendServiceImpl implements FriendService {
         userRepository.increaseFriendCount(userId);
         userRepository.increaseFriendCount(targetId);
 
-        try {
-            notificationServiceClient.sendNotification(SendFriendNotificationReqDTO.builder()
-                    .userId(targetId).type("FRIEND").senderProfilePicUrl(user.getProfilePicUrl())
-                    .senderName(user.getNickname()).notificationDataId(userId).build());
-        } catch (Exception e) {
-            log.error(">>> 알림 전송 실패: " + userId);
-        }
+//        try {
+//            notificationServiceClient.sendNotification(SendFriendNotificationReqDTO.builder()
+//                    .userId(targetId).type("FRIEND").senderProfilePicUrl(user.getProfilePicUrl())
+//                    .senderName(user.getNickname()).notificationDataId(userId).build());
+//        } catch (Exception e) {
+//            log.error(">>> 알림 전송 실패: " + userId);
+//        }
     }
 
     @Override
