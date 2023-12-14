@@ -1,6 +1,7 @@
 package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.UpdateExpReqDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final UserRepository userRepository;
+    private final PetServiceClient petServiceClient;
 
     @Override
     public GetAttendInfoReqDTO getAttendanceInfo(String userId) {
@@ -52,6 +54,12 @@ public class AttendanceServiceImpl implements AttendanceService {
             updateData = user.getAttendContinueCount() + 1;
             log.info(">>> 연속 출석 처리: " + userId + " " + updateData);
         }
+
+        UpdateExpReqDTO updateExpReqDTO = UpdateExpReqDTO.builder()
+                .petSeqId(petServiceClient.getMainPet(userId).getData())
+                .experiencePoint(10)
+                .build();
+        petServiceClient.updatePetExp(userId, updateExpReqDTO);
 
         userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
     }

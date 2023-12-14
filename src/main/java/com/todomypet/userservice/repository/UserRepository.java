@@ -61,7 +61,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) WITH user MATCH (b:Background{id:\"01\"}) CREATE (user)-[:SELECT]->(b)")
     void setDefaultBackground(String userId);
 
-    @Query("MATCH (user:User{id:$userId}) SET user.attendCount = attendCount + 1, " +
-            "user.attendContinueCount = $updateData, lastAttendAt = $today")
+    @Query("MATCH (user:User{id:$userId}) SET user.attendCount = user.attendCount + 1, " +
+            "user.attendContinueCount = $updateData, user.lastAttendAt = $today")
     void updateAttendanceCount(String userId, int updateData, String today);
 }
