@@ -64,4 +64,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) SET user.attendCount = user.attendCount + 1, " +
             "user.attendContinueCount = $updateData, user.lastAttendAt = $today")
     void updateAttendanceCount(String userId, int updateData, String today);
+
+    @Query("MATCH (u:User{id:$userId}) SET u.petAcquireCount = u.petAcquireCount + 1")
+    void increasePetCount(String userId);
 }

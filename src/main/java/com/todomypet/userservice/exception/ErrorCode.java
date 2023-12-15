@@ -16,7 +16,13 @@ public enum ErrorCode {
     DID_NOT_ACHIEVED_ACHIEVEMENT(HttpStatus.BAD_REQUEST, "U007", "완료하지 못한 업적은 조회할 수 없습니다."),
     ALREADY_ACHIEVE(HttpStatus.BAD_REQUEST, "U008", "이미 달성한 업적입니다."),
     ACHIEVEMENT_NOT_EXISTS(HttpStatus.BAD_REQUEST, "U009", "업적 id가 유효하지 않습니다."),
-    NICKNAME_IS_NULL(HttpStatus.BAD_REQUEST, "U010", "닉네임 값이 null입니다.")
+    NICKNAME_IS_NULL(HttpStatus.BAD_REQUEST, "U010", "닉네임 값이 null입니다."),
+    NOT_COLLECT_USER_AND_SIGNATURE_CODE(HttpStatus.BAD_REQUEST, "U011",
+            "유저 아이디와 펫 시그니처 코드가 일치하지 않습니다."),
+    NOT_EXISTS_BACKGROUND(HttpStatus.BAD_REQUEST, "U012", "잘못된 펫룸 id입니다."),
+    NOT_EXISTS_ADOPT_RELATIONSHIP(HttpStatus.BAD_REQUEST, "U013",
+            "유저와 펫 사이에 입양 관계가 존재하지 않습니다."),
+    NOT_EXISTS_MAIN_PET(HttpStatus.INTERNAL_SERVER_ERROR, "U014", "유저의 메인 펫이 존재하지 않습니다.");
     ;
 
     private final HttpStatus httpStatus;

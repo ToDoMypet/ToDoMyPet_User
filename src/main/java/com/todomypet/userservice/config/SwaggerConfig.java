@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
-        Info info = new Info().title("유저 서비스 API 문서")
+        Info info = new Info().title("유저, 펫 서비스 API 문서")
                 .version("v1.0")
-                .description("유저 서비스 API 명세입니다.");
+                .description("유저와 펫 서비스 API 명세입니다.");
 
         return new OpenAPI()
                 .info(info)
