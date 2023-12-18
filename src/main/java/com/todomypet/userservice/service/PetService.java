@@ -1,10 +1,9 @@
 package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.dto.*;
-import com.todomypet.userservice.dto.pet.AddPetReqDTO;
-import com.todomypet.userservice.dto.pet.AdoptPetReqDTO;
-import com.todomypet.userservice.dto.pet.AdoptedPetResListDTO;
-import com.todomypet.userservice.dto.pet.CommunityPetListResDTO;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
+import com.todomypet.userservice.dto.pet.*;
 
 import java.util.List;
 
@@ -18,5 +17,5 @@ public interface PetService {
     GetPetCollectionListResDTO getPetCollection(String userId);
     List<CommunityPetListResDTO> getCommunityPetList(String userId);
     UpdateExperiencePointResDTO updateExperiencePoint(String userId, UpdateExperiencePointReqDTO updateExperiencePointReqDTO);
-    String getMainPetByUserId(String userId);
+    List<GetPetUpgradeChoiceResDTO> getPetUpgradeChoice(String userId, String petId);
 }

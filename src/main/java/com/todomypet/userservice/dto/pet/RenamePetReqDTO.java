@@ -1,4 +1,4 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.pet;
 
 import lombok.Builder;
 import lombok.Getter;

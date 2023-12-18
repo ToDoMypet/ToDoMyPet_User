@@ -22,7 +22,8 @@ public enum ErrorCode {
     NOT_EXISTS_BACKGROUND(HttpStatus.BAD_REQUEST, "U012", "잘못된 펫룸 id입니다."),
     NOT_EXISTS_ADOPT_RELATIONSHIP(HttpStatus.BAD_REQUEST, "U013",
             "유저와 펫 사이에 입양 관계가 존재하지 않습니다."),
-    NOT_EXISTS_MAIN_PET(HttpStatus.INTERNAL_SERVER_ERROR, "U014", "유저의 메인 펫이 존재하지 않습니다.");
+    NOT_EXISTS_MAIN_PET(HttpStatus.INTERNAL_SERVER_ERROR, "U014", "유저의 메인 펫이 존재하지 않습니다."),
+    NOT_EXISTS_PET(HttpStatus.BAD_REQUEST, "U015", "잘못된 펫 아이디입니다.")
     ;
 
     private final HttpStatus httpStatus;

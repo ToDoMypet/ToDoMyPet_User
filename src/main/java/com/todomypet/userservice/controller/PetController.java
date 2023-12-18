@@ -1,6 +1,8 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
 import com.todomypet.userservice.service.PetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearer-key")
+@RequestMapping("/pet")
 @Tag(name = "Pet Controller")
 public class PetController {
 
@@ -90,9 +93,11 @@ public class PetController {
         return new SuccessResDTO<UpdateExperiencePointResDTO>(response);
     }
 
-    @GetMapping("/main-pet")
-    public SuccessResDTO<String> getMainPet(@RequestHeader String userId) {
-        String response = petService.getMainPetByUserId(userId);
-        return new SuccessResDTO<>(response);
+    @Operation(summary = "진화 선택", description = "펫 진화 모달 안에 표시될 펫들의 정보를 조회합니다.")
+    @GetMapping("/upgrade-choice/{petId}")
+    public SuccessResDTO<List<GetPetUpgradeChoiceResDTO>> getPetListInUpgradeChoiceModal(@RequestHeader String userId,
+                                                                                   @PathVariable String petId) {
+        List<GetPetUpgradeChoiceResDTO> response = petService.getPetUpgradeChoice(userId, petId);
+        return new SuccessResDTO<List<GetPetUpgradeChoiceResDTO>>(response);
     }
 }

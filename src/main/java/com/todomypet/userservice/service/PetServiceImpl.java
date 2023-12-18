@@ -2,10 +2,13 @@ package com.todomypet.userservice.service;
 
 import com.github.f4b6a3.ulid.UlidCreator;
 import com.todomypet.userservice.domain.node.Pet;
+import com.todomypet.userservice.domain.node.PetGradeType;
 import com.todomypet.userservice.domain.node.PetPersonalityType;
 import com.todomypet.userservice.domain.node.PetType;
 import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
+import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
@@ -214,10 +217,45 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public String getMainPetByUserId(String userId) {
-        log.info(">>> 메인 펫 조회: " + userId);
-        Adopt adopt = adoptRepository.getMainPetByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET));
-        return adopt.getSeq();
+    public List<GetPetUpgradeChoiceResDTO> getPetUpgradeChoice(String userId, String petId) {
+        Pet pet = petRepository.getPetByPetId(petId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_PET));
+
+        PetGradeType nextGrade = getPetNextGradeType(pet);
+
+        List<Pet> petList = petRepository.getPetByGradeAndType(nextGrade, pet.getPetType());
+        List<GetPetUpgradeChoiceResDTO> response = new ArrayList<>();
+
+        for (Pet p: petList) {
+            GetPetUpgradeChoiceResDTO getPetUpgradeChoiceResDTO = GetPetUpgradeChoiceResDTO.builder()
+                    .petName(p.getPetName())
+                    .petImageUrl(p.getPetPortraitUrl())
+                    .getGrade(nextGrade)
+                    .getOrNot(adoptRepository.existsAdoptByUserIdAndPetId(userId, p.getId()))
+                    .build();
+            response.add(getPetUpgradeChoiceResDTO);
+        }
+        return response;
+    }
+
+    private static PetGradeType getPetNextGradeType(Pet pet) {
+        PetGradeType grade = pet.getPetGrade();
+
+        PetGradeType newGrade = null;
+        switch (grade) {
+            case BABY -> {
+                newGrade = PetGradeType.CHILDREN;
+            }
+            case CHILDREN -> {
+                newGrade = PetGradeType.TEENAGER;
+            }
+            case TEENAGER -> {
+                newGrade = PetGradeType.ADULT;
+            }
+            default -> {
+                throw new CustomException(ErrorCode.USER_NOT_EXISTS);
+            }
+        }
+        return newGrade;
     }
 }

@@ -1,5 +1,6 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.pet;
 
+import com.todomypet.userservice.dto.pet.GetMyPetInfoResDTO;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -1,4 +1,4 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.adopt;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateExpReqDTO {
+public class UpdateExperiencePointReqDTO {
     private String petSeqId;
     private int experiencePoint;
 }

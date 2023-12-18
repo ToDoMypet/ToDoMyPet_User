@@ -1,4 +1,4 @@
-package com.todomypet.userservice.dto;
+package com.todomypet.userservice.dto.pet;
 
 import com.todomypet.userservice.domain.node.PetGradeType;
 import com.todomypet.userservice.domain.node.PetPersonalityType;
