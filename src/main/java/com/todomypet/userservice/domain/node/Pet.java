@@ -25,6 +25,9 @@ public class Pet {
     @Property("petGrade")
     private PetGradeType petGrade;
 
+    @Property("petImageUrl")
+    private String petImageUrl;
+
     @Property("petPortraitUrl")
     private String petPortraitUrl;
 

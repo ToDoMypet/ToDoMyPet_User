@@ -42,6 +42,7 @@ public class PetServiceImpl implements PetService {
          Pet p = Pet.builder().id(addPetReqDTO.getId())
                     .petName(addPetReqDTO.getName())
                     .petMaxExperiencePoint(addPetReqDTO.getMaxExperience())
+                    .petImageUrl(addPetReqDTO.getPortraitUrl())
                     .petPortraitUrl(addPetReqDTO.getPortraitUrl())
                     .petDescribe(addPetReqDTO.getDescribe())
                     .petPersonality(PetPersonalityType.valueOf(addPetReqDTO.getPersonality()))
@@ -55,9 +56,7 @@ public class PetServiceImpl implements PetService {
     @Override
     @Transactional
     public void adoptPet(String userId, AdoptPetReqDTO adoptPetReqDTO) {
-        LocalDateTime adoptAt = LocalDateTime.parse(LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-
+        log.info(">>> 펫 입양 진입");
         StringBuilder signatureCode = new StringBuilder();
         Random rnd = new Random();
 
@@ -75,10 +74,10 @@ public class PetServiceImpl implements PetService {
         }
 
         userRepository.increasePetCount(userId);
-
-
         adoptRepository.createAdoptBetweenAdoptAndUser(userId, adoptPetReqDTO.getPetId(),
-                adoptPetReqDTO.getRename(), adoptAt, UlidCreator.getUlid().toString(), signatureCode.toString());
+                adoptPetReqDTO.getName(), UlidCreator.getUlid().toString(), signatureCode.toString(),
+                adoptPetReqDTO.isRenameOrNot());
+
     }
 
     @Override
@@ -236,6 +235,22 @@ public class PetServiceImpl implements PetService {
             response.add(getPetUpgradeChoiceResDTO);
         }
         return response;
+    }
+
+    @Override
+    @Transactional
+    public GraduatedPetResDTO graduatePet(String userId, GraduatePetReqDTO req) {
+        log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
+
+        adoptRepository.graduatePetBySeq(userId, req.getSeq());
+//        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), req.getPetName(),
+//                req.getSeq(), req.getSignatureCode());
+        Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getSeq());
+        Pet pet = petRepository.getPetBySeqOfAdopt(req.getSeq());
+
+        return GraduatedPetResDTO.builder().renameOrNot(adopt.isRenameOrNot())
+                .originName(pet.getPetName()).rename(adopt.getName()).petImageUrl(pet.getPetPortraitUrl())
+                .build();
     }
 
     private static PetGradeType getPetNextGradeType(Pet pet) {

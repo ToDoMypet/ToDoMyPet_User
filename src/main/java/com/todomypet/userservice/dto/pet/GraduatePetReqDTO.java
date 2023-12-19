@@ -5,12 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
 @Builder
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AdoptPetReqDTO {
+public class GraduatePetReqDTO {
+    private String seq;
+    private String signatureCode;
     private String petId;
-    private String name;
-    private boolean renameOrNot;
+    private String petName;
 }

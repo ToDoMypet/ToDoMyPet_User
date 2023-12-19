@@ -17,6 +17,7 @@ public class AddPetReqDTO {
     private PetType type;
     private int maxExperience;
     private PetGradeType grade;
+    private String imageUrl;
     private String portraitUrl;
     private String describe;
     private String personality;

@@ -18,4 +18,6 @@ public interface PetService {
     List<CommunityPetListResDTO> getCommunityPetList(String userId);
     UpdateExperiencePointResDTO updateExperiencePoint(String userId, UpdateExperiencePointReqDTO updateExperiencePointReqDTO);
     List<GetPetUpgradeChoiceResDTO> getPetUpgradeChoice(String userId, String petId);
+
+    GraduatedPetResDTO graduatePet(String userId, GraduatePetReqDTO req);
 }

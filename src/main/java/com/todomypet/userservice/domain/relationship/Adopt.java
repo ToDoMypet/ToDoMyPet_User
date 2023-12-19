@@ -23,12 +23,6 @@ public class Adopt {
     @Property("seq")
     private String seq;
 
-    @Property("startedAt")
-    private LocalDateTime startedAt;
-
-    @Property("endedAt")
-    private LocalDateTime endedAt;
-
     @Property("graduated")
     private Boolean graduated;
 
@@ -37,6 +31,9 @@ public class Adopt {
 
     @Property("signatureCode")
     private String signatureCode;
+
+    @Property("renameOrNot")
+    private boolean renameOrNot;
 
     @TargetNode
     private Pet pet;

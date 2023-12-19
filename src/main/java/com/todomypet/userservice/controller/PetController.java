@@ -47,7 +47,7 @@ public class PetController {
         return new SuccessResDTO<AdoptedPetResListDTO>(response);
     }
 
-    @Operation(summary = "내 펫 정보", description = "일지에서 펫을 선택했을 때 불러오는 데이터입니다.")
+    @Operation(summary = "펫 성장 과정 조회", description = "일지에서 펫을 선택했을 때 불러오는 데이터입니다.")
     @GetMapping("/adopted-pet-list/my-pet-info/{signatureCode}")
     public SuccessResDTO<GetMyPetInfoResListDTO> getMyPetInfo(@RequestHeader String userId,
                                                               @PathVariable String signatureCode) {
@@ -93,11 +93,19 @@ public class PetController {
         return new SuccessResDTO<UpdateExperiencePointResDTO>(response);
     }
 
-    @Operation(summary = "진화 선택", description = "펫 진화 모달 안에 표시될 펫들의 정보를 조회합니다.")
+    @Operation(summary = "진화 선택 리스트 조회", description = "펫 진화 모달 안에 표시될 펫들의 정보를 조회합니다.")
     @GetMapping("/upgrade-choice/{petId}")
     public SuccessResDTO<List<GetPetUpgradeChoiceResDTO>> getPetListInUpgradeChoiceModal(@RequestHeader String userId,
                                                                                    @PathVariable String petId) {
         List<GetPetUpgradeChoiceResDTO> response = petService.getPetUpgradeChoice(userId, petId);
         return new SuccessResDTO<List<GetPetUpgradeChoiceResDTO>>(response);
+    }
+
+    @Operation(summary = "펫 진화", description = "펫을 진화시킵니다.")
+    @PostMapping("/upgrade")
+    public SuccessResDTO<GraduatedPetResDTO> upgradePet(@RequestHeader String userId,
+                                                        @RequestBody GraduatePetReqDTO req) {
+        GraduatedPetResDTO response = petService.graduatePet(userId, req);
+        return new SuccessResDTO<GraduatedPetResDTO>(response);
     }
 }
