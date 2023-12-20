@@ -22,7 +22,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE (p.grade = 'ADULT' AND a.graduated = true) OR (a.graduated = false) " +
-            "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode} ORDER BY a.seq DESC")
+            "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode, .renameOrNot} ORDER BY a.seq DESC")
     List<Adopt> getAdoptList(String userId);
 
     @Query("MATCH (User)-[a:ADOPT]->(Pet) " +
@@ -31,7 +31,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (u)-[a:ADOPT]->(Pet) WHERE a.signatureCode = $signatureCode " +
-            "RETURN a{.experiencePoint, .name, .seq, .graduated} ORDER BY a.seq")
+            "RETURN a{.experiencePoint, .name, .seq, .graduated, .renameOrNot} ORDER BY a.seq")
     List<Adopt> getMyPetInfo(String userId, String signatureCode);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +

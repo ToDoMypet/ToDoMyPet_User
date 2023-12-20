@@ -89,7 +89,7 @@ public class PetServiceImpl implements PetService {
             AdoptedPetResDTO adoptedPetResDTO = AdoptedPetResDTO.builder()
                     .name(adopt.getName())
                     .experiencePoint(adopt.getExperiencePoint())
-                    .portraitUrl(pet.getPetPortraitUrl())
+                    .imageUrl(pet.getPetImageUrl())
                     .grade(pet.getPetGrade())
                     .maxExperiencePoint(pet.getPetMaxExperiencePoint())
                     .signatureCode(adopt.getSignatureCode())
@@ -104,6 +104,7 @@ public class PetServiceImpl implements PetService {
         List<Adopt> petInfos = adoptRepository.getMyPetInfo(userId, signatureCode);
         List<GetMyPetInfoResDTO> getMyPetInfoResDTOList = new ArrayList<GetMyPetInfoResDTO>();
         for (Adopt adopt : petInfos) {
+            System.out.println(adopt);
             Pet pet = petRepository.getPetBySeqOfAdopt(adopt.getSeq());
 
             GetMyPetInfoResDTO getMyPetInfoResDTO = GetMyPetInfoResDTO.builder()
@@ -113,6 +114,7 @@ public class PetServiceImpl implements PetService {
                     .experience(adopt.getExperiencePoint())
                     .grade(pet.getPetGrade())
                     .graduated(adopt.getGraduated())
+                    .seq(adopt.getSeq())
                     .build();
 
             getMyPetInfoResDTOList.add(getMyPetInfoResDTO);
