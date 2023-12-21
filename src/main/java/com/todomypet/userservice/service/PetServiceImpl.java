@@ -250,7 +250,7 @@ public class PetServiceImpl implements PetService {
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getSeq());
 
         return GraduatedPetResDTO.builder().renameOrNot(adopt.isRenameOrNot())
-                .originName(pet.getPetName()).rename(adopt.getName()).petImageUrl(pet.getPetPortraitUrl())
+                .originName(pet.getPetName()).rename(adopt.getName()).petImageUrl(pet.getPetImageUrl())
                 .build();
     }
 
