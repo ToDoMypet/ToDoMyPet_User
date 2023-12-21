@@ -104,11 +104,10 @@ public class PetServiceImpl implements PetService {
         List<Adopt> petInfos = adoptRepository.getMyPetInfo(userId, signatureCode);
         List<GetMyPetInfoResDTO> getMyPetInfoResDTOList = new ArrayList<GetMyPetInfoResDTO>();
         for (Adopt adopt : petInfos) {
-            System.out.println(adopt);
             Pet pet = petRepository.getPetBySeqOfAdopt(adopt.getSeq());
 
             GetMyPetInfoResDTO getMyPetInfoResDTO = GetMyPetInfoResDTO.builder()
-                    .portraitUrl(pet.getPetPortraitUrl())
+                    .imageUrl(pet.getPetPortraitUrl())
                     .name(adopt.getName())
                     .maxExperience(pet.getPetMaxExperiencePoint())
                     .experience(adopt.getExperiencePoint())
@@ -119,7 +118,7 @@ public class PetServiceImpl implements PetService {
 
             getMyPetInfoResDTOList.add(getMyPetInfoResDTO);
         }
-        return GetMyPetInfoResListDTO.builder().build();
+        return GetMyPetInfoResListDTO.builder().petInfoList(getMyPetInfoResDTOList).build();
     }
 
     @Override
@@ -158,7 +157,7 @@ public class PetServiceImpl implements PetService {
                 GetPetCollectionResDTO getPetCollectionResDTO = GetPetCollectionResDTO.builder()
                         .id(pet.getId())
                         .petName(pet.getPetName())
-                        .portraitUrl(pet.getPetPortraitUrl())
+                        .imageUrl(pet.getPetPortraitUrl())
                         .collected(adoptRepository.existsAdoptByUserIdAndPetId(userId, pet.getId()))
                         .describe(pet.getPetDescribe())
                         .personality(pet.getPetPersonality())
