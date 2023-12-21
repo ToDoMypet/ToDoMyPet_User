@@ -244,6 +244,8 @@ public class PetServiceImpl implements PetService {
     public GraduatedPetResDTO graduatePet(String userId, GraduatePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
 
+        // todo: max 경험치인지 확인 및 예외처리 필요
+
         adoptRepository.graduatePetBySeq(userId, req.getSeq());
 //        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), req.getPetName(),
 //                req.getSeq(), req.getSignatureCode());

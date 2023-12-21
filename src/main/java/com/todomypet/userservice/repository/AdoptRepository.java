@@ -21,7 +21,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
                                         String rename, String seq, String signatureCode, boolean renameOrNot);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE (p.grade = 'ADULT' AND a.graduated = true) OR (a.graduated = false) " +
+            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE (p.petGrade = 'ADULT' AND a.graduated = true) OR (a.graduated = false) " +
             "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode, .renameOrNot} ORDER BY a.seq DESC")
     List<Adopt> getAdoptList(String userId);
 
@@ -51,7 +51,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
     boolean existsAdoptByUserIdAndPetId(String userId, String petId);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE (p.grade = 'ADULT' AND a.graduated = true) OR (a.graduated = false) " +
+            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE (p.petGrade = 'ADULT' AND a.graduated = true) OR (a.graduated = false) " +
             "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode, .renameOrNot} ORDER BY a.seq DESC")
     List<Adopt> getCommunityPetList(String userId);
 
