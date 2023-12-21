@@ -186,7 +186,7 @@ public class PetServiceImpl implements PetService {
             communityPetListResDTOList.add(CommunityPetListResDTO.builder()
                     .id(adopt.getSeq())
                     .petName(adopt.getName())
-                    .petImageUrl(petRepository.getPetBySeqOfAdopt(adopt.getSeq()).getPetPortraitUrl()).build());
+                    .petImageUrl(petRepository.getPetBySeqOfAdopt(adopt.getSeq()).getPetImageUrl()).build());
 
         }
         return communityPetListResDTOList;
