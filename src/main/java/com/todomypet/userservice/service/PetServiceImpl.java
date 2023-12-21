@@ -42,7 +42,7 @@ public class PetServiceImpl implements PetService {
          Pet p = Pet.builder().id(addPetReqDTO.getId())
                     .petName(addPetReqDTO.getName())
                     .petMaxExperiencePoint(addPetReqDTO.getMaxExperience())
-                    .petImageUrl(addPetReqDTO.getPortraitUrl())
+                    .petImageUrl(addPetReqDTO.getImageUrl())
                     .petPortraitUrl(addPetReqDTO.getPortraitUrl())
                     .petDescribe(addPetReqDTO.getDescribe())
                     .petPersonality(PetPersonalityType.valueOf(addPetReqDTO.getPersonality()))
