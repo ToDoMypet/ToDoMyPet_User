@@ -157,7 +157,7 @@ public class PetServiceImpl implements PetService {
                 GetPetCollectionResDTO getPetCollectionResDTO = GetPetCollectionResDTO.builder()
                         .id(pet.getId())
                         .petName(pet.getPetName())
-                        .imageUrl(pet.getPetPortraitUrl())
+                        .imageUrl(pet.getPetImageUrl())
                         .collected(adoptRepository.existsAdoptByUserIdAndPetId(userId, pet.getId()))
                         .describe(pet.getPetDescribe())
                         .personality(pet.getPetPersonality())
