@@ -228,9 +228,10 @@ public class PetServiceImpl implements PetService {
 
         for (Pet p: petList) {
             GetPetUpgradeChoiceResDTO getPetUpgradeChoiceResDTO = GetPetUpgradeChoiceResDTO.builder()
+                    .petId(p.getId())
                     .petName(p.getPetName())
                     .petImageUrl(p.getPetImageUrl())
-                    .getGrade(nextGrade)
+                    .petGrade(nextGrade)
                     .getOrNot(adoptRepository.existsAdoptByUserIdAndPetId(userId, p.getId()))
                     .build();
             response.add(getPetUpgradeChoiceResDTO);
