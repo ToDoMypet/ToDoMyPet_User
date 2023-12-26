@@ -1,6 +1,8 @@
 package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.adopt.GraduatePetReqDTO;
+import com.todomypet.userservice.dto.adopt.GraduatePetResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
@@ -19,5 +21,7 @@ public interface PetService {
     UpdateExperiencePointResDTO updateExperiencePoint(String userId, UpdateExperiencePointReqDTO updateExperiencePointReqDTO);
     List<GetPetUpgradeChoiceResDTO> getPetUpgradeChoice(String userId, String petId);
 
-    GraduatedPetResDTO upgradePet(String userId, GraduatePetReqDTO req);
+    UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req);
+
+    GraduatePetResDTO graduatePet(String userId, GraduatePetReqDTO req);
 }

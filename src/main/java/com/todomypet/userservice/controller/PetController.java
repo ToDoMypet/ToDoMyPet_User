@@ -1,6 +1,8 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.adopt.GraduatePetReqDTO;
+import com.todomypet.userservice.dto.adopt.GraduatePetResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
@@ -103,9 +105,16 @@ public class PetController {
 
     @Operation(summary = "펫 진화", description = "펫을 진화시킵니다.")
     @PostMapping("/upgrade")
-    public SuccessResDTO<GraduatedPetResDTO> upgradePet(@RequestHeader String userId,
+    public SuccessResDTO<UpgradePetResDTO> upgradePet(@RequestHeader String userId,
+                                                      @RequestBody UpgradePetReqDTO req) {
+        UpgradePetResDTO response = petService.upgradePet(userId, req);
+        return new SuccessResDTO<UpgradePetResDTO>(response);
+    }
+
+    @PostMapping("/graduate")
+    public SuccessResDTO<GraduatePetResDTO> graduatePet(@RequestHeader String userId,
                                                         @RequestBody GraduatePetReqDTO req) {
-        GraduatedPetResDTO response = petService.upgradePet(userId, req);
-        return new SuccessResDTO<GraduatedPetResDTO>(response);
+        GraduatePetResDTO response = petService.graduatePet(userId, req);
+        return new SuccessResDTO<GraduatePetResDTO>(response);
     }
 }

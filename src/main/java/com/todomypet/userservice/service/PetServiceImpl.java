@@ -7,6 +7,8 @@ import com.todomypet.userservice.domain.node.PetPersonalityType;
 import com.todomypet.userservice.domain.node.PetType;
 import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.adopt.GraduatePetReqDTO;
+import com.todomypet.userservice.dto.adopt.GraduatePetResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
@@ -20,8 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -242,10 +242,8 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional
-    public GraduatedPetResDTO upgradePet(String userId, GraduatePetReqDTO req) {
+    public UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
-
-        // todo: max 경험치인지 확인 필요
 
         Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getSeq())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP));
@@ -267,8 +265,23 @@ public class PetServiceImpl implements PetService {
         adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), currentName,
                 UlidCreator.getUlid().toString(), adopt.getSignatureCode(), adopt.isRenameOrNot());
 
-        return GraduatedPetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
+        return UpgradePetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
                 .currentName(currentName).petImageUrl(pet.getPetImageUrl()).build();
+    }
+
+    @Override
+    @Transactional
+    public GraduatePetResDTO graduatePet(String userId, GraduatePetReqDTO req) {
+        log.info(">>> 펫 졸업 진입: (userId)" + userId + " " + "(펫 seq)" + req.getPetSeq());
+
+        Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getPetSeq())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP));
+
+        Pet pet = petRepository.getPetBySeqOfAdopt(req.getPetSeq());
+
+        adoptRepository.graduatePetBySeq(userId, req.getPetSeq());
+
+        return GraduatePetResDTO.builder().petName(adopt.getName()).petImageUrl(pet.getPetImageUrl()).build();
     }
 
     private static PetGradeType getPetNextGradeType(Pet pet) {

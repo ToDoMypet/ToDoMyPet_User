@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class GraduatedPetResDTO {
+public class UpgradePetResDTO {
     private boolean renameOrNot;
     private String originName;
     private String currentName;

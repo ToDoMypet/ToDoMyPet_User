@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GraduatePetReqDTO {
+public class UpgradePetReqDTO {
     private String seq;
     private String signatureCode;
     private String petId;
