@@ -105,7 +105,7 @@ public class PetController {
     @PostMapping("/upgrade")
     public SuccessResDTO<GraduatedPetResDTO> upgradePet(@RequestHeader String userId,
                                                         @RequestBody GraduatePetReqDTO req) {
-        GraduatedPetResDTO response = petService.graduatePet(userId, req);
+        GraduatedPetResDTO response = petService.upgradePet(userId, req);
         return new SuccessResDTO<GraduatedPetResDTO>(response);
     }
 }

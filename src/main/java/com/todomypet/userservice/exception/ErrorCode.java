@@ -2,6 +2,7 @@ package com.todomypet.userservice.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
@@ -23,7 +24,8 @@ public enum ErrorCode {
     NOT_EXISTS_ADOPT_RELATIONSHIP(HttpStatus.BAD_REQUEST, "U013",
             "유저와 펫 사이에 입양 관계가 존재하지 않습니다."),
     NOT_EXISTS_MAIN_PET(HttpStatus.INTERNAL_SERVER_ERROR, "U014", "유저의 메인 펫이 존재하지 않습니다."),
-    NOT_EXISTS_PET(HttpStatus.BAD_REQUEST, "U015", "잘못된 펫 아이디입니다.")
+    NOT_EXISTS_PET(HttpStatus.BAD_REQUEST, "U015", "잘못된 펫 아이디입니다."),
+    EXPERIENCE_POINT_NOT_SATISFIED(HttpStatus.BAD_REQUEST, "U016", "경험치가 만족되지 않습니다.")
     ;
 
     private final HttpStatus httpStatus;

@@ -124,7 +124,8 @@ public class PetServiceImpl implements PetService {
     @Override
     @Transactional
     public PetDetailResDTO getPetDetail(String userId, String seq) {
-        Adopt adopt = adoptRepository.getAdoptBySeq(userId, seq);
+        Adopt adopt = adoptRepository.getAdoptBySeq(userId, seq)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP));
         Pet pet = petRepository.getPetBySeqOfAdopt(seq);
 
         return PetDetailResDTO.builder()
@@ -241,20 +242,33 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional
-    public GraduatedPetResDTO graduatePet(String userId, GraduatePetReqDTO req) {
+    public GraduatedPetResDTO upgradePet(String userId, GraduatePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
 
-        // todo: max 경험치인지 확인 및 예외처리 필요
+        // todo: max 경험치인지 확인 필요
 
-        adoptRepository.graduatePetBySeq(userId, req.getSeq());
-//        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), req.getPetName(),
-//                req.getSeq(), req.getSignatureCode());
-        Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getSeq());
+        Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getSeq())
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP));
+        adoptRepository.graduatePetBySeq(userId, adopt.getSeq());
+
+        String originName = req.getPetName();
+        String currentName = req.getPetName();
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getSeq());
 
-        return GraduatedPetResDTO.builder().renameOrNot(adopt.isRenameOrNot())
-                .originName(pet.getPetName()).rename(adopt.getName()).petImageUrl(pet.getPetImageUrl())
-                .build();
+        if (adopt.getExperiencePoint() >= pet.getPetMaxExperiencePoint()) {
+            throw new CustomException(ErrorCode.EXPERIENCE_POINT_NOT_SATISFIED);
+        }
+
+        if (adopt.isRenameOrNot()) {
+            log.info(">>> (" + userId + ") rename check");
+            originName = pet.getPetName();
+        }
+
+        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), currentName,
+                UlidCreator.getUlid().toString(), adopt.getSignatureCode(), adopt.isRenameOrNot());
+
+        return GraduatedPetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
+                .currentName(currentName).petImageUrl(pet.getPetImageUrl()).build();
     }
 
     private static PetGradeType getPetNextGradeType(Pet pet) {
