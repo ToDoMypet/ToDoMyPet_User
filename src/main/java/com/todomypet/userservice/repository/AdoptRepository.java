@@ -43,8 +43,9 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
     void renamePet(String userId, String signatureCode, String rename);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE a.signatureCode = $signatureCode RETURN a")
-    Optional<Adopt> getOneAdoptByUserIdAndSignatureCode(String userId, String signatureCode);
+            "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE a.signatureCode = $signatureCode " +
+            "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode, .renameOrNot}")
+    List<Adopt> getAdoptByUserIdAndSignatureCode(String userId, String signatureCode);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (p:Pet{id:$petId}) RETURN EXISTS((u)-[:ADOPT]->(p))")

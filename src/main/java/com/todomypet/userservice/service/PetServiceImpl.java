@@ -140,8 +140,12 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public void renamePet(String userId, RenamePetReqDTO renamePetReqDTO) {
-        Adopt adopt = adoptRepository.getOneAdoptByUserIdAndSignatureCode(userId, renamePetReqDTO.getSignatureCode())
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_COLLECT_USER_AND_SIGNATURE_CODE));
+       List<Adopt> adopt = adoptRepository.getAdoptByUserIdAndSignatureCode(userId, renamePetReqDTO.getSignatureCode());
+
+       if (adopt.isEmpty()) {
+           throw new CustomException(ErrorCode.NOT_COLLECT_USER_AND_SIGNATURE_CODE);
+       }
+
         adoptRepository.renamePet(userId, renamePetReqDTO.getSignatureCode(), renamePetReqDTO.getRename());
     }
 
