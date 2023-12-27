@@ -39,7 +39,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
     Optional<Adopt> getAdoptBySeq(String userId, String seq);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
-            "MATCH (u)-[a:ADOPT]->(p:Pet) SET a.name = $rename, a.renameOrNot = true")
+            "MATCH (u)-[a:ADOPT{signatureCode:$signatureCode}]->(p:Pet) SET a.name = $rename, a.renameOrNot = true")
     void renamePet(String userId, String signatureCode, String rename);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
