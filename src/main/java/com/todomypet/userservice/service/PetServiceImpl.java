@@ -1,10 +1,7 @@
 package com.todomypet.userservice.service;
 
 import com.github.f4b6a3.ulid.UlidCreator;
-import com.todomypet.userservice.domain.node.Pet;
-import com.todomypet.userservice.domain.node.PetGradeType;
-import com.todomypet.userservice.domain.node.PetPersonalityType;
-import com.todomypet.userservice.domain.node.PetType;
+import com.todomypet.userservice.domain.node.*;
 import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.adopt.GraduatePetReqDTO;
@@ -15,6 +12,7 @@ import com.todomypet.userservice.dto.pet.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AdoptRepository;
+import com.todomypet.userservice.repository.BackgroundRepository;
 import com.todomypet.userservice.repository.PetRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -34,6 +32,7 @@ public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final AdoptRepository adoptRepository;
     private final UserRepository userRepository;
+    private final BackgroundRepository backgroundRepository;
 
 
     @Transactional

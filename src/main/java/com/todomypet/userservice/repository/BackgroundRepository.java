@@ -18,6 +18,9 @@ public interface BackgroundRepository extends Neo4jRepository<Background, String
     @Query("MATCH (b:Background{id:$backgroundId}) RETURN b.backgroundImageUrl")
     String getBackgroundUrlById(String backgroundId);
 
+    @Query("MATCH (u:User{id:$userId}) WITH u MATCH (u)-[:SELECT]->(b:Background) RETURN b")
+    Optional<Background> getMainBackgroundByUserId(String userId);
+
     @Query("MATCH (b:Background) RETURN b ORDER BY b.id")
     List<Background> getBackgroundList();
 

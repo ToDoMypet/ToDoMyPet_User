@@ -1,6 +1,7 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
 import com.todomypet.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,6 +18,13 @@ public class UserController {
 
     private final UserService userService;
 
+
+    @Operation(summary = "메인 페이지 조회", description = "메인 페이지 조회 API입니다.")
+    @GetMapping("/main-page")
+    public SuccessResDTO<GetMainPageResDTO> getMainPage(@RequestHeader String userId) {
+        GetMainPageResDTO response = userService.getMainPage(userId);
+        return new SuccessResDTO<GetMainPageResDTO>(response);
+    }
 
     @Operation(summary = "회원 정보 조회", description = "회원 정보 페이지입니다.")
     @GetMapping("/profile/{targetId}")
