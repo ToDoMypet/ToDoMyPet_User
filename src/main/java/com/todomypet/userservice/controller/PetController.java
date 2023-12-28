@@ -111,6 +111,7 @@ public class PetController {
         return new SuccessResDTO<UpgradePetResDTO>(response);
     }
 
+    @Operation(summary = "펫 졸업", description = "펫을 졸업시킵니다.")
     @PostMapping("/graduate")
     public SuccessResDTO<GraduatePetResDTO> graduatePet(@RequestHeader String userId,
                                                         @RequestBody GraduatePetReqDTO req) {
