@@ -57,6 +57,11 @@ public class PetServiceImpl implements PetService {
     @Transactional
     public void adoptPet(String userId, AdoptPetReqDTO adoptPetReqDTO) {
         log.info(">>> 펫 입양 진입");
+
+        if (adoptRepository.existsAdoptByUserIdAndPetId(userId, adoptPetReqDTO.getPetId())) {
+            userRepository.increaseCollectionCount(userId);
+        }
+
         StringBuilder signatureCode = new StringBuilder();
         Random rnd = new Random();
 
@@ -73,7 +78,7 @@ public class PetServiceImpl implements PetService {
             }
         }
 
-        userRepository.increasePetCount(userId);
+        userRepository.increasePetAcquireCount(userId);
         adoptRepository.createAdoptBetweenAdoptAndUser(userId, adoptPetReqDTO.getPetId(),
                 adoptPetReqDTO.getName(), UlidCreator.getUlid().toString(), signatureCode.toString(),
                 adoptPetReqDTO.isRenameOrNot());
@@ -249,6 +254,10 @@ public class PetServiceImpl implements PetService {
     public UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
 
+        if (adoptRepository.existsAdoptByUserIdAndPetId(userId, req.getPetId())) {
+            userRepository.increaseCollectionCount(userId);
+        }
+
         Adopt adopt = adoptRepository.getAdoptBySeq(userId, req.getSeq())
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP));
         adoptRepository.graduatePetBySeq(userId, adopt.getSeq());
@@ -268,6 +277,8 @@ public class PetServiceImpl implements PetService {
 
         adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), currentName,
                 UlidCreator.getUlid().toString(), adopt.getSignatureCode(), adopt.isRenameOrNot());
+
+        userRepository.increasePetEvolveCount(userId);
 
         return UpgradePetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
                 .currentName(currentName).petImageUrl(pet.getPetImageUrl()).build();
