@@ -295,6 +295,7 @@ public class PetServiceImpl implements PetService {
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getPetSeq());
 
         adoptRepository.graduatePetBySeq(userId, req.getPetSeq());
+        userRepository.increasePetCompleteCount(userId);
 
         return GraduatePetResDTO.builder().petName(adopt.getName()).petImageUrl(pet.getPetImageUrl()).build();
     }
