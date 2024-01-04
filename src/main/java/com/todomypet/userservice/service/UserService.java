@@ -8,7 +8,7 @@ public interface UserService {
 
     MyPageResDTO getMyPage(String userId);
 
-    UserInfoResDTO getUserByPersonalCode(String personalCode);
+    UserInfoResDTO getUserByPersonalCode(String userId, String personalCode);
 
     UserProfileResDTO getUserProfile(String userId, String targetId);
     MyProfileResDTO getMyProfile(String userId);

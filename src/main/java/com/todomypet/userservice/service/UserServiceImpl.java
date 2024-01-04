@@ -37,13 +37,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserInfoResDTO getUserByPersonalCode(String personalCode) {
+    public UserInfoResDTO getUserByPersonalCode(String userId, String personalCode) {
         User user = userRepository.getOneUserByPersonalCode(personalCode).orElse(null);
-
         if (user == null) {
             return null;
         } else {
-            return userMapper.userToUserInfoResDTO(user);
+            UserInfoResDTO response = userMapper.userToUserInfoResDTO(user);
+            response.setFriendOrNot(friendRepository.existsFriendByUserAndUser(userId, user.getId()));
+            return response;
         }
     }
 

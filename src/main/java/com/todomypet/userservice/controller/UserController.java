@@ -62,7 +62,7 @@ public class UserController {
     @GetMapping("/search/{personalCode}")
     public SuccessResDTO<UserInfoResDTO> getUserByPersonalCode(@Parameter(hidden = true) @RequestHeader String userId,
                                                                @PathVariable String personalCode) {
-        UserInfoResDTO response = userService.getUserByPersonalCode(personalCode);
+        UserInfoResDTO response = userService.getUserByPersonalCode(userId, personalCode);
         return new SuccessResDTO<UserInfoResDTO>(response);
     }
 
