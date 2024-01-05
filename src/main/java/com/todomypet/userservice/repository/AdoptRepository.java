@@ -68,7 +68,7 @@ public interface AdoptRepository extends Neo4jRepository<Adopt, Long> {
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (u)-[a:ADOPT]->(p:Pet) WHERE a.graduated = false " +
-            "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode}")
+            "RETURN a{.seq, .name, .graduated, .experiencePoint, .signatureCode, .renameOrNot}")
     Optional<Adopt> getMainPetByUserId(String userId);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +

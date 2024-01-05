@@ -24,4 +24,6 @@ public interface PetService {
     UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req);
 
     GraduatePetResDTO graduatePet(String userId, GraduatePetReqDTO req);
+
+    String getMainPetSeqByUserId(String userId);
 }

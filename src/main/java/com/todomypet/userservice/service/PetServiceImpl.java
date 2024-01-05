@@ -299,6 +299,12 @@ public class PetServiceImpl implements PetService {
         return GraduatePetResDTO.builder().petName(adopt.getName()).petImageUrl(pet.getPetImageUrl()).build();
     }
 
+    @Override
+    public String getMainPetSeqByUserId(String userId) {
+        return adoptRepository.getMainPetByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET)).getSeq();
+    }
+
     private static PetGradeType getPetNextGradeType(Pet pet) {
         PetGradeType grade = pet.getPetGrade();
 

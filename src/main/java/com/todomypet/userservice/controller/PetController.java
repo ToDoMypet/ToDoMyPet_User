@@ -118,4 +118,11 @@ public class PetController {
         GraduatePetResDTO response = petService.graduatePet(userId, req);
         return new SuccessResDTO<GraduatePetResDTO>(response);
     }
+
+    @Operation(summary = "메인 펫 조회", description = "user id를 통해 main pet의 seq 값을 조회합니다.")
+    @GetMapping("/get-main-pet")
+    public SuccessResDTO<String> getMainPet(@RequestHeader String userId) {
+        String response = petService.getMainPetSeqByUserId(userId);
+        return new SuccessResDTO<String>(response);
+    }
 }
