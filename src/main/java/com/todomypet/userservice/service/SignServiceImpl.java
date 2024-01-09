@@ -3,9 +3,12 @@ package com.todomypet.userservice.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todomypet.userservice.config.jwt.JwtTokenProvider;
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.dto.TokenResponseDTO;
+import com.todomypet.userservice.dto.openFeign.AddCategoryReqDTO;
+import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -26,6 +29,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,7 @@ public class SignServiceImpl implements SignService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserMapper userMapper;
+    private final TodoServiceClient todoServiceClient;
 
     @Override
     @Transactional
@@ -48,7 +53,7 @@ public class SignServiceImpl implements SignService {
 
         while (true) {
             for (int i = 0; i < 2; i++) {
-                personalCode.append((char)(rnd.nextInt(26) + 65));
+                personalCode.append((char) (rnd.nextInt(26) + 65));
             }
             for (int i = 0; i < 9; i++) {
                 personalCode.append(rnd.nextInt(10));
@@ -82,6 +87,12 @@ public class SignServiceImpl implements SignService {
 
         String savedUserId = userRepository.save(user).getId();
         userRepository.setDefaultBackground(savedUserId);
+
+
+        FeignClientResDTO<AddCategoryResDTO> feignResponse;
+
+        UUID categoryId = UUID.randomUUID();
+        userRepository.createDefaultCategory(savedUserId, categoryId.toString());
 
         return savedUserId;
     }

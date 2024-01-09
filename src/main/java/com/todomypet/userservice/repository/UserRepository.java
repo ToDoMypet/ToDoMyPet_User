@@ -76,4 +76,8 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User{id:$userId}) SET u.petCompleteCount = u.petCompleteCount + 1")
     void increasePetCompleteCount(String userId);
+
+    @Query("MATCH (u:User{id:$userId}) WITH u " +
+            "CREATE (u)-[:HAVE{colorCode:\"#CBCBCB\", bgCode:\"#F0F0F0\", textCode:\"#909090\"}]->(:Category{id:$categoryId, name:\"미분류\"})")
+    void createDefaultCategory(String userId, String categoryId);
 }

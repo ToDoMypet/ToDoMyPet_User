@@ -208,7 +208,7 @@ public class PetServiceImpl implements PetService {
         log.info(">>> 경험치 획득 진입: (유저)" + userId + "/ (펫 seqId)" +
                 updateExperiencePointReqDTO.getPetSeqId() + " (기존 경험치)" + adoptRepository.getExperiencePointBySeqId(userId,
                 updateExperiencePointReqDTO.getPetSeqId()));
-        if (adoptRepository.getAdoptBySeq(userId, updateExperiencePointReqDTO.getPetSeqId()) == null) {
+        if (adoptRepository.getAdoptBySeq(userId, updateExperiencePointReqDTO.getPetSeqId()).isEmpty()) {
             throw new CustomException(ErrorCode.NOT_EXISTS_ADOPT_RELATIONSHIP);
         };
 
