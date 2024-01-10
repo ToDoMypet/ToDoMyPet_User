@@ -18,4 +18,7 @@ public interface AchievementRepository extends Neo4jRepository<Achievement, Stri
 
     @Query("MATCH (a:Achievement{id:$achievementId}) RETURN a")
     Optional<Achievement> getAchievementById(String achievementId);
+
+    @Query("MATCH (a:Achievement{achType:$achievementType, achCondition:$achievementCount}) RETURN a")
+    Achievement isSatisfyAchievementCondition(AchievementType achievementType, Integer achievementCount);
 }

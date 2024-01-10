@@ -11,15 +11,14 @@ import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
-import com.todomypet.userservice.repository.AdoptRepository;
-import com.todomypet.userservice.repository.BackgroundRepository;
-import com.todomypet.userservice.repository.PetRepository;
-import com.todomypet.userservice.repository.UserRepository;
+import com.todomypet.userservice.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,23 +32,27 @@ public class PetServiceImpl implements PetService {
     private final AdoptRepository adoptRepository;
     private final UserRepository userRepository;
     private final BackgroundRepository backgroundRepository;
+    private final AchievementRepository achievementRepository;
+    private final AchieveRepository achieveRepository;
 
 
     @Transactional
     @Override
-    public String addPet(AddPetReqDTO addPetReqDTO) {
-         Pet p = Pet.builder().id(addPetReqDTO.getId())
-                    .petName(addPetReqDTO.getName())
-                    .petMaxExperiencePoint(addPetReqDTO.getMaxExperience())
-                    .petImageUrl(addPetReqDTO.getImageUrl())
-                    .petPortraitUrl(addPetReqDTO.getPortraitUrl())
-                    .petDescribe(addPetReqDTO.getDescribe())
-                    .petPersonality(PetPersonalityType.valueOf(addPetReqDTO.getPersonality()))
-                    .petCondition(addPetReqDTO.getPetCondition())
-                    .petType(addPetReqDTO.getType())
-                    .petGrade(addPetReqDTO.getGrade())
+    public void addPet(List<AddPetReqDTO> addPetReqDTO) {
+        for (AddPetReqDTO req : addPetReqDTO) {
+            Pet p = Pet.builder().id(req.getId())
+                    .petName(req.getName())
+                    .petMaxExperiencePoint(req.getMaxExperience())
+                    .petImageUrl(req.getImageUrl())
+                    .petPortraitUrl(req.getPortraitUrl())
+                    .petDescribe(req.getDescribe())
+                    .petPersonality(PetPersonalityType.valueOf(req.getPersonality()))
+                    .petCondition(req.getPetCondition())
+                    .petType(req.getType())
+                    .petGrade(req.getGrade())
                     .build();
-        return petRepository.save(p).getId();
+            petRepository.save(p);
+        }
     }
 
     @Override
@@ -278,6 +281,17 @@ public class PetServiceImpl implements PetService {
                 UlidCreator.getUlid().toString(), adopt.getSignatureCode(), adopt.isRenameOrNot());
 
         userRepository.increasePetEvolveCount(userId);
+
+        // todo: 로컬 테스트 필요
+        User user = userRepository.findById(userId).orElseThrow();
+        Achievement achievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.EVOLUTION, user.getPetEvolveCount());
+        if (achievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(userId, achievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        };
+
 
         return UpgradePetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
                 .currentName(currentName).petImageUrl(pet.getPetImageUrl()).build();

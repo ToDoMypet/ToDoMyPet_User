@@ -29,9 +29,9 @@ public class PetController {
     // todo: 권한 설정 필요
     @Operation(summary = "펫 추가", description = "펫을 추가합니다. admin 전용 API입니다.")
     @PostMapping("/add")
-    public SuccessResDTO<AddPetResDTO> addPet(@RequestBody AddPetReqDTO addPetReqDTO) {
-        AddPetResDTO response = AddPetResDTO.builder().id(petService.addPet(addPetReqDTO)).build();
-        return new SuccessResDTO<AddPetResDTO>(response);
+    public SuccessResDTO<Void> addPet(@RequestBody List<AddPetReqDTO> addPetReqDTO) {
+        petService.addPet(addPetReqDTO);
+        return new SuccessResDTO<Void>(null);
     }
 
     @Operation(summary = "펫 입양", description = "키우는 펫을 추가합니다.")
