@@ -31,7 +31,6 @@ public class PetServiceImpl implements PetService {
     private final PetRepository petRepository;
     private final AdoptRepository adoptRepository;
     private final UserRepository userRepository;
-    private final BackgroundRepository backgroundRepository;
     private final AchievementRepository achievementRepository;
     private final AchieveRepository achieveRepository;
 
@@ -45,6 +44,7 @@ public class PetServiceImpl implements PetService {
                     .petMaxExperiencePoint(req.getMaxExperience())
                     .petImageUrl(req.getImageUrl())
                     .petPortraitUrl(req.getPortraitUrl())
+                    .petGif(req.getGif())
                     .petDescribe(req.getDescribe())
                     .petPersonality(PetPersonalityType.valueOf(req.getPersonality()))
                     .petCondition(req.getPetCondition())

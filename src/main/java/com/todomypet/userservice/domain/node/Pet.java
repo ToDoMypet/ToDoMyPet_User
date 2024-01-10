@@ -34,6 +34,9 @@ public class Pet {
     @Property("petDescribe")
     private String petDescribe;
 
+    @Property("petGif")
+    private String petGif;
+
     @Property("petPersonality")
     private PetPersonalityType petPersonality;
 
