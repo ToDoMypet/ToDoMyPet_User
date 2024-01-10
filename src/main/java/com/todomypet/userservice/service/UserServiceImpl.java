@@ -91,10 +91,10 @@ public class UserServiceImpl implements UserService {
         Pet pet = petRepository.getPetBySeqOfAdopt(adopt.getSeq());
 
         return GetMainPageResDTO.builder().petGrade(pet.getPetGrade()).petPortraitImage(pet.getPetPortraitUrl())
-                .petGif(pet.getPetImageUrl()).petName(pet.getPetName()).petExperiencePoint(adopt.getExperiencePoint())
+                .petGif(pet.getPetGif()).petName(adopt.getName()).petExperiencePoint(adopt.getExperiencePoint())
                 .petMaxExperiencePoint(pet.getPetMaxExperiencePoint())
-                .backgroundImage(String.valueOf(backgroundRepository.getMainBackgroundByUserId(userId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND))))
+                .backgroundImage(backgroundRepository.getMainBackgroundByUserId(userId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND)).getBackgroundImageUrl())
                 .build();
     }
 }
