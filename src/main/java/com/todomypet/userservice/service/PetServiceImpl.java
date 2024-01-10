@@ -11,12 +11,14 @@ import com.todomypet.userservice.dto.adopt.UpdateExperiencePointResDTO;
 import com.todomypet.userservice.dto.pet.*;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
+import com.todomypet.userservice.mapper.PetMapper;
 import com.todomypet.userservice.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -33,6 +35,7 @@ public class PetServiceImpl implements PetService {
     private final UserRepository userRepository;
     private final AchievementRepository achievementRepository;
     private final AchieveRepository achieveRepository;
+    private final PetMapper petMapper;
 
 
     @Transactional
@@ -317,6 +320,16 @@ public class PetServiceImpl implements PetService {
     public String getMainPetSeqByUserId(String userId) {
         return adoptRepository.getMainPetByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET)).getSeq();
+    }
+
+    @Override
+    public List<GetAvailableStartingPetDTO> getAvailableStartingPet(String userId) {
+        List<Pet> petList = petRepository.getAvailablePet(userId);
+        List<GetAvailableStartingPetDTO> response = new ArrayList<>();
+        for (Pet p : petList) {
+            response.add(petMapper.petToGetAvailableStartingPetDTO(p));
+        }
+        return response;
     }
 
     private static PetGradeType getPetNextGradeType(Pet pet) {

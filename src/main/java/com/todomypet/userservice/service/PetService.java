@@ -26,4 +26,6 @@ public interface PetService {
     GraduatePetResDTO graduatePet(String userId, GraduatePetReqDTO req);
 
     String getMainPetSeqByUserId(String userId);
+
+    List<GetAvailableStartingPetDTO> getAvailableStartingPet(String userId);
 }

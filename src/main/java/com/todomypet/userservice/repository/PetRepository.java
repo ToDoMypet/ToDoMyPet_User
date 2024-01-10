@@ -26,4 +26,7 @@ public interface PetRepository extends Neo4jRepository< Pet, String> {
 
     @Query("MATCH (p:Pet) WHERE p.petGrade = $newGrade AND p.petType = $petType RETURN p")
     List<Pet> getPetByGradeAndType(PetGradeType newGrade, PetType petType);
+
+    @Query("MATCH (u:User{id:$userId}) WITH u MATCH (u)-[:AVAILABLE]->(p:Pet) RETURN p")
+    List<Pet> getAvailablePet(String userId);
 }

@@ -42,6 +42,12 @@ public class PetController {
         return new SuccessResDTO<>(null);
     }
 
+    @GetMapping("/get-available-pet")
+    public SuccessResDTO<List<GetAvailableStartingPetDTO>> getAvailableStartingPet(@RequestHeader String userId) {
+        List<GetAvailableStartingPetDTO> response = petService.getAvailableStartingPet(userId);
+        return new SuccessResDTO<>(response);
+    }
+
     @Operation(summary = "일지", description = "일지 데이터를 불러옵니다.")
     @GetMapping("/adopted-pet-list")
     public SuccessResDTO<AdoptedPetResListDTO> getAdoptedPetList(@RequestHeader String userId) {
