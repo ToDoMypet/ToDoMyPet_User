@@ -12,6 +12,7 @@ import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
+import com.todomypet.userservice.repository.PetRepository;
 import com.todomypet.userservice.repository.RefreshTokenRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -40,7 +41,6 @@ public class SignServiceImpl implements SignService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserMapper userMapper;
-    private final TodoServiceClient todoServiceClient;
 
     @Override
     @Transactional
@@ -87,6 +87,7 @@ public class SignServiceImpl implements SignService {
 
         String savedUserId = userRepository.save(user).getId();
         userRepository.setDefaultBackground(savedUserId);
+        userRepository.setDefaultPet(savedUserId);
 
 
         FeignClientResDTO<AddCategoryResDTO> feignResponse;
