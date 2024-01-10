@@ -38,8 +38,8 @@ public class PetServiceImpl implements PetService {
 
     @Transactional
     @Override
-    public void addPet(List<AddPetReqDTO> addPetReqDTO) {
-        for (AddPetReqDTO req : addPetReqDTO) {
+    public void addPet(AddPetReqDTOList addPetReqDTO) {
+        for (AddPetReqDTO req : addPetReqDTO.getPetList()) {
             Pet p = Pet.builder().id(req.getId())
                     .petName(req.getName())
                     .petMaxExperiencePoint(req.getMaxExperience())

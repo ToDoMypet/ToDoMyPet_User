@@ -10,7 +10,7 @@ import com.todomypet.userservice.dto.pet.*;
 import java.util.List;
 
 public interface PetService {
-    void addPet(List<AddPetReqDTO> addPetReqDTO);
+    void addPet(AddPetReqDTOList addPetReqDTO);
     void adoptPet(String userId, AdoptPetReqDTO adoptPetReqDTO);
     AdoptedPetResListDTO getAdoptedPetList(String userId);
     GetMyPetInfoResListDTO getMyPetInfo(String userId, String signatureCode);
