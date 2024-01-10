@@ -83,6 +83,7 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(1)
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
+                .haveUnreadNotificationOrNot(false)
                 .build();
 
         String savedUserId = userRepository.save(user).getId();

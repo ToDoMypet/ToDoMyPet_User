@@ -76,4 +76,7 @@ public class User {
 
     @Property("lastAttendAt")
     private LocalDate lastAttendAt;
+
+    @Property("haveUnreadNotificationOrNot")
+    private boolean haveUnreadNotificationOrNot;
 }
