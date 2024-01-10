@@ -1,6 +1,7 @@
 package com.todomypet.userservice.dto.pet;
 
 import com.todomypet.userservice.domain.node.PetGradeType;
+import com.todomypet.userservice.domain.node.PetPersonalityType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class GetMainPageResDTO {
     private String petPortraitImage;
     private String petGif;
     private String petName;
+    private PetPersonalityType petPersonality;
     private int petExperiencePoint;
     private int petMaxExperiencePoint;
     private String backgroundImage;

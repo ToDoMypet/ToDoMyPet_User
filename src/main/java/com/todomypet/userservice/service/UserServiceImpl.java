@@ -92,6 +92,7 @@ public class UserServiceImpl implements UserService {
 
         return GetMainPageResDTO.builder().petGrade(pet.getPetGrade()).petPortraitImage(pet.getPetPortraitUrl())
                 .petGif(pet.getPetGif()).petName(adopt.getName()).petExperiencePoint(adopt.getExperiencePoint())
+                .petPersonality(pet.getPetPersonality())
                 .petMaxExperiencePoint(pet.getPetMaxExperiencePoint())
                 .backgroundImage(backgroundRepository.getMainBackgroundByUserId(userId)
                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND)).getBackgroundImageUrl())
