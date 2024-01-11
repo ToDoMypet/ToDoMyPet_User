@@ -2,6 +2,7 @@ package com.todomypet.userservice.domain.relationship;
 
 import com.todomypet.userservice.domain.node.Pet;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.Property;
 import org.springframework.data.neo4j.core.schema.RelationshipId;
@@ -24,7 +25,7 @@ public class Adopt {
     private String seq;
 
     @Property("graduated")
-    private Boolean graduated;
+    private boolean graduated;
 
     @Property("experiencePoint")
     private int experiencePoint;

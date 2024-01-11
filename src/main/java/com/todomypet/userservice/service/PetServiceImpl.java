@@ -122,7 +122,7 @@ public class PetServiceImpl implements PetService {
                     .maxExperience(pet.getPetMaxExperiencePoint())
                     .experience(adopt.getExperiencePoint())
                     .grade(pet.getPetGrade())
-                    .graduated(adopt.getGraduated())
+                    .graduated(adopt.isGraduated())
                     .seq(adopt.getSeq())
                     .build();
 
