@@ -3,6 +3,7 @@ package com.todomypet.userservice.controller;
 import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
 import com.todomypet.userservice.dto.attend.UpdateAttendanceCountReqDTO;
+import com.todomypet.userservice.service.AchievementService;
 import com.todomypet.userservice.service.AttendanceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
+    private final AchievementService achievementService;
 
     @Operation(summary = "접속 시 출석 데이터 조회", description = "해당 일자 최초 접속 시 모달에 표시될 데이터를 조회합니다.")
     @GetMapping("")

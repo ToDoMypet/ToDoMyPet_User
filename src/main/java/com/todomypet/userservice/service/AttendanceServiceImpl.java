@@ -1,11 +1,15 @@
 package com.todomypet.userservice.service;
 
+import com.todomypet.userservice.domain.node.Achievement;
+import com.todomypet.userservice.domain.node.AchievementType;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
+import com.todomypet.userservice.repository.AchieveRepository;
+import com.todomypet.userservice.repository.AchievementRepository;
 import com.todomypet.userservice.repository.AdoptRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -14,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
@@ -25,6 +30,8 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final UserRepository userRepository;
     private final AdoptRepository adoptRepository;
     private final PetService petService;
+    private final AchievementRepository achievementRepository;
+    private final AchieveRepository achieveRepository;
 
     @Override
     @Transactional
@@ -37,6 +44,13 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         log.info(">>> 휴면 카운트: " + userId + " " + lastAttendanceToToday);
 
+        Achievement achievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
+        if (achievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
         return GetAttendInfoReqDTO.builder().attendCount(user.getAttendCount())
                 .attendContinueCount(user.getAttendContinueCount())
                 .lastAttendanceToToday(lastAttendanceToToday.getDays()).build();
@@ -72,5 +86,4 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
     }
-
 }
