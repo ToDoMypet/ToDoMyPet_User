@@ -110,10 +110,10 @@ public class PetController {
     }
 
     @Operation(summary = "펫 진화", description = "펫을 진화시킵니다.")
-    @PostMapping("/upgrade")
-    public SuccessResDTO<UpgradePetResDTO> upgradePet(@RequestHeader String userId,
+    @PostMapping("/evolve")
+    public SuccessResDTO<UpgradePetResDTO> evolvePet(@RequestHeader String userId,
                                                       @RequestBody UpgradePetReqDTO req) {
-        UpgradePetResDTO response = petService.upgradePet(userId, req);
+        UpgradePetResDTO response = petService.evolvePet(userId, req);
         return new SuccessResDTO<UpgradePetResDTO>(response);
     }
 

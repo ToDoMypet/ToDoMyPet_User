@@ -27,6 +27,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final PetService petService;
 
     @Override
+    @Transactional
     public GetAttendInfoReqDTO getAttendanceInfo(String userId) {
         log.info(">>> 출석 모달 진입: " + userId);
         User user = userRepository.getOneUserById(userId)
@@ -71,4 +72,5 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
     }
+
 }

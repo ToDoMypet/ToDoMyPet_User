@@ -2,6 +2,7 @@ package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
+import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Achieve;
 import com.todomypet.userservice.dto.achievement.*;
 import com.todomypet.userservice.exception.CustomException;

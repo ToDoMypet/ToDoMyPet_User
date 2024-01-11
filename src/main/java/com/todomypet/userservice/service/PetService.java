@@ -21,7 +21,7 @@ public interface PetService {
     UpdateExperiencePointResDTO updateExperiencePoint(String userId, UpdateExperiencePointReqDTO updateExperiencePointReqDTO);
     List<GetPetUpgradeChoiceResDTO> getPetUpgradeChoice(String userId, String petId);
 
-    UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req);
+    UpgradePetResDTO evolvePet(String userId, UpgradePetReqDTO req);
 
     GraduatePetResDTO graduatePet(String userId, GraduatePetReqDTO req);
 

@@ -256,7 +256,7 @@ public class PetServiceImpl implements PetService {
 
     @Override
     @Transactional
-    public UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req) {
+    public UpgradePetResDTO evolvePet(String userId, UpgradePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
 
         if (adoptRepository.existsAdoptByUserIdAndPetId(userId, req.getSelectedPetId())) {
@@ -271,9 +271,9 @@ public class PetServiceImpl implements PetService {
         String currentName = req.getPetName();
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getSeq());
 
-//        if (adopt.getExperiencePoint() < pet.getPetMaxExperiencePoint()) {
-//            throw new CustomException(ErrorCode.EXPERIENCE_POINT_NOT_SATISFIED);
-//        }
+        if (adopt.getExperiencePoint() < pet.getPetMaxExperiencePoint()) {
+            throw new CustomException(ErrorCode.EXPERIENCE_POINT_NOT_SATISFIED);
+        }
 
         if (adopt.isRenameOrNot()) {
             log.info(">>> (" + userId + ") rename check");
@@ -286,13 +286,8 @@ public class PetServiceImpl implements PetService {
         userRepository.increasePetEvolveCount(userId);
 
         User user = userRepository.findById(userId).orElseThrow();
-        Achievement achievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.EVOLUTION, user.getPetEvolveCount());
-        if (achievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(userId, achievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
-        };
+
+        earnAchievement(user, AchievementType.EVOLUTION, user.getPetEvolveCount());
 
 
         return UpgradePetResDTO.builder().renameOrNot(adopt.isRenameOrNot()).originName(originName)
@@ -309,8 +304,16 @@ public class PetServiceImpl implements PetService {
 
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getPetSeq());
 
+        if (pet.getPetGrade() != PetGradeType.ADULT) {
+            throw new CustomException(ErrorCode.GRADUATION_MUST_BE_ADULT_GRADE);
+        }
+
         adoptRepository.graduatePetBySeq(userId, req.getPetSeq());
         userRepository.increasePetCompleteCount(userId);
+
+        User user = userRepository.findById(userId).orElseThrow();
+
+        earnAchievement(user, AchievementType.GRADUATION, user.getPetCompleteCount());
 
         return GraduatePetResDTO.builder().petName(adopt.getName()).petImageUrl(pet.getPetImageUrl()).build();
     }
@@ -351,4 +354,14 @@ public class PetServiceImpl implements PetService {
         }
         return newGrade;
     }
+
+    public void earnAchievement(User user, AchievementType achievementType, int achievementCondition) {
+        Achievement achievement = achievementRepository
+                .isSatisfyAchievementCondition(achievementType, achievementCondition);
+        if (achievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        };
+    };
 }
