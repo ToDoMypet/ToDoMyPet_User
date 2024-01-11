@@ -259,7 +259,7 @@ public class PetServiceImpl implements PetService {
     public UpgradePetResDTO upgradePet(String userId, UpgradePetReqDTO req) {
         log.info(">>> 펫 진화 진입: (userId)" + userId + " " + "(펫 signatureCode)" + req.getSignatureCode());
 
-        if (adoptRepository.existsAdoptByUserIdAndPetId(userId, req.getPetId())) {
+        if (adoptRepository.existsAdoptByUserIdAndPetId(userId, req.getSelectedPetId())) {
             userRepository.increaseCollectionCount(userId);
         }
 
@@ -280,7 +280,7 @@ public class PetServiceImpl implements PetService {
             originName = pet.getPetName();
         }
 
-        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getPetId(), currentName,
+        adoptRepository.createAdoptBetweenAdoptAndUser(userId, req.getSelectedPetId(), currentName,
                 UlidCreator.getUlid().toString(), adopt.getSignatureCode(), adopt.isRenameOrNot());
 
         userRepository.increasePetEvolveCount(userId);

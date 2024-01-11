@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class UpgradePetReqDTO {
     private String seq;
     private String signatureCode;
-    private String petId;
+    private String selectedPetId;
     private String petName;
 }
