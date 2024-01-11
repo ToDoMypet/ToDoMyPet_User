@@ -1,6 +1,6 @@
 package com.todomypet.userservice.controller;
 
-import com.todomypet.userservice.dto.background.AddBackgroundReqDTO;
+import com.todomypet.userservice.dto.background.AddBackgroundReqDTOList;
 import com.todomypet.userservice.dto.background.BackgroundResDTO;
 import com.todomypet.userservice.dto.SuccessResDTO;
 import com.todomypet.userservice.service.BackgroundService;
@@ -26,8 +26,8 @@ public class BackgroundController {
     // todo: 권한 설정 필요
     @Operation(summary = "배경 추가", description = "어드민 전용 API입니다.")
     @PostMapping("/background/add")
-    public SuccessResDTO<Void> addBackground(@RequestBody AddBackgroundReqDTO addBackgroundReqDTO) {
-        backgroundService.addBackground(addBackgroundReqDTO);
+    public SuccessResDTO<Void> addBackground(@RequestBody AddBackgroundReqDTOList req) {
+        backgroundService.addBackground(req);
         return new SuccessResDTO<>(null);
     }
 
