@@ -21,10 +21,9 @@ public class AchievementController {
 
     @Operation(summary = "업적 추가", description = "업적을 추가합니다. admin 전용 API입니다.")
     @PostMapping("/add")
-    public SuccessResDTO<AddAchievementResDTO> addAchievement(@RequestBody AddAchievementReqDTO addAchievementReqDTO) {
-        AddAchievementResDTO response = AddAchievementResDTO.builder().id(achievementService
-                .addAchievement(addAchievementReqDTO)).build();
-        return new SuccessResDTO<AddAchievementResDTO>(response);
+    public SuccessResDTO<Void> addAchievement(@RequestBody AddAchievementReqDTOList req) {
+        achievementService.addAchievement(req);
+        return new SuccessResDTO<Void>(null);
     }
 
     @Operation(summary = "업적 달성", description = "업적을 달성합니다.")

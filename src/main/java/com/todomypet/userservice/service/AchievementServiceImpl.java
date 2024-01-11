@@ -28,16 +28,18 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Transactional
     @Override
-    public String addAchievement(AddAchievementReqDTO addAchievementReqDTO) {
-        Achievement a = Achievement.builder().id(addAchievementReqDTO.getId())
-                .achName(addAchievementReqDTO.getAchName())
-                .achType(addAchievementReqDTO.getAchType())
-                .achDiff(addAchievementReqDTO.getAchDiff())
-                .achCondition(addAchievementReqDTO.getAchCondition())
-                .achAdvice(addAchievementReqDTO.getAchAdvice())
-                .achDescribe(addAchievementReqDTO.getAchDescribe())
-                .build();
-        return achievementRepository.save(a).getId();
+    public void addAchievement(AddAchievementReqDTOList req) {
+        for (AddAchievementReqDTO addAchievementReqDTO : req.getAchievementList()) {
+            Achievement a = Achievement.builder().id(addAchievementReqDTO.getId())
+                    .achName(addAchievementReqDTO.getAchName())
+                    .achType(addAchievementReqDTO.getAchType())
+                    .achDiff(addAchievementReqDTO.getAchDiff())
+                    .achCondition(addAchievementReqDTO.getAchCondition())
+                    .achAdvice(addAchievementReqDTO.getAchAdvice())
+                    .achDescribe(addAchievementReqDTO.getAchDescribe())
+                    .build();
+            achievementRepository.save(a);
+        }
     }
 
     @Transactional
