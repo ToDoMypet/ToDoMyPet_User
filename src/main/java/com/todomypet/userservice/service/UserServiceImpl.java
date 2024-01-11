@@ -1,5 +1,6 @@
 package com.todomypet.userservice.service;
 
+import com.todomypet.userservice.domain.node.Background;
 import com.todomypet.userservice.domain.node.Pet;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Adopt;
@@ -90,12 +91,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET));
         Pet pet = petRepository.getPetBySeqOfAdopt(adopt.getSeq());
 
+        Background b = backgroundRepository.getMainBackgroundByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND));
         return GetMainPageResDTO.builder().petGrade(pet.getPetGrade()).petPortraitImage(pet.getPetPortraitUrl())
                 .petGif(pet.getPetGif()).petName(adopt.getName()).petExperiencePoint(adopt.getExperiencePoint())
                 .petPersonality(pet.getPetPersonality())
                 .petMaxExperiencePoint(pet.getPetMaxExperiencePoint())
-                .backgroundImage(backgroundRepository.getMainBackgroundByUserId(userId)
-                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND)).getBackgroundImageUrl())
+                .backgroundId(b.getId())
+                .backgroundImage(b.getBackgroundImageUrl())
                 .build();
     }
 }

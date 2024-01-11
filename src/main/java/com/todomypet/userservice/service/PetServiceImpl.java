@@ -271,9 +271,9 @@ public class PetServiceImpl implements PetService {
         String currentName = req.getPetName();
         Pet pet = petRepository.getPetBySeqOfAdopt(req.getSeq());
 
-        if (adopt.getExperiencePoint() >= pet.getPetMaxExperiencePoint()) {
-            throw new CustomException(ErrorCode.EXPERIENCE_POINT_NOT_SATISFIED);
-        }
+//        if (adopt.getExperiencePoint() < pet.getPetMaxExperiencePoint()) {
+//            throw new CustomException(ErrorCode.EXPERIENCE_POINT_NOT_SATISFIED);
+//        }
 
         if (adopt.isRenameOrNot()) {
             log.info(">>> (" + userId + ") rename check");
@@ -285,7 +285,6 @@ public class PetServiceImpl implements PetService {
 
         userRepository.increasePetEvolveCount(userId);
 
-        // todo: 로컬 테스트 필요
         User user = userRepository.findById(userId).orElseThrow();
         Achievement achievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.EVOLUTION, user.getPetEvolveCount());

@@ -15,5 +15,6 @@ public class GetMainPageResDTO {
     private PetPersonalityType petPersonality;
     private int petExperiencePoint;
     private int petMaxExperiencePoint;
+    private String backgroundId;
     private String backgroundImage;
 }
