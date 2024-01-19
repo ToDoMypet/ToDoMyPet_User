@@ -13,6 +13,8 @@ public class GetMainPageResDTO {
     private String petGif;
     private String petName;
     private PetPersonalityType petPersonality;
+    private String petSignatureCode;
+    private String petSeq;
     private int petExperiencePoint;
     private int petMaxExperiencePoint;
     private String backgroundId;

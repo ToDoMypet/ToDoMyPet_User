@@ -97,6 +97,8 @@ public class UserServiceImpl implements UserService {
                 .petGif(pet.getPetGif()).petName(adopt.getName()).petExperiencePoint(adopt.getExperiencePoint())
                 .petPersonality(pet.getPetPersonality())
                 .petMaxExperiencePoint(pet.getPetMaxExperiencePoint())
+                .petSignatureCode(adopt.getSignatureCode())
+                .petSeq(adopt.getSeq())
                 .backgroundId(b.getId())
                 .backgroundImage(b.getBackgroundImageUrl())
                 .build();
