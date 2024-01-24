@@ -15,4 +15,12 @@ public interface UserService {
     void updateMyPage(String userId, UpdateMyPageReqDTO updateMyPageReqDTO);
 
     GetMainPageResDTO getMainPage(String userId);
+
+    void increaseCollectionCountByUserId(String userId);
+
+    void increasePetAcquireCountByUserId(String userId);
+
+    void increasePetEvolveCountByUserId(String userId);
+
+    void increasePetCompleteCountByUserId(String userId);
 }

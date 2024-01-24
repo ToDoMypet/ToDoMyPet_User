@@ -1,11 +1,10 @@
 package com.todomypet.userservice.service;
 
-import com.todomypet.userservice.domain.node.Background;
-import com.todomypet.userservice.domain.node.Pet;
-import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.domain.node.*;
 import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
+import com.todomypet.userservice.dto.pet.GetMainPetInfosResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final FriendRepository friendRepository;
     private final S3Uploader s3Uploader;
-    private final AdoptRepository adoptRepository;
+    private final PetServiceClient petServiceClient;
     private final BackgroundRepository backgroundRepository;
     private final PetRepository petRepository;
 
@@ -87,20 +86,47 @@ public class UserServiceImpl implements UserService {
         log.info(">>> 메인 페이지 진입: " + userId);
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
-        Adopt adopt = adoptRepository.getMainPetByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET));
-        Pet pet = petRepository.getPetBySeqOfAdopt(adopt.getSeq());
+        GetMainPetInfosResDTO petInfos;
+
+        try {
+            petInfos = petServiceClient.getMainPetInfosByUserId(userId).getData();
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
+        }
+
 
         Background b = backgroundRepository.getMainBackgroundByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_BACKGROUND));
-        return GetMainPageResDTO.builder().petGrade(pet.getPetGrade()).petPortraitImage(pet.getPetPortraitUrl())
-                .petGif(pet.getPetGif()).petName(adopt.getName()).petExperiencePoint(adopt.getExperiencePoint())
-                .petPersonality(pet.getPetPersonality())
-                .petMaxExperiencePoint(pet.getPetMaxExperiencePoint())
-                .petSignatureCode(adopt.getSignatureCode())
-                .petSeq(adopt.getSeq())
+        return GetMainPageResDTO.builder().petGrade(PetGradeType.valueOf(petInfos.getPetGrade()))
+                .petPortraitImage(petInfos.getPetPortraitImageUrl())
+                .petGif(petInfos.getPetGifUrl()).petName(petInfos.getPetName())
+                .petExperiencePoint(petInfos.getPetExperiencePoint())
+                .petPersonality(PetPersonalityType.valueOf(petInfos.getPetPersonalityType()))
+                .petMaxExperiencePoint(petInfos.getPetMaxExperiencePoint())
+                .petSignatureCode(petInfos.getPetSignatureCode())
+                .petSeq(petInfos.getPetSeq())
                 .backgroundId(b.getId())
                 .backgroundImage(b.getBackgroundImageUrl())
                 .build();
+    }
+
+    @Override
+    public void increaseCollectionCountByUserId(String userId) {
+        userRepository.increaseCollectionCount(userId);
+    }
+
+    @Override
+    public void increasePetAcquireCountByUserId(String userId) {
+        userRepository.increaseAchieveCount(userId);
+    }
+
+    @Override
+    public void increasePetEvolveCountByUserId(String userId) {
+        userRepository.increasePetEvolveCount(userId);
+    }
+
+    @Override
+    public void increasePetCompleteCountByUserId(String userId) {
+        userRepository.increasePetCompleteCount(userId);
     }
 }

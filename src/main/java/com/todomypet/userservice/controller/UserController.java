@@ -3,6 +3,7 @@ package com.todomypet.userservice.controller;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
 import com.todomypet.userservice.service.UserService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -64,6 +65,34 @@ public class UserController {
                                                                @PathVariable String personalCode) {
         UserInfoResDTO response = userService.getUserByPersonalCode(userId, personalCode);
         return new SuccessResDTO<UserInfoResDTO>(response);
+    }
+
+    @Hidden
+    @PutMapping("/increase-collection-count")
+    public SuccessResDTO<Void> increaseCollectionCount(String userId) {
+        userService.increaseCollectionCountByUserId(userId);
+        return new SuccessResDTO<>(null);
+    }
+
+    @Hidden
+    @PutMapping("/increase-pet-acquire-count")
+    public SuccessResDTO<Void> increasePetAcquireCount(String userId) {
+        userService.increasePetAcquireCountByUserId(userId);
+        return new SuccessResDTO<>(null);
+    }
+
+    @Hidden
+    @PutMapping("/increase-pet-evolve-count")
+    public SuccessResDTO<Void> increasePetEvolveCount(String userId) {
+        userService.increasePetEvolveCountByUserId(userId);
+        return new SuccessResDTO<>(null);
+    }
+
+    @Hidden
+    @PutMapping("/increase-pet-complete-count")
+    public SuccessResDTO<Void> increasePetCompleteCount(String userId) {
+        userService.increasePetCompleteCountByUserId(userId);
+        return new SuccessResDTO<>(null);
     }
 
 }

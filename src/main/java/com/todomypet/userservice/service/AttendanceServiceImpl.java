@@ -10,7 +10,6 @@ import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AchieveRepository;
 import com.todomypet.userservice.repository.AchievementRepository;
-import com.todomypet.userservice.repository.AdoptRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -28,10 +27,9 @@ import java.time.format.DateTimeFormatter;
 public class AttendanceServiceImpl implements AttendanceService {
 
     private final UserRepository userRepository;
-    private final AdoptRepository adoptRepository;
-    private final PetService petService;
     private final AchievementRepository achievementRepository;
     private final AchieveRepository achieveRepository;
+    private final PetServiceClient petServiceClient;
 
     @Override
     @Transactional
@@ -74,15 +72,18 @@ public class AttendanceServiceImpl implements AttendanceService {
         }
 
         log.info(">>> 메인 펫 조회: " + userId);
-        Adopt adopt = adoptRepository.getMainPetByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_EXISTS_MAIN_PET));
+        String petSeq = petServiceClient.getMainPetInfosByUserId(userId).getData().getPetSeq();
 
         UpdateExperiencePointReqDTO reqDTO = UpdateExperiencePointReqDTO.builder()
-                .petSeqId(adopt.getSeq())
+                .petSeqId(petSeq)
                 .experiencePoint(10)
                 .build();
 
-        petService.updateExperiencePoint(userId, reqDTO);
+        try {
+            petServiceClient.updateExperiencePoint(userId, reqDTO);
+        } catch (Exception e) {
+            throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
+        }
 
         userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
     }
