@@ -2,6 +2,7 @@ package com.todomypet.userservice.service;
 
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
+import com.todomypet.userservice.dto.user.AdminGetAllUsersDTO;
 
 public interface UserService {
 
@@ -23,4 +24,6 @@ public interface UserService {
     void increasePetEvolveCountByUserId(String userId);
 
     void increasePetCompleteCountByUserId(String userId);
+
+    AdminGetAllUsersDTO getAllUsers();
 }

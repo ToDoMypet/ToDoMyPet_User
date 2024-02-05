@@ -5,6 +5,8 @@ import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
 import com.todomypet.userservice.dto.pet.GetMainPetInfosResDTO;
+import com.todomypet.userservice.dto.user.AdminGetAllUsersDTO;
+import com.todomypet.userservice.dto.user.AdminUserDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -13,6 +15,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -128,5 +133,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void increasePetCompleteCountByUserId(String userId) {
         userRepository.increasePetCompleteCount(userId);
+    }
+
+    @Override
+    public AdminGetAllUsersDTO getAllUsers() {
+        List<User> users = userRepository.getAllUsers();
+        List<AdminUserDTO> response = new ArrayList<>();
+        for (User user : users) {
+            response.add(userMapper.userToAdminUserDTO(user));
+        }
+        return AdminGetAllUsersDTO.builder().userList(response).build();
     }
 }

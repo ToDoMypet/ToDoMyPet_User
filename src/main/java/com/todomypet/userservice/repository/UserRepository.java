@@ -85,4 +85,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
             "CREATE (u)-[:AVAILABLE]->(p1), (u)-[:AVAILABLE]->(p2), " +
             "(u)-[:AVAILABLE]->(p3)")
     void setDefaultPet(String userId);
+
+    @Query("MATCH (n:User) RETURN n")
+    List<User> getAllUsers();
 }
