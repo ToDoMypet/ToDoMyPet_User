@@ -7,4 +7,5 @@ import lombok.Getter;
 @Getter
 public class GetUserDetailsDTO {
     private String id;
+    private String authority;
 }

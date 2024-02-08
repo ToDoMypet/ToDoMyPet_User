@@ -26,9 +26,10 @@ public class JwtTokenProvider {
     @Value("${token.secret}")
     private String SECRET;
 
-    public String createJwtAccessToken(String userId) {
+    public String createJwtAccessToken(String userId, String authority) {
         return Jwts.builder()
                 .setSubject(userId)
+                .claim("auth", authority)
                 .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRED_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();

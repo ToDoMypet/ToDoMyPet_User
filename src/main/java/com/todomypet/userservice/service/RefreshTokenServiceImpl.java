@@ -46,8 +46,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         log.info(">>> refresh token : " + refreshToken);
 
         String userId = rtk.getUserId();
+
+        String authority = userRepository.getOneUserById(userId).orElseThrow(()
+                -> new CustomException(ErrorCode.USER_NOT_EXISTS)).getAuthority();
         String newRefreshToken = jwtTokenProvider.createJwtRefreshToken(userId);
-        String newAccessToken = jwtTokenProvider.createJwtAccessToken(userId);
+        String newAccessToken = jwtTokenProvider.createJwtAccessToken(userId, authority);
 
         refreshTokenRepository.deleteById(refreshToken);
         refreshTokenRepository.save(RefreshToken.of(userId, newRefreshToken));

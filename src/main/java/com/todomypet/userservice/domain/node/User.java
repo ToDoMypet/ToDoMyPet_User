@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.neo4j.core.schema.*;
 import org.springframework.data.neo4j.core.support.UUIDStringGenerator;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,8 +33,6 @@ public class User {
     @Property("profilePicUrl")
     private String profilePicUrl;
 
-    @Property("oauthKey")
-    private String oauthKey;
 
     @Property("personalCode")
     private String personalCode;
@@ -79,4 +78,7 @@ public class User {
 
     @Property("haveUnreadNotificationOrNot")
     private boolean haveUnreadNotificationOrNot;
+
+    @Property("authority")
+    private String authority;
 }

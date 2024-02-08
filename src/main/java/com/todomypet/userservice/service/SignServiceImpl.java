@@ -1,34 +1,24 @@
 package com.todomypet.userservice.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.todomypet.userservice.config.jwt.JwtTokenProvider;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
-import com.todomypet.userservice.dto.TokenResponseDTO;
-import com.todomypet.userservice.dto.openFeign.AddCategoryReqDTO;
 import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
-import com.todomypet.userservice.repository.PetRepository;
-import com.todomypet.userservice.repository.RefreshTokenRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
@@ -84,6 +74,7 @@ public class SignServiceImpl implements SignService {
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
                 .haveUnreadNotificationOrNot(false)
+                .authority("ROLE_USER")
                 .build();
 
         String savedUserId = userRepository.save(user).getId();
@@ -148,7 +139,8 @@ public class SignServiceImpl implements SignService {
         if (user.getDeleted()) {
             throw new CustomException(ErrorCode.DELETED_USER);
         }
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(),
-                true, true, true, true, new ArrayList<>());
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail()).password(user.getPassword()).authorities(user.getAuthority()).build();
     }
 }
