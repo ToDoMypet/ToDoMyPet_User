@@ -20,12 +20,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/admin/get-all-users")
-    public SuccessResDTO<AdminGetAllUsersDTO> adminGetAllUsers() {
-        AdminGetAllUsersDTO response = userService.getAllUsers();
-        return new SuccessResDTO<AdminGetAllUsersDTO>(response);
-    }
-
     @Operation(summary = "메인 페이지 조회", description = "메인 페이지 조회 API입니다.")
     @GetMapping("/main-page")
     public SuccessResDTO<GetMainPageResDTO> getMainPage(@RequestHeader String userId) {
