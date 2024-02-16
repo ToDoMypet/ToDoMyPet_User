@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 public interface SignService extends UserDetailsService {
     String signUp(SignUpReqDTO signUpInfo);
 
+    String addAdminInfo(SignUpReqDTO signUpInfo);
+
     Boolean duplicationCheck(String checkedId);
 
     String sendCheckEmail(String receiveEmail) throws Exception;

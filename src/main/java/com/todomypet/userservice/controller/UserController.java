@@ -69,28 +69,28 @@ public class UserController {
 
     @Hidden
     @PutMapping("/increase-collection-count")
-    public SuccessResDTO<Void> increaseCollectionCount(String userId) {
+    public SuccessResDTO<Void> increaseCollectionCount(@RequestHeader String userId) {
         userService.increaseCollectionCountByUserId(userId);
         return new SuccessResDTO<>(null);
     }
 
     @Hidden
     @PutMapping("/increase-pet-acquire-count")
-    public SuccessResDTO<Void> increasePetAcquireCount(String userId) {
+    public SuccessResDTO<Void> increasePetAcquireCount(@RequestHeader String userId) {
         userService.increasePetAcquireCountByUserId(userId);
         return new SuccessResDTO<>(null);
     }
 
     @Hidden
     @PutMapping("/increase-pet-evolve-count")
-    public SuccessResDTO<Void> increasePetEvolveCount(String userId) {
+    public SuccessResDTO<Void> increasePetEvolveCount(@RequestHeader String userId) {
         userService.increasePetEvolveCountByUserId(userId);
         return new SuccessResDTO<>(null);
     }
 
     @Hidden
     @PutMapping("/increase-pet-complete-count")
-    public SuccessResDTO<Void> increasePetCompleteCount(String userId) {
+    public SuccessResDTO<Void> increasePetCompleteCount(@RequestHeader String userId) {
         userService.increasePetCompleteCountByUserId(userId);
         return new SuccessResDTO<>(null);
     }

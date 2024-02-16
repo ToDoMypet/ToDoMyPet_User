@@ -1,5 +1,6 @@
 package com.todomypet.userservice.service;
 
+import com.github.f4b6a3.ulid.UlidCreator;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
@@ -62,7 +63,7 @@ public class SignServiceImpl implements SignService {
                 .createdAt(LocalDateTime.parse(LocalDateTime.now()
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
                 .deleted(Boolean.FALSE)
-                .Protected(Boolean.FALSE)
+                .Protected(Boolean.TRUE)
                 .personalCode(personalCode.toString())
                 .achCount(0)
                 .attendCount(1)
@@ -81,13 +82,41 @@ public class SignServiceImpl implements SignService {
         userRepository.setDefaultBackground(savedUserId);
         userRepository.setDefaultPet(savedUserId);
 
-
         FeignClientResDTO<AddCategoryResDTO> feignResponse;
 
-        UUID categoryId = UUID.randomUUID();
-        userRepository.createDefaultCategory(savedUserId, categoryId.toString());
+        String categoryId = UlidCreator.getUlid().toString();
+        userRepository.createDefaultCategory(savedUserId, categoryId);
 
         return savedUserId;
+    }
+
+    @Override
+    public String addAdminInfo(SignUpReqDTO signUpInfo) {
+        User user = User.builder().email(signUpInfo.getEmail())
+                .password(passwordEncoder.encode(signUpInfo.getPassword()))
+                .profilePicUrl("")
+                .nickname(signUpInfo.getNickname())
+                .bio(signUpInfo.getBio())
+                .createdAt(LocalDateTime.parse(LocalDateTime.now()
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"))))
+                .deleted(Boolean.FALSE)
+                .Protected(Boolean.FALSE)
+                .personalCode("")
+                .achCount(0)
+                .attendCount(1)
+                .collectionCount(0)
+                .petAcquireCount(0)
+                .petEvolveCount(0)
+                .petCompleteCount(0)
+                .attendContinueCount(1)
+                .friendCount(0)
+                .lastAttendAt(LocalDate.now().minusDays(1))
+                .haveUnreadNotificationOrNot(false)
+                .authority("ROLE_ADMIN")
+                .build();
+
+        String savedUserId = userRepository.save(user).getId();
+        return null;
     }
 
     @Override
