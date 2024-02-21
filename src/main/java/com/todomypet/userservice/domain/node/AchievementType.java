@@ -8,7 +8,7 @@ public enum AchievementType {
     ACHIEVE("달성"),
     EVOLUTION("진화"),
     GRADUATION("최종"),
-    ACQUIREMENT("획득")
+    CONTINUE_ATTENDANCE("연속 출석")
     ;
 
     private final String achievementType;
