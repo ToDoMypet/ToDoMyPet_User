@@ -64,7 +64,7 @@ public class AchievementServiceImpl implements AchievementService {
     @Override
     public GetAchievementListResDTO getAchievementList(String userId) {
         AchievementType[] arr = {AchievementType.ATTENDANCE, AchievementType.ACHIEVE, AchievementType.EVOLUTION,
-                AchievementType.GRADUATION, AchievementType.ACQUIREMENT};
+                AchievementType.GRADUATION, AchievementType.CONTINUE_ATTENDANCE};
         GetAchievementListResDTO getAchievementListResDTO = new GetAchievementListResDTO();
 
         for (int i = 0; i < arr.length; i++) {

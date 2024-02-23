@@ -19,13 +19,6 @@ public class AchievementController {
 
     private final AchievementService achievementService;
 
-    @Operation(summary = "업적 추가", description = "업적을 추가합니다. admin 전용 API입니다.")
-    @PostMapping("/add")
-    public SuccessResDTO<Void> addAchievement(@RequestBody AddAchievementReqDTOList req) {
-        achievementService.addAchievement(req);
-        return new SuccessResDTO<Void>(null);
-    }
-
     @Operation(summary = "업적 달성", description = "업적을 달성합니다.")
     @PostMapping("")
     public SuccessResDTO<Void> achieve(@Parameter(hidden = true) @RequestHeader String userId, @RequestBody AchieveReqDTO achieveReqDTO) {
