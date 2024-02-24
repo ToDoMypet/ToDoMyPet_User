@@ -13,6 +13,7 @@ public class GetMainPetInfosResDTO {
     private int petExperiencePoint;
     private int petMaxExperiencePoint;
     private String petPersonalityType;
+    private String petId;
     private String petSignatureCode;
     private String petSeq;
 }

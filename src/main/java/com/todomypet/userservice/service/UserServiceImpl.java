@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
                 .petPersonality(PetPersonalityType.valueOf(petInfos.getPetPersonalityType()))
                 .petMaxExperiencePoint(petInfos.getPetMaxExperiencePoint())
                 .petSignatureCode(petInfos.getPetSignatureCode())
+                .petId(petInfos.getPetId())
                 .petSeq(petInfos.getPetSeq())
                 .backgroundId(b.getId())
                 .backgroundImage(b.getBackgroundImageUrl())
