@@ -42,10 +42,17 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         log.info(">>> 휴면 카운트: " + userId + " " + lastAttendanceToToday);
 
-        Achievement achievement = achievementRepository
+        Achievement attendacneAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
-        if (achievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+        if (attendacneAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
+        Achievement attendanceContinueAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
+        if (attendanceContinueAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
                     String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
                             .format(LocalDateTime.now()))));
         }
