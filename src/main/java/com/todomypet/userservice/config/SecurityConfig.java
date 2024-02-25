@@ -37,7 +37,6 @@ public class SecurityConfig {
         http.csrf().disable()
                 .formLogin().disable()
                 .httpBasic().disable()
-//                .authorizeHttpRequests(requests -> requests.requestMatchers("/admin/**").hasRole("ADMIN"))
                 .addFilter(new JwtAuthenticationFilter(
                         authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
                         signService, refreshTokenService, jwtTokenProvider)
