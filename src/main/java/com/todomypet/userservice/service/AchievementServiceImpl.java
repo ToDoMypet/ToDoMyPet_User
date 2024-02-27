@@ -14,6 +14,7 @@ import com.todomypet.userservice.repository.AchievementRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,6 +24,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AchievementServiceImpl implements AchievementService {
 
     private final AchievementRepository achievementRepository;
@@ -64,8 +66,7 @@ public class AchievementServiceImpl implements AchievementService {
             notificationServiceClient.sendNotificationByAction(userId,
                     SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
+            log.error("푸시 알림 전송 실패");
         }
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
