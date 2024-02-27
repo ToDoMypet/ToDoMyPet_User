@@ -123,7 +123,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void increasePetAcquireCountByUserId(String userId) {
-        userRepository.increaseAchieveCount(userId);
+        userRepository.increasePetAcquireCount(userId);
     }
 
     @Override
