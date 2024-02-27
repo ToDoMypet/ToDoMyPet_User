@@ -127,4 +127,9 @@ public class AchievementServiceImpl implements AchievementService {
                 .achDiff(achievement.getAchDiff())
                 .build();
     }
+
+    @Override
+    public boolean checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req) {
+        return achievementRepository.isSatisfyAchievementCondition(req.getType(), req.getCondition()) != null;
+    }
 }

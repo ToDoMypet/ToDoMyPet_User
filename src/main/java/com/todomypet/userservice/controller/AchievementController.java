@@ -40,4 +40,11 @@ public class AchievementController {
         GetAchievementDetailResDTO response = achievementService.getAchievementDetail(userId, achievementId);
         return new SuccessResDTO<GetAchievementDetailResDTO>(response);
     }
+
+    @GetMapping("/achieve-or-not")
+    public SuccessResDTO<Boolean> checkAchieveOrNot(@RequestHeader String userId,
+                                                    @RequestBody CheckAchieveOrNotReqDTO req) {
+        boolean response = achievementService.checkAchievementCondition(userId, req);
+        return new SuccessResDTO<Boolean>(response);
+    }
 }
