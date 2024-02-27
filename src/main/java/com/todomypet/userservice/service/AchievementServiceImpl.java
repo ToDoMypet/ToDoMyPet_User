@@ -5,6 +5,8 @@ import com.todomypet.userservice.domain.node.AchievementType;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Achieve;
 import com.todomypet.userservice.dto.achievement.*;
+import com.todomypet.userservice.dto.openFeign.NotificationType;
+import com.todomypet.userservice.dto.openFeign.SendNotificationByActionReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AchieveRepository;
@@ -26,6 +28,7 @@ public class AchievementServiceImpl implements AchievementService {
     private final AchievementRepository achievementRepository;
     private final AchieveRepository achieveRepository;
     private final UserRepository userRepository;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Transactional
     @Override
@@ -57,14 +60,21 @@ public class AchievementServiceImpl implements AchievementService {
 
         userRepository.increaseAchieveCount(userId);
 
+        try {
+            notificationServiceClient.sendNotificationByAction(userId,
+                    SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
+        }
+
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt.toString());
     }
 
     @Override
     public GetAchievementListResDTO getAchievementList(String userId) {
-        AchievementType[] arr = {AchievementType.ATTENDANCE, AchievementType.ACHIEVE, AchievementType.EVOLUTION,
-                AchievementType.GRADUATION, AchievementType.CONTINUE_ATTENDANCE};
+        AchievementType[] arr = AchievementType.values();
         GetAchievementListResDTO getAchievementListResDTO = new GetAchievementListResDTO();
 
         for (int i = 0; i < arr.length; i++) {

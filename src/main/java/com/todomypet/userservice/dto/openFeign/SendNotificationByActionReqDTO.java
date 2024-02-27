@@ -16,4 +16,5 @@ public class SendNotificationByActionReqDTO {
     private String senderName;
     private String notificationContent;
     private String notificationDataId;
+
 }
