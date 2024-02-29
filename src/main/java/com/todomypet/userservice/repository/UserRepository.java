@@ -81,7 +81,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
             "CREATE (u)-[:HAVE{colorCode:\"#CBCBCB\", bgCode:\"#F0F0F0\", textCode:\"#909090\"}]->(:Category{id:$categoryId, name:\"미분류\"})")
     void createDefaultCategory(String userId, String categoryId);
 
-    @Query("MATCH (u:User{id:$userId}), (p1:Pet{id:\"101\"}), (p2:Pet{id:\"201\"}), (p3:Pet{id:\"401\"}) " +
+    @Query("MATCH (u:User{id:$userId}), (p1:Pet{id:\"101\"}), (p2:Pet{id:\"201\"}), (p3:Pet{id:\"501\"}) " +
             "CREATE (u)-[:AVAILABLE]->(p1), (u)-[:AVAILABLE]->(p2), " +
             "(u)-[:AVAILABLE]->(p3)")
     void setDefaultPet(String userId);
