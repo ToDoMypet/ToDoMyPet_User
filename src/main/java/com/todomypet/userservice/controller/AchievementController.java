@@ -3,6 +3,7 @@ package com.todomypet.userservice.controller;
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.achievement.*;
 import com.todomypet.userservice.service.AchievementService;
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -41,7 +42,8 @@ public class AchievementController {
         return new SuccessResDTO<GetAchievementDetailResDTO>(response);
     }
 
-    @GetMapping("/achieve-or-not")
+    @Hidden
+    @PostMapping("/achieve-or-not")
     public SuccessResDTO<Boolean> checkAchieveOrNot(@RequestHeader String userId,
                                                     @RequestBody CheckAchieveOrNotReqDTO req) {
         boolean response = achievementService.checkAchievementCondition(userId, req);

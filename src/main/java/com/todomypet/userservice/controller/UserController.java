@@ -66,7 +66,6 @@ public class UserController {
         UserInfoResDTO response = userService.getUserByPersonalCode(userId, personalCode);
         return new SuccessResDTO<UserInfoResDTO>(response);
     }
-
     @Hidden
     @PutMapping("/increase-collection-count")
     public SuccessResDTO<String> increaseCollectionCount(@RequestHeader String userId) {
@@ -75,10 +74,10 @@ public class UserController {
     }
 
     @Hidden
-    @PutMapping("/increase-pet-acquire-count")
-    public SuccessResDTO<String> increasePetAcquireCount(@RequestHeader String userId) {
-        userService.increasePetAcquireCountByUserId(userId);
-        return new SuccessResDTO<>(userId);
+    @GetMapping("/increase-and-get-todo-clear-count")
+    public SuccessResDTO<Integer> increaseTodoClearCount(@RequestHeader String userId) {
+        int todoClearCount = userService.increaseTodoClearCountByUserId(userId);
+        return new SuccessResDTO<Integer>(todoClearCount);
     }
 
     @Hidden

@@ -33,12 +33,11 @@ public class User {
     @Property("profilePicUrl")
     private String profilePicUrl;
 
-
     @Property("personalCode")
     private String personalCode;
 
-    @Property("petAcquireCount")
-    private Integer petAcquireCount;
+    @Property("todoClearCount")
+    private Integer todoClearCount;
 
     @Property("petEvolveCount")
     private Integer petEvolveCount;

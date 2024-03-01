@@ -64,10 +64,6 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) SET user.attendCount = user.attendCount + 1, " +
             "user.attendContinueCount = $updateData, user.lastAttendAt = $today")
     void updateAttendanceCount(String userId, int updateData, String today);
-
-    @Query("MATCH (u:User{id:$userId}) SET u.petAcquireCount = u.petAcquireCount + 1")
-    void increasePetAcquireCount(String userId);
-
     @Query("MATCH (u:User{id:$userId}) SET u.collectionCount = u.collectionCount + 1")
     void increaseCollectionCount(String userId);
 
@@ -88,4 +84,13 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (n:User) RETURN n")
     List<User> getAllUsers();
+
+    @Query("MATCH (n:User{id:$userId}) RETURN n.achieveCount")
+    int getAchieveCountByUserId(String userId);
+
+    @Query("MATCH (n:User{id:$userId}) SET n.todoClearCount = n.todoClearCount + 1")
+    void increaseTodoClearCount(String userId);
+
+    @Query("MATCH (n:User{id:$userId}) RETURN n.todoClearCount")
+    int getTodoClearCountByUserId(String userId);
 }

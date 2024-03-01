@@ -19,11 +19,13 @@ public interface UserService {
 
     void increaseCollectionCountByUserId(String userId);
 
-    void increasePetAcquireCountByUserId(String userId);
+    int increaseTodoClearCountByUserId(String userId);
 
     void increasePetEvolveCountByUserId(String userId);
 
     void increasePetCompleteCountByUserId(String userId);
 
     AdminGetAllUsersDTO getAllUsers();
+
+    int increaseAchieveCount(String userId);
 }

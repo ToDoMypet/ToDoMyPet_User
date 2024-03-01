@@ -122,8 +122,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void increasePetAcquireCountByUserId(String userId) {
-        userRepository.increasePetAcquireCount(userId);
+    @Transactional
+    public int increaseTodoClearCountByUserId(String userId) {
+        userRepository.increaseTodoClearCount(userId);
+        return userRepository.getTodoClearCountByUserId(userId);
     }
 
     @Override
@@ -144,5 +146,12 @@ public class UserServiceImpl implements UserService {
             response.add(userMapper.userToAdminUserDTO(user));
         }
         return AdminGetAllUsersDTO.builder().userList(response).build();
+    }
+
+    @Override
+    @Transactional
+    public int increaseAchieveCount(String userId) {
+        userRepository.increaseAchieveCount(userId);
+        return userRepository.getAchieveCountByUserId(userId);
     }
 }
