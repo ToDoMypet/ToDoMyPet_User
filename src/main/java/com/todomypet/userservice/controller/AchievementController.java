@@ -44,9 +44,9 @@ public class AchievementController {
 
     @Hidden
     @PostMapping("/achieve-or-not")
-    public SuccessResDTO<Boolean> checkAchieveOrNot(@RequestHeader String userId,
+    public SuccessResDTO<CheckAchieveOrNotResDTO> checkAchieveOrNot(@RequestHeader String userId,
                                                     @RequestBody CheckAchieveOrNotReqDTO req) {
-        boolean response = achievementService.checkAchievementCondition(userId, req);
-        return new SuccessResDTO<Boolean>(response);
+        CheckAchieveOrNotResDTO response = achievementService.checkAchievementCondition(userId, req);
+        return new SuccessResDTO<CheckAchieveOrNotResDTO>(response);
     }
 }

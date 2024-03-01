@@ -130,7 +130,11 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
-    public boolean checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req) {
-        return achievementRepository.isSatisfyAchievementCondition(req.getType(), req.getCondition()) != null;
+    public CheckAchieveOrNotResDTO checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req) {
+        Achievement achievement = achievementRepository.isSatisfyAchievementCondition(req.getType(), req.getCondition());
+        if (achievement != null) {
+            return CheckAchieveOrNotResDTO.builder().achieveOrNot(true).achievementId(achievement.getId()).build();
+        };
+        return CheckAchieveOrNotResDTO.builder().achieveOrNot(false).achievementId(null).build();
     }
 }

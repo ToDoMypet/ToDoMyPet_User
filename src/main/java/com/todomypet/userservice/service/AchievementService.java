@@ -8,5 +8,5 @@ public interface AchievementService {
     GetAchievementListResDTO getAchievementList(String userId);
     GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId);
 
-    boolean checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req);
+    CheckAchieveOrNotResDTO checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req);
 }
