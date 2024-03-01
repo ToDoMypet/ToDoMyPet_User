@@ -23,9 +23,9 @@ public interface UserService {
 
     void increasePetEvolveCountByUserId(String userId);
 
-    void increasePetCompleteCountByUserId(String userId);
-
     AdminGetAllUsersDTO getAllUsers();
 
     int increaseAchieveCount(String userId);
+
+    int increaseAndGetPetCompleteCountByUserId(String userId);
 }

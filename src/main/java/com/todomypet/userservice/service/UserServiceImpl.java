@@ -134,8 +134,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void increasePetCompleteCountByUserId(String userId) {
+    @Transactional
+    public int increaseAndGetPetCompleteCountByUserId(String userId) {
         userRepository.increasePetCompleteCount(userId);
+        return userRepository.getIncreasePetCompleteCountByUserId(userId);
     }
 
     @Override
