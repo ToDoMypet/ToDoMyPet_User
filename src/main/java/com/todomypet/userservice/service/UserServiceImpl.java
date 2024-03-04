@@ -129,15 +129,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void increasePetEvolveCountByUserId(String userId) {
+    @Transactional
+    public int increaseAndGetPetEvolveCountByUserId(String userId) {
         userRepository.increasePetEvolveCount(userId);
+        return userRepository.getPetEvolveCountByUserId(userId);
     }
 
     @Override
     @Transactional
     public int increaseAndGetPetCompleteCountByUserId(String userId) {
         userRepository.increasePetCompleteCount(userId);
-        return userRepository.getIncreasePetCompleteCountByUserId(userId);
+        return userRepository.getPetCompleteCountByUserId(userId);
     }
 
     @Override
@@ -150,10 +152,4 @@ public class UserServiceImpl implements UserService {
         return AdminGetAllUsersDTO.builder().userList(response).build();
     }
 
-    @Override
-    @Transactional
-    public int increaseAchieveCount(String userId) {
-        userRepository.increaseAchieveCount(userId);
-        return userRepository.getAchieveCountByUserId(userId);
-    }
 }

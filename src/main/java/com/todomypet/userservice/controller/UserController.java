@@ -81,14 +81,14 @@ public class UserController {
     }
 
     @Hidden
-    @PutMapping("/increase-pet-evolve-count")
-    public SuccessResDTO<String> increasePetEvolveCount(@RequestHeader String userId) {
-        userService.increasePetEvolveCountByUserId(userId);
-        return new SuccessResDTO<>(userId);
+    @PutMapping("/increase-and-get-pet-evolve-count")
+    public SuccessResDTO<Integer> increasePetEvolveCount(@RequestHeader String userId) {
+        int petEvolveCount = userService.increaseAndGetPetEvolveCountByUserId(userId);
+        return new SuccessResDTO<Integer>(petEvolveCount);
     }
 
     @Hidden
-    @PutMapping("/increase-and-pet-complete-count")
+    @PutMapping("/increase-and-get-pet-complete-count")
     public SuccessResDTO<Integer> increasePetCompleteCount(@RequestHeader String userId) {
         int petCompleteCount = userService.increaseAndGetPetCompleteCountByUserId(userId);
         return new SuccessResDTO<Integer>(petCompleteCount);

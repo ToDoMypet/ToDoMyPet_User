@@ -95,5 +95,8 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     int getTodoClearCountByUserId(String userId);
 
     @Query("MATCH (n:User{id:$userId}) RETURN n.petCompleteCount")
-    int getIncreasePetCompleteCountByUserId(String userId);
+    int getPetCompleteCountByUserId(String userId);
+
+    @Query("MATCH (n:User{id:$userId}) RETURN n.petEvolveCount")
+    int getPetEvolveCountByUserId(String userId);
 }

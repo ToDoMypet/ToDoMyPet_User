@@ -21,11 +21,9 @@ public interface UserService {
 
     int increaseTodoClearCountByUserId(String userId);
 
-    void increasePetEvolveCountByUserId(String userId);
+    int increaseAndGetPetEvolveCountByUserId(String userId);
 
     AdminGetAllUsersDTO getAllUsers();
-
-    int increaseAchieveCount(String userId);
 
     int increaseAndGetPetCompleteCountByUserId(String userId);
 }
