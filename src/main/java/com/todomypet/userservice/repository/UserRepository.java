@@ -99,4 +99,10 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (n:User{id:$userId}) RETURN n.petEvolveCount")
     int getPetEvolveCountByUserId(String userId);
+
+    @Query("MATCH (u:User{id:$userId}) DETACH DELETE u")
+    void deleteByUserId(String userId);
+
+    @Query("MATCH (u:User) WHERE u.deleted = true RETURN u")
+    List<User> findByDeletedTrue();
 }
