@@ -140,6 +140,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
+    @Transactional
     public void deleteAccount(String userId) {
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
@@ -151,6 +152,7 @@ public class SignServiceImpl implements SignService {
         LocalDateTime deletedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
+        userRepository.decreaseFriendCountByFriendId(user.getId());
         userRepository.deleteAccount(userId, deletedAt);
     }
 

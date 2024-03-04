@@ -105,4 +105,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User) WHERE u.deleted = true RETURN u")
     List<User> findByDeletedTrue();
+
+    @Query("MATCH (u:User{id:$deletedUserId})-[:FRIEND]-(target:User) SET target.friendCount = friendCount - 1")
+    void decreaseFriendCountByFriendId(String deletedUserId);
 }

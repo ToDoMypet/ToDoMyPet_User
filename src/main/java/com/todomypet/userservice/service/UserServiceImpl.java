@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final S3Uploader s3Uploader;
     private final PetServiceClient petServiceClient;
     private final BackgroundRepository backgroundRepository;
-    private final PetRepository petRepository;
 
     @Override
     public MyPageResDTO getMyPage(String userId) {
