@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @Getter
 public class DuplicationCheckResDTO {
-    private Boolean response;
+    private Boolean duplicationOrNot;
+    private Boolean deletedOrNot;
 }

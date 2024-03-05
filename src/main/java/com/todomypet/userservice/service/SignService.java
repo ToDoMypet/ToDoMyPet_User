@@ -12,7 +12,7 @@ public interface SignService extends UserDetailsService {
 
     String addAdminInfo(SignUpReqDTO signUpInfo);
 
-    Boolean duplicationCheck(String checkedId);
+    DuplicationCheckResDTO duplicationCheck(String checkedId);
 
     String sendCheckEmail(String receiveEmail) throws Exception;
 

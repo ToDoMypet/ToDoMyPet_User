@@ -2,6 +2,7 @@ package com.todomypet.userservice.service;
 
 import com.github.f4b6a3.ulid.UlidCreator;
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.DuplicationCheckResDTO;
 import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
@@ -120,11 +121,17 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public Boolean duplicationCheck(String checkedEmail) {
-        if (userRepository.getUserCountByEmail(checkedEmail) <= 0) {
-            return Boolean.TRUE;
-        };
-        return Boolean.FALSE;
+    public DuplicationCheckResDTO duplicationCheck(String checkedEmail) {
+        if (userRepository.getUserCountByEmail(checkedEmail) > 0) {
+            User user = userRepository.getOneUserByEmail(checkedEmail)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+            return DuplicationCheckResDTO.builder()
+                    .duplicationOrNot(true)
+                    .deletedOrNot(user.getDeleted()).build();
+        }
+        return DuplicationCheckResDTO.builder()
+                .duplicationOrNot(false)
+                .deletedOrNot(null).build();
     }
 
     @Override

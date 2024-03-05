@@ -41,8 +41,7 @@ public class SignController {
             description = "입력된 이메일을 사용하는 회원이 이미 존재하면 false, 아니면 true를 return합니다.")
     @GetMapping("/duplication-check/{checkedEmail}")
     public SuccessResDTO<DuplicationCheckResDTO> emailDuplicationCheck(@PathVariable String checkedEmail) {
-        DuplicationCheckResDTO response = DuplicationCheckResDTO.builder()
-                .response(signService.duplicationCheck(checkedEmail)).build();
+        DuplicationCheckResDTO response = signService.duplicationCheck(checkedEmail);
         return new SuccessResDTO<>(response);
     }
 
