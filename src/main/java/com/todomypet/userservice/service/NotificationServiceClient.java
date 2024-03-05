@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "notification-server", url = "${feign.notification.url}")
 public interface NotificationServiceClient {
-    @PostMapping(value = "/api/notification", consumes = "application/json")
+    @PostMapping(value = "/send/by-action", consumes = "application/json")
     FeignClientResDTO<Void> sendNotificationByAction(@RequestHeader String userId,
                                                  SendNotificationByActionReqDTO sendNotificationByActionReqDTO);
 }
