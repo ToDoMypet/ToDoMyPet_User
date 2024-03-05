@@ -23,16 +23,17 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
     Integer getUserCountByEmail(String checkedEmail);
 
-    @Query("MATCH (user:User{personalCode:$personalCode}) RETURN user")
+    @Query("MATCH (user:User{personalCode:$personalCode}) WHERE user.deleted = false RETURN user")
     Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WITH t ORDER BY t.nickname " +
+            "MATCH (user)-[:FRIEND]-(t:User) WITH t WHERE t.deleted = false ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserId(String userId);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname CONTAINS $nickname WITH t ORDER BY t.nickname " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname AND t.deleted = true " +
+            "CONTAINS $nickname WITH t ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserIdAndNickname(String userId, String nickname);
 
