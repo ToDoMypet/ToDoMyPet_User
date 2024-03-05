@@ -109,4 +109,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User{id:$deletedUserId})-[:FRIEND]-(target:User) SET target.friendCount = friendCount - 1")
     void decreaseFriendCountByFriendId(String deletedUserId);
+
+    @Query("MATCH (u:User{email:$email}) SET u.password = $encodedPassword")
+    void changePasswordByEmail(String email, String encodedPassword);
 }

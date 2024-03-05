@@ -7,6 +7,7 @@ import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
+import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -22,7 +23,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -168,6 +168,12 @@ public class SignServiceImpl implements SignService {
         log.info(">>> 비밀번호 확인 진입: " + userId);
         String pw = userRepository.getPasswordByUserId(userId);
         return passwordEncoder.matches(password, pw);
+    }
+
+    @Override
+    public String changePasswordByEmail(ChangePasswordReqDTO req) {
+        userRepository.changePasswordByEmail(req.getEmail(), passwordEncoder.encode(req.getPasswordToChange()));
+        return req.getEmail();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
 import com.todomypet.userservice.service.RefreshTokenService;
 import com.todomypet.userservice.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -71,5 +72,12 @@ public class SignController {
     public SuccessResDTO<Boolean> checkPassword(@RequestHeader String userId, @RequestBody PasswordCheckReqDTO req) {
         boolean response = signService.checkPassword(userId, req.getPassword());
         return new SuccessResDTO<Boolean>(response);
+    }
+
+    @Operation(summary = "비밀번호 변경", description = "비밀번호를 수정합니다.")
+    @PutMapping("/change-password")
+    public SuccessResDTO<String> changePassword(@RequestBody ChangePasswordReqDTO req) {
+        String response = signService.changePasswordByEmail(req);
+        return new SuccessResDTO<String>(response);
     }
 }
