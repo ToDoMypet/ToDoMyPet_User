@@ -27,7 +27,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WITH t WHERE t.deleted = false ORDER BY t.nickname " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.deleted = false WITH t ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserId(String userId);
 
