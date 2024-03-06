@@ -142,6 +142,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String getUserIdByTodoId(String todoId) {
+        return userRepository.getUserIdByTodoId(todoId).getId();
+    }
+
+    @Override
     public AdminGetAllUsersDTO getAllUsers() {
         List<User> users = userRepository.getAllUsers();
         List<AdminUserDTO> response = new ArrayList<>();

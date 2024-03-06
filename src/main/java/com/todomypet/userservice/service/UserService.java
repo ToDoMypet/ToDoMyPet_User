@@ -26,4 +26,6 @@ public interface UserService {
     AdminGetAllUsersDTO getAllUsers();
 
     int increaseAndGetPetCompleteCountByUserId(String userId);
+
+    String getUserIdByTodoId(String todoId);
 }

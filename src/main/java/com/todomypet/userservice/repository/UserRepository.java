@@ -112,4 +112,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User{email:$email}) SET u.password = $encodedPassword")
     void changePasswordByEmail(String email, String encodedPassword);
+
+    @Query("MATCH (u:User)-[:HAVE]->(:Category)-[:INCLUDE]->(:Todo{id:$todoId}) RETURN u")
+    User getUserIdByTodoId(String todoId);
 }

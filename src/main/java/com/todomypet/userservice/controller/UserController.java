@@ -94,4 +94,9 @@ public class UserController {
         return new SuccessResDTO<Integer>(petCompleteCount);
     }
 
+    @GetMapping("/get-user-by-todo/{todoId}")
+    public SuccessResDTO<String> getUserIdByTodoId(@PathVariable String todoId) {
+        String response = userService.getUserIdByTodoId(todoId);
+        return new SuccessResDTO<String>(response);
+    }
 }
