@@ -87,9 +87,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         try {
             petServiceClient.updateExperiencePoint(userId, reqDTO);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
         }
 
-        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
+        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now());
     }
 }

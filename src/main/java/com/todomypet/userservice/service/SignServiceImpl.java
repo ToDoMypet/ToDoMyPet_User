@@ -111,7 +111,7 @@ public class SignServiceImpl implements SignService {
                 .petCompleteCount(0)
                 .attendContinueCount(1)
                 .friendCount(0)
-                .lastAttendAt(LocalDate.now().minusDays(1))
+                .lastAttendAt(LocalDate.now().minusDays(2))
                 .haveUnreadNotificationOrNot(false)
                 .authority("ROLE_ADMIN")
                 .build();

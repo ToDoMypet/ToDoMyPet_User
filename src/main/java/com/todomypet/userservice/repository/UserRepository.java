@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -64,7 +65,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) SET user.attendCount = user.attendCount + 1, " +
             "user.attendContinueCount = $updateData, user.lastAttendAt = $today")
-    void updateAttendanceCount(String userId, int updateData, String today);
+    void updateAttendanceCount(String userId, int updateData, LocalDate today);
     @Query("MATCH (u:User{id:$userId}) SET u.collectionCount = u.collectionCount + 1")
     void increaseCollectionCount(String userId);
 
