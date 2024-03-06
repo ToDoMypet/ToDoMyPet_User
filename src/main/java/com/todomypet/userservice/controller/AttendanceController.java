@@ -31,9 +31,8 @@ public class AttendanceController {
 
     @Operation(summary = "출석 카운트 갱신", description = "출석 카운트를 갱신합니다.")
     @PutMapping("")
-    SuccessResDTO<Void> updateAttendanceCount(@RequestHeader String userId,
-                                          @RequestBody UpdateAttendanceCountReqDTO req) {
-        attendanceService.updateAttendanceCount(userId, req.getToday());
+    SuccessResDTO<Void> updateAttendanceCount(@RequestHeader String userId) {
+        attendanceService.updateAttendanceCount(userId);
         return new SuccessResDTO<>(null);
     }
 
