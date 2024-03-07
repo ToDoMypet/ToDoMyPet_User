@@ -44,7 +44,8 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) SET user.friendCount = user.friendCount - 1")
     void decreaseFriendCount(String userId);
 
-    @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt")
+    @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt, " +
+            "user.nickname = \"비활성 회원\", user.profilePicUrl = \"\"")
     void deleteAccount(String userId, LocalDateTime deletedAt);
 
     @Query("MATCH (user:User{id:$userId}) SET user.achCount = user.achCount + 1")
@@ -108,7 +109,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (u:User) WHERE u.deleted = true RETURN u")
     List<User> findByDeletedTrue();
 
-    @Query("MATCH (u:User{id:$deletedUserId})-[:FRIEND]-(target:User) SET target.friendCount = friendCount - 1")
+    @Query("MATCH (u:User{id:$deletedUserId})-[:FRIEND]-(target:User) SET target.friendCount = target.friendCount - 1")
     void decreaseFriendCountByFriendId(String deletedUserId);
 
     @Query("MATCH (u:User{email:$email}) SET u.password = $encodedPassword")
