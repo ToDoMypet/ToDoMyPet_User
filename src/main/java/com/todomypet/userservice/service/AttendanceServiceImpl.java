@@ -42,21 +42,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         log.info(">>> 휴면 카운트: " + userId + " " + lastAttendanceToToday);
 
-        Achievement attendacneAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
-        if (attendacneAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
-        }
-        Achievement attendanceContinueAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
-        if (attendanceContinueAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
-        }
-        return GetAttendInfoReqDTO.builder().attendCount(user.getAttendCount())
+        return GetAttendInfoReqDTO.builder().attendCount(user.getAttendCount() + 1)
                 .attendContinueCount(user.getAttendContinueCount())
                 .lastAttendanceToToday(lastAttendanceToToday.getDays()).build();
     }
@@ -83,6 +69,21 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .petSeqId(petSeq)
                 .experiencePoint(10)
                 .build();
+
+        Achievement attendacneAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
+        if (attendacneAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
+        Achievement attendanceContinueAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
+        if (attendanceContinueAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
 
         try {
             petServiceClient.updateExperiencePoint(userId, reqDTO);
