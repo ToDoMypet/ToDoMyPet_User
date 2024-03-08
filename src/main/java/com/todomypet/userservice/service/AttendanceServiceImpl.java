@@ -4,6 +4,7 @@ import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Adopt;
+import com.todomypet.userservice.dto.achievement.CheckAchieveOrNotResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
 import com.todomypet.userservice.exception.CustomException;
@@ -70,6 +71,8 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .experiencePoint(10)
                 .build();
 
+        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now());
+
         Achievement attendacneAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
         if (attendacneAchievement != null) {
@@ -77,6 +80,7 @@ public class AttendanceServiceImpl implements AttendanceService {
                     String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
                             .format(LocalDateTime.now()))));
         }
+
         Achievement attendanceContinueAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
         if (attendanceContinueAchievement != null) {
@@ -91,7 +95,5 @@ public class AttendanceServiceImpl implements AttendanceService {
             e.printStackTrace();
             throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
         }
-
-        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now());
     }
 }
