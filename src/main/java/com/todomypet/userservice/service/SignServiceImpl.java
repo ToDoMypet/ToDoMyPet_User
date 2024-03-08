@@ -33,6 +33,7 @@ public class SignServiceImpl implements SignService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserMapper userMapper;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Override
     @Transactional
@@ -75,7 +76,6 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(1)
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
-                .haveUnreadNotificationOrNot(false)
                 .authority("ROLE_USER")
                 .build();
 
@@ -112,7 +112,6 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(1)
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
-                .haveUnreadNotificationOrNot(false)
                 .authority("ROLE_ADMIN")
                 .build();
 
@@ -174,6 +173,12 @@ public class SignServiceImpl implements SignService {
     public String changePasswordByEmail(ChangePasswordReqDTO req) {
         userRepository.changePasswordByEmail(req.getEmail(), passwordEncoder.encode(req.getPasswordToChange()));
         return req.getEmail();
+    }
+
+    @Override
+    public void logout(String userId, String fcmToken) {
+        // todo: access token 블랙리스트 등록
+        notificationServiceClient.deleteFcmToken(fcmToken);
     }
 
     @Override

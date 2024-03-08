@@ -24,4 +24,6 @@ public interface SignService extends UserDetailsService {
     boolean checkPassword(String userId, String password);
 
     String changePasswordByEmail(ChangePasswordReqDTO req);
+
+    void logout(String userId, String fcmToken);
 }

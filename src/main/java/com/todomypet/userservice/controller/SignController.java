@@ -80,4 +80,10 @@ public class SignController {
         String response = signService.changePasswordByEmail(req);
         return new SuccessResDTO<String>(response);
     }
+
+    @DeleteMapping("/logout")
+    public SuccessResDTO<Void> logout(@RequestHeader String userId, @RequestHeader String fcmToken) {
+        signService.logout(userId, fcmToken);
+        return new SuccessResDTO<>(null);
+    }
 }
