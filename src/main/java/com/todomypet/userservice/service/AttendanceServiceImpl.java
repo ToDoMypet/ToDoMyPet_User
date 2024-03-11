@@ -7,6 +7,8 @@ import com.todomypet.userservice.domain.relationship.Adopt;
 import com.todomypet.userservice.dto.achievement.CheckAchieveOrNotResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
+import com.todomypet.userservice.dto.openFeign.NotificationType;
+import com.todomypet.userservice.dto.openFeign.SendNotificationByActionReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.repository.AchieveRepository;
@@ -31,6 +33,7 @@ public class AttendanceServiceImpl implements AttendanceService {
     private final AchievementRepository achievementRepository;
     private final AchieveRepository achieveRepository;
     private final PetServiceClient petServiceClient;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Override
     @Transactional
@@ -78,28 +81,24 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         Achievement attendacneAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
-
-        if (attendacneAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
-                    LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now())));
-            userRepository.increaseAchieveCount(userId);
-        }
+        processAchievement(attendacneAchievement, user, userId);
 
         Achievement attendanceContinueAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
-        if (attendanceContinueAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
-                    LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now())));
-            userRepository.increaseAchieveCount(userId);
-        }
+        processAchievement(attendanceContinueAchievement, user, userId);
+    }
 
-        try {
-            petServiceClient.updateExperiencePoint(userId, reqDTO);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
+    private void processAchievement(Achievement achievement, User user, String userId) {
+        if (achievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+                    LocalDateTime.now());
+            userRepository.increaseAchieveCount(userId);
+            try {
+                notificationServiceClient.sendNotificationByAction(userId,
+                        SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
+            } catch (Exception e) {
+                log.error("푸시 알림 전송 실패");
+            }
         }
     }
 }
