@@ -70,7 +70,7 @@ public class AchievementServiceImpl implements AchievementService {
         }
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
-                achieveReqDTO.getAchievementId(), achievedAt.toString());
+                achieveReqDTO.getAchievementId(), achievedAt);
     }
 
     @Override

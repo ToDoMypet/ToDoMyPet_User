@@ -6,13 +6,15 @@ import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+
 @Repository
 @EnableNeo4jRepositories
 public interface AchieveRepository extends Neo4jRepository<Achieve, Long> {
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (a:Achievement{id:$achievementId}) " +
             "CREATE (u)-[:ACHIEVE{achievedAt: $achievedAt}]->(a)")
-    void createAchieveBetweenUserAndAchievement(String userId, String achievementId, String achievedAt);
+    void createAchieveBetweenUserAndAchievement(String userId, String achievementId, LocalDateTime achievedAt);
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (a:Achievement{id:$achievementId}) " +
@@ -21,6 +23,6 @@ public interface AchieveRepository extends Neo4jRepository<Achieve, Long> {
 
     @Query("MATCH (u:User{id:$userId}) WITH u " +
             "MATCH (u)-[ach:ACHIEVE]->(a:Achievement{id:$achievementId}) " +
-            "RETURN ach")
+            "RETURN ach{.achievedAt}")
     Achieve findByUserIdAndAchievementId(String userId, String achievementId);
 }

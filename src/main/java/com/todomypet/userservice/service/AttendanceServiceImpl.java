@@ -77,16 +77,16 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
         if (attendacneAchievement != null) {
             achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
+                    LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now())));
         }
 
         Achievement attendanceContinueAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
         if (attendanceContinueAchievement != null) {
             achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
+                    LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now())));
         }
 
         try {
