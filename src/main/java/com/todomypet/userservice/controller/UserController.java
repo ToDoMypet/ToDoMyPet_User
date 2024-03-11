@@ -1,6 +1,7 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.openFeign.GetUserByTodoIdResDTO;
 import com.todomypet.userservice.dto.pet.GetMainPageResDTO;
 import com.todomypet.userservice.dto.user.AdminGetAllUsersDTO;
 import com.todomypet.userservice.service.UserService;
@@ -95,8 +96,8 @@ public class UserController {
     }
 
     @GetMapping("/get-user-by-todo/{todoId}")
-    public SuccessResDTO<String> getUserIdByTodoId(@PathVariable String todoId) {
+    public SuccessResDTO<GetUserByTodoIdResDTO> getUserIdByTodoId(@PathVariable String todoId) {
         String response = userService.getUserIdByTodoId(todoId);
-        return new SuccessResDTO<String>(response);
+        return new SuccessResDTO<GetUserByTodoIdResDTO>(GetUserByTodoIdResDTO.builder().userId(response).build());
     }
 }
