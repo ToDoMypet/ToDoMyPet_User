@@ -78,10 +78,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         Achievement attendacneAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
+
         if (attendacneAchievement != null) {
             achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
                     LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
                             .format(LocalDateTime.now())));
+            userRepository.increaseAchieveCount(userId);
         }
 
         Achievement attendanceContinueAchievement = achievementRepository
@@ -90,6 +92,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
                     LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
                             .format(LocalDateTime.now())));
+            userRepository.increaseAchieveCount(userId);
         }
 
         try {
