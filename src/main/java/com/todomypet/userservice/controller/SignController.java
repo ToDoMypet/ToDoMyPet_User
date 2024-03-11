@@ -1,6 +1,7 @@
 package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
+import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
 import com.todomypet.userservice.service.RefreshTokenService;
 import com.todomypet.userservice.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,8 +42,7 @@ public class SignController {
             description = "입력된 이메일을 사용하는 회원이 이미 존재하면 false, 아니면 true를 return합니다.")
     @GetMapping("/duplication-check/{checkedEmail}")
     public SuccessResDTO<DuplicationCheckResDTO> emailDuplicationCheck(@PathVariable String checkedEmail) {
-        DuplicationCheckResDTO response = DuplicationCheckResDTO.builder()
-                .response(signService.duplicationCheck(checkedEmail)).build();
+        DuplicationCheckResDTO response = signService.duplicationCheck(checkedEmail);
         return new SuccessResDTO<>(response);
     }
 
@@ -72,5 +72,18 @@ public class SignController {
     public SuccessResDTO<Boolean> checkPassword(@RequestHeader String userId, @RequestBody PasswordCheckReqDTO req) {
         boolean response = signService.checkPassword(userId, req.getPassword());
         return new SuccessResDTO<Boolean>(response);
+    }
+
+    @Operation(summary = "비밀번호 변경", description = "비밀번호를 수정합니다.")
+    @PutMapping("/change-password")
+    public SuccessResDTO<String> changePassword(@RequestBody ChangePasswordReqDTO req) {
+        String response = signService.changePasswordByEmail(req);
+        return new SuccessResDTO<String>(response);
+    }
+
+    @DeleteMapping("/logout")
+    public SuccessResDTO<Void> logout(@RequestHeader String userId, @RequestHeader String fcmToken) {
+        signService.logout(userId, fcmToken);
+        return new SuccessResDTO<>(null);
     }
 }

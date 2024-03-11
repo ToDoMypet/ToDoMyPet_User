@@ -4,6 +4,7 @@ import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Adopt;
+import com.todomypet.userservice.dto.achievement.CheckAchieveOrNotResDTO;
 import com.todomypet.userservice.dto.adopt.UpdateExperiencePointReqDTO;
 import com.todomypet.userservice.dto.attend.GetAttendInfoReqDTO;
 import com.todomypet.userservice.exception.CustomException;
@@ -42,38 +43,22 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         log.info(">>> 휴면 카운트: " + userId + " " + lastAttendanceToToday);
 
-        Achievement attendacneAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
-        if (attendacneAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
-        }
-        Achievement attendanceContinueAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
-        if (attendanceContinueAchievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
-                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
-                            .format(LocalDateTime.now()))));
-        }
-        return GetAttendInfoReqDTO.builder().attendCount(user.getAttendCount())
+        return GetAttendInfoReqDTO.builder().attendCount(user.getAttendCount() + 1)
                 .attendContinueCount(user.getAttendContinueCount())
                 .lastAttendanceToToday(lastAttendanceToToday.getDays()).build();
     }
 
     @Override
     @Transactional
-    public void updateAttendanceCount(String userId, String today) {
+    public void updateAttendanceCount(String userId) {
         log.info(">>> 출석 일수 갱신 진입: " + userId);
 
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
         int updateData = 1;
 
-        if ((Period.between(LocalDate.parse(today, formatter), user.getLastAttendAt())).getDays() == 1) {
+        if ((Period.between(LocalDate.now(), user.getLastAttendAt())).getDays() == 1) {
             updateData = user.getAttendContinueCount() + 1;
             log.info(">>> 연속 출석 처리: " + userId + " " + updateData);
         }
@@ -86,12 +71,29 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .experiencePoint(10)
                 .build();
 
+        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now());
+
+        Achievement attendacneAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
+        if (attendacneAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendacneAchievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
+
+        Achievement attendanceContinueAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
+        if (attendanceContinueAchievement != null) {
+            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), attendanceContinueAchievement.getId(),
+                    String.valueOf(LocalDateTime.parse(DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ss")
+                            .format(LocalDateTime.now()))));
+        }
+
         try {
             petServiceClient.updateExperiencePoint(userId, reqDTO);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CustomException(ErrorCode.FEIGN_CLIENT_ERROR);
         }
-
-        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now().toString());
     }
 }

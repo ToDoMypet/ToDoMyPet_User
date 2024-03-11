@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final S3Uploader s3Uploader;
     private final PetServiceClient petServiceClient;
     private final BackgroundRepository backgroundRepository;
-    private final PetRepository petRepository;
 
     @Override
     public MyPageResDTO getMyPage(String userId) {
@@ -106,7 +105,7 @@ public class UserServiceImpl implements UserService {
                 .petPortraitImage(petInfos.getPetPortraitImageUrl())
                 .petGif(petInfos.getPetGifUrl()).petName(petInfos.getPetName())
                 .petExperiencePoint(petInfos.getPetExperiencePoint())
-                .petPersonality(PetPersonalityType.valueOf(petInfos.getPetPersonalityType()))
+                .petPersonality(petInfos.getPetPersonalityType())
                 .petMaxExperiencePoint(petInfos.getPetMaxExperiencePoint())
                 .petSignatureCode(petInfos.getPetSignatureCode())
                 .petId(petInfos.getPetId())
@@ -129,15 +128,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void increasePetEvolveCountByUserId(String userId) {
+    @Transactional
+    public int increaseAndGetPetEvolveCountByUserId(String userId) {
         userRepository.increasePetEvolveCount(userId);
+        return userRepository.getPetEvolveCountByUserId(userId);
     }
 
     @Override
     @Transactional
     public int increaseAndGetPetCompleteCountByUserId(String userId) {
         userRepository.increasePetCompleteCount(userId);
-        return userRepository.getIncreasePetCompleteCountByUserId(userId);
+        return userRepository.getPetCompleteCountByUserId(userId);
+    }
+
+    @Override
+    public String getUserIdByTodoId(String todoId) {
+        return userRepository.getUserIdByTodoId(todoId).getId();
     }
 
     @Override
@@ -150,10 +156,4 @@ public class UserServiceImpl implements UserService {
         return AdminGetAllUsersDTO.builder().userList(response).build();
     }
 
-    @Override
-    @Transactional
-    public int increaseAchieveCount(String userId) {
-        userRepository.increaseAchieveCount(userId);
-        return userRepository.getAchieveCountByUserId(userId);
-    }
 }

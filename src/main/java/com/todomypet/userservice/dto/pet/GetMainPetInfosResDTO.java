@@ -1,5 +1,6 @@
 package com.todomypet.userservice.dto.pet;
 
+import com.todomypet.userservice.domain.node.PetPersonalityType;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -12,7 +13,7 @@ public class GetMainPetInfosResDTO {
     private String petName;
     private int petExperiencePoint;
     private int petMaxExperiencePoint;
-    private String petPersonalityType;
+    private PetPersonalityType petPersonalityType;
     private String petId;
     private String petSignatureCode;
     private String petSeq;

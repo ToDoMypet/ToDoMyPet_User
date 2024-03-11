@@ -2,10 +2,12 @@ package com.todomypet.userservice.service;
 
 import com.github.f4b6a3.ulid.UlidCreator;
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.DuplicationCheckResDTO;
 import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
+import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -21,7 +23,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class SignServiceImpl implements SignService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final MailService mailService;
     private final UserMapper userMapper;
+    private final NotificationServiceClient notificationServiceClient;
 
     @Override
     @Transactional
@@ -66,7 +68,7 @@ public class SignServiceImpl implements SignService {
                 .Protected(Boolean.TRUE)
                 .personalCode(personalCode.toString())
                 .achCount(0)
-                .attendCount(1)
+                .attendCount(0)
                 .collectionCount(0)
                 .todoClearCount(0)
                 .petEvolveCount(0)
@@ -74,7 +76,6 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(1)
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
-                .haveUnreadNotificationOrNot(false)
                 .authority("ROLE_USER")
                 .build();
 
@@ -103,7 +104,7 @@ public class SignServiceImpl implements SignService {
                 .Protected(Boolean.FALSE)
                 .personalCode("")
                 .achCount(0)
-                .attendCount(1)
+                .attendCount(0)
                 .collectionCount(0)
                 .todoClearCount(0)
                 .petEvolveCount(0)
@@ -111,7 +112,6 @@ public class SignServiceImpl implements SignService {
                 .attendContinueCount(1)
                 .friendCount(0)
                 .lastAttendAt(LocalDate.now().minusDays(1))
-                .haveUnreadNotificationOrNot(false)
                 .authority("ROLE_ADMIN")
                 .build();
 
@@ -120,11 +120,17 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public Boolean duplicationCheck(String checkedEmail) {
-        if (userRepository.getUserCountByEmail(checkedEmail) <= 0) {
-            return Boolean.TRUE;
-        };
-        return Boolean.FALSE;
+    public DuplicationCheckResDTO duplicationCheck(String checkedEmail) {
+        if (userRepository.getUserCountByEmail(checkedEmail) > 0) {
+            User user = userRepository.getOneUserByEmail(checkedEmail)
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
+            return DuplicationCheckResDTO.builder()
+                    .duplicationOrNot(true)
+                    .deletedOrNot(user.getDeleted()).build();
+        }
+        return DuplicationCheckResDTO.builder()
+                .duplicationOrNot(false)
+                .deletedOrNot(null).build();
     }
 
     @Override
@@ -140,6 +146,7 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
+    @Transactional
     public void deleteAccount(String userId) {
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
@@ -151,6 +158,7 @@ public class SignServiceImpl implements SignService {
         LocalDateTime deletedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
+        userRepository.decreaseFriendCountByFriendId(user.getId());
         userRepository.deleteAccount(userId, deletedAt);
     }
 
@@ -159,6 +167,18 @@ public class SignServiceImpl implements SignService {
         log.info(">>> 비밀번호 확인 진입: " + userId);
         String pw = userRepository.getPasswordByUserId(userId);
         return passwordEncoder.matches(password, pw);
+    }
+
+    @Override
+    public String changePasswordByEmail(ChangePasswordReqDTO req) {
+        userRepository.changePasswordByEmail(req.getEmail(), passwordEncoder.encode(req.getPasswordToChange()));
+        return req.getEmail();
+    }
+
+    @Override
+    public void logout(String userId, String fcmToken) {
+        // todo: access token 블랙리스트 등록
+        notificationServiceClient.deleteFcmToken(fcmToken);
     }
 
     @Override

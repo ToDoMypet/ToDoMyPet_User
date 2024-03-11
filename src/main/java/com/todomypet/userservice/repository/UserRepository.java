@@ -7,6 +7,7 @@ import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -23,16 +24,17 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
     Integer getUserCountByEmail(String checkedEmail);
 
-    @Query("MATCH (user:User{personalCode:$personalCode}) RETURN user")
+    @Query("MATCH (user:User{personalCode:$personalCode}) WHERE user.deleted = false RETURN user")
     Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WITH t ORDER BY t.nickname " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.deleted = false WITH t ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserId(String userId);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname CONTAINS $nickname WITH t ORDER BY t.nickname " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname AND t.deleted = true " +
+            "CONTAINS $nickname WITH t ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserIdAndNickname(String userId, String nickname);
 
@@ -42,7 +44,8 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User{id:$userId}) SET user.friendCount = user.friendCount - 1")
     void decreaseFriendCount(String userId);
 
-    @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt")
+    @Query("MATCH (user:User{id:$userId}) SET user.deleted = true, user.deletedAt = $deletedAt, " +
+            "user.nickname = \"비활성 회원\", user.profilePicUrl = \"\"")
     void deleteAccount(String userId, LocalDateTime deletedAt);
 
     @Query("MATCH (user:User{id:$userId}) SET user.achCount = user.achCount + 1")
@@ -63,7 +66,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (user:User{id:$userId}) SET user.attendCount = user.attendCount + 1, " +
             "user.attendContinueCount = $updateData, user.lastAttendAt = $today")
-    void updateAttendanceCount(String userId, int updateData, String today);
+    void updateAttendanceCount(String userId, int updateData, LocalDate today);
     @Query("MATCH (u:User{id:$userId}) SET u.collectionCount = u.collectionCount + 1")
     void increaseCollectionCount(String userId);
 
@@ -95,5 +98,23 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     int getTodoClearCountByUserId(String userId);
 
     @Query("MATCH (n:User{id:$userId}) RETURN n.petCompleteCount")
-    int getIncreasePetCompleteCountByUserId(String userId);
+    int getPetCompleteCountByUserId(String userId);
+
+    @Query("MATCH (n:User{id:$userId}) RETURN n.petEvolveCount")
+    int getPetEvolveCountByUserId(String userId);
+
+    @Query("MATCH (u:User{id:$userId}) DETACH DELETE u")
+    void deleteByUserId(String userId);
+
+    @Query("MATCH (u:User) WHERE u.deleted = true RETURN u")
+    List<User> findByDeletedTrue();
+
+    @Query("MATCH (u:User{id:$deletedUserId})-[:FRIEND]-(target:User) SET target.friendCount = target.friendCount - 1")
+    void decreaseFriendCountByFriendId(String deletedUserId);
+
+    @Query("MATCH (u:User{email:$email}) SET u.password = $encodedPassword")
+    void changePasswordByEmail(String email, String encodedPassword);
+
+    @Query("MATCH (u:User)-[:HAVE]->(:Category)-[:INCLUDE]->(:Todo{id:$todoId}) RETURN u")
+    User getUserIdByTodoId(String todoId);
 }
