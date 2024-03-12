@@ -117,4 +117,8 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User)-[:HAVE]->(:Category)-[:INCLUDE]->(:Todo{id:$todoId}) RETURN u")
     User getUserIdByTodoId(String todoId);
+
+    @Query("MATCH (u:User{id:$userId}) WITH u MATCH (p:Pet) " +
+            "WHERE p.petCondition = u.achCount AND p.petGrade = \"BABY\" CREATE (u)-[:AVAILABLE]->(p)")
+    void createAvailableByAchieveCondition(String userId);
 }

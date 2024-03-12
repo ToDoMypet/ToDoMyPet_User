@@ -61,6 +61,7 @@ public class AchievementServiceImpl implements AchievementService {
         };
 
         userRepository.increaseAchieveCount(userId);
+        userRepository.createAvailableByAchieveCondition(userId);
 
         try {
             notificationServiceClient.sendNotificationByAction(userId,

@@ -22,9 +22,9 @@ public class AchievementController {
 
     @Operation(summary = "업적 달성", description = "업적을 달성합니다.")
     @PostMapping("")
-    public SuccessResDTO<Void> achieve(@Parameter(hidden = true) @RequestHeader String userId, @RequestBody AchieveReqDTO achieveReqDTO) {
+    public SuccessResDTO<String> achieve(@Parameter(hidden = true) @RequestHeader String userId, @RequestBody AchieveReqDTO achieveReqDTO) {
         achievementService.achieve(userId, achieveReqDTO);
-        return new SuccessResDTO<Void>(null);
+        return new SuccessResDTO<String>(userId);
     }
 
     @Operation(summary = "업적 리스트", description = "마이페이지의 업적 리스트를 불러옵니다.")
