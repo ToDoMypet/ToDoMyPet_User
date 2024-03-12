@@ -60,9 +60,6 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
         int updateData = 1;
-        System.out.println(LocalDate.now());
-        System.out.println(user.getLastAttendAt());
-        System.out.println(Period.between(LocalDate.now(), user.getLastAttendAt()).getDays());
 
         if ((Period.between(LocalDate.now(), user.getLastAttendAt())).getDays() == -1) {
             updateData = user.getAttendContinueCount() + 1;
