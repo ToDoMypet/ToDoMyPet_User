@@ -2,19 +2,17 @@ package com.todomypet.userservice.controller;
 
 import com.todomypet.userservice.dto.*;
 import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
+import com.todomypet.userservice.dto.user.LogOutReqDTO;
 import com.todomypet.userservice.service.RefreshTokenService;
 import com.todomypet.userservice.service.SignService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -83,8 +81,8 @@ public class SignController {
 
     @Operation(summary = "로그아웃", description = "기기 fcm 토큰 정보를 삭제하고 access token을 블랙리스트에 추가합니다.")
     @DeleteMapping("/logout")
-    public SuccessResDTO<Void> logout(@RequestHeader String userId, @RequestHeader String fcmToken) {
-        signService.logout(userId, fcmToken);
+    public SuccessResDTO<Void> logout(@RequestHeader String userId, @RequestBody LogOutReqDTO req) {
+        signService.logout(userId, req.getFcmToken());
         return new SuccessResDTO<>(null);
     }
 }
