@@ -68,7 +68,7 @@ public class AchievementServiceImpl implements AchievementService {
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt);
-        
+
         return userId;
     }
 
@@ -103,7 +103,7 @@ public class AchievementServiceImpl implements AchievementService {
                     getAchievementListResDTO.setGraduation(getAchievementResList);
                 }
                 case 4 -> {
-                    getAchievementListResDTO.setAcquirement(getAchievementResList);
+                    getAchievementListResDTO.setContinueAttendance(getAchievementResList);
                 }
             }
         }

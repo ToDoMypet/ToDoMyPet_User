@@ -12,5 +12,5 @@ public class GetAchievementListResDTO {
     private List<GetAchievementResDTO> achievement;
     private List<GetAchievementResDTO> evolution;
     private List<GetAchievementResDTO> graduation;
-    private List<GetAchievementResDTO> acquirement;
+    private List<GetAchievementResDTO> continueAttendance;
 }

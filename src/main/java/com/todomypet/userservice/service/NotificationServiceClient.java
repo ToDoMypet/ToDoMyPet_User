@@ -13,6 +13,6 @@ public interface NotificationServiceClient {
     FeignClientResDTO<Void> sendNotificationByAction(@RequestHeader String userId,
                                                  SendNotificationByActionReqDTO sendNotificationByActionReqDTO);
 
-    @DeleteMapping(value = "/delete-fcm-token", consumes = "application/json")
+    @DeleteMapping(value = "/delete-fcm-token")
     FeignClientResDTO<Void> deleteFcmToken(String fcmToken);
 }
