@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "notification-server", url = "${feign.notification.url}")
 public interface NotificationServiceClient {
     @PostMapping(value = "/send/by-action", consumes = "application/json")
-    FeignClientResDTO<Void> sendNotificationByAction(@RequestHeader String userId,
+    FeignClientResDTO<String> sendNotificationByAction(@RequestHeader String userId,
                                                  SendNotificationByActionReqDTO sendNotificationByActionReqDTO);
 
     @DeleteMapping(value = "/delete-fcm-token")

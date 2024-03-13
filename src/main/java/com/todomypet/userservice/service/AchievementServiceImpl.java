@@ -54,8 +54,17 @@ public class AchievementServiceImpl implements AchievementService {
     public String achieve(String userId, AchieveReqDTO achieveReqDTO) {
         achievementRepository.getAchievementById(achieveReqDTO.getAchievementId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
+
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+
+        achieveRepository.createAchieveBetweenUserAndAchievement(userId,
+                achieveReqDTO.getAchievementId(), achievedAt);
+
+        String response = notificationServiceClient.sendNotificationByAction(userId,
+                SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build()).getData();
+
+        log.info(">>> 서버간 통신 후 response 수신: " + response);
 
         if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId())) {
             throw new CustomException(ErrorCode.ALREADY_ACHIEVE);
@@ -64,8 +73,6 @@ public class AchievementServiceImpl implements AchievementService {
         userRepository.increaseAchieveCount(userId);
         userRepository.createAvailableByAchieveCondition(userId);
 
-        achieveRepository.createAchieveBetweenUserAndAchievement(userId,
-                achieveReqDTO.getAchievementId(), achievedAt);
 
         return userId;
     }
