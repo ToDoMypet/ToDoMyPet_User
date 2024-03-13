@@ -66,7 +66,7 @@ public class AchievementServiceImpl implements AchievementService {
 
         log.info(">>> 서버간 통신 후 response 수신: " + response);
 
-        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId())) {
+        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId()) != null) {
             throw new CustomException(ErrorCode.ALREADY_ACHIEVE);
         };
 
@@ -88,7 +88,7 @@ public class AchievementServiceImpl implements AchievementService {
             for (int j = 0; j < achievementList.size(); j++) {
                 GetAchievementResDTO getAchievementResDTO = GetAchievementResDTO.builder()
                         .achieved(achieveRepository.existsAchieveBetweenUserAndAchievement(userId,
-                                achievementList.get(j).getId()))
+                                achievementList.get(j).getId()) != null)
                         .id(achievementList.get(j).getId())
                         .achName(achievementList.get(j).getAchName())
                         .build();
@@ -120,7 +120,7 @@ public class AchievementServiceImpl implements AchievementService {
     public GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId) {
         Achievement achievement = achievementRepository.getAchievementById(achievementId)
                 .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
-        if (!achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievementId)) {
+        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievementId) == null) {
             throw new CustomException(ErrorCode.DID_NOT_ACHIEVED_ACHIEVEMENT);
         };
         Achieve achieve = achieveRepository.findByUserIdAndAchievementId(userId, achievementId);
