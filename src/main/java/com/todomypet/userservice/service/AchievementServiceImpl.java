@@ -4,6 +4,7 @@ import com.todomypet.userservice.domain.node.Achievement;
 import com.todomypet.userservice.domain.node.AchievementType;
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.domain.relationship.Achieve;
+import com.todomypet.userservice.dto.FeignClientResDTO;
 import com.todomypet.userservice.dto.achievement.*;
 import com.todomypet.userservice.dto.openFeign.NotificationType;
 import com.todomypet.userservice.dto.openFeign.SendNotificationByActionReqDTO;
@@ -63,8 +64,9 @@ public class AchievementServiceImpl implements AchievementService {
         userRepository.increaseAchieveCount(userId);
         userRepository.createAvailableByAchieveCondition(userId);
 
-        notificationServiceClient.sendNotificationByAction(userId,
+        FeignClientResDTO<Void> response = notificationServiceClient.sendNotificationByAction(userId,
                 SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
+        log.info(">>> 알림 전송 후 response 수신");
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt);
