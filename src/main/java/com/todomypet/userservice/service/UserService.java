@@ -17,7 +17,7 @@ public interface UserService {
 
     GetMainPageResDTO getMainPage(String userId);
 
-    void increaseCollectionCountByUserId(String userId);
+    int increaseCollectionCountByUserId(String userId);
 
     int increaseTodoClearCountByUserId(String userId);
 

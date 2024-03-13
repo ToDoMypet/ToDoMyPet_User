@@ -116,8 +116,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void increaseCollectionCountByUserId(String userId) {
+    public int increaseCollectionCountByUserId(String userId) {
         userRepository.increaseCollectionCount(userId);
+        return userRepository.getCollectionCount(userId);
     }
 
     @Override

@@ -63,12 +63,8 @@ public class AchievementServiceImpl implements AchievementService {
         userRepository.increaseAchieveCount(userId);
         userRepository.createAvailableByAchieveCondition(userId);
 
-        try {
-            notificationServiceClient.sendNotificationByAction(userId,
-                    SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
-        } catch (Exception e) {
-            log.error("푸시 알림 전송 실패");
-        }
+        notificationServiceClient.sendNotificationByAction(userId,
+                SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt);

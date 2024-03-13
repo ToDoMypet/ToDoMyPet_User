@@ -69,9 +69,9 @@ public class UserController {
     }
     @Hidden
     @PutMapping("/increase-collection-count")
-    public SuccessResDTO<String> increaseCollectionCount(@RequestHeader String userId) {
-        userService.increaseCollectionCountByUserId(userId);
-        return new SuccessResDTO<>(userId);
+    public SuccessResDTO<Integer> increaseCollectionCount(@RequestHeader String userId) {
+        int collectionCount = userService.increaseCollectionCountByUserId(userId);
+        return new SuccessResDTO<Integer>(collectionCount);
     }
 
     @Hidden

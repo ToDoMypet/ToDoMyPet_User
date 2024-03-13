@@ -121,4 +121,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (u:User{id:$userId}) WITH u MATCH (p:Pet) " +
             "WHERE p.petCondition = u.achCount AND p.petGrade = \"BABY\" CREATE (u)-[:AVAILABLE]->(p)")
     void createAvailableByAchieveCondition(String userId);
+
+    @Query("MATCH (u:User{id:$userId}) RETURN u.collectionCount")
+    int getCollectionCount(String userId);
 }
