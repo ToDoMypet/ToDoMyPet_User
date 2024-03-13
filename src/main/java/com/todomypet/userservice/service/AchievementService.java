@@ -4,7 +4,7 @@ import com.todomypet.userservice.dto.achievement.*;
 
 public interface AchievementService {
     void addAchievement(AddAchievementReqDTOList addAchievementReqDTOList);
-    void achieve(String userId, AchieveReqDTO achieveReqDTO);
+    String achieve(String userId, AchieveReqDTO achieveReqDTO);
     GetAchievementListResDTO getAchievementList(String userId);
     GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId);
 

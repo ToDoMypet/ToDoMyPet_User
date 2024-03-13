@@ -50,7 +50,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Transactional
     @Override
-    public void achieve(String userId, AchieveReqDTO achieveReqDTO) {
+    public String achieve(String userId, AchieveReqDTO achieveReqDTO) {
         achievementRepository.getAchievementById(achieveReqDTO.getAchievementId())
                 .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
@@ -68,6 +68,8 @@ public class AchievementServiceImpl implements AchievementService {
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
                 achieveReqDTO.getAchievementId(), achievedAt);
+        
+        return userId;
     }
 
     @Override
