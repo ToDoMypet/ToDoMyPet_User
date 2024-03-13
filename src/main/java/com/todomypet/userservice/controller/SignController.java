@@ -82,7 +82,7 @@ public class SignController {
     @Operation(summary = "로그아웃", description = "기기 fcm 토큰 정보를 삭제하고 access token을 블랙리스트에 추가합니다.")
     @DeleteMapping("/log-out")
     public SuccessResDTO<Void> logout(@RequestHeader String userId, @RequestBody LogOutReqDTO req) {
-        signService.logout(userId, req.getFcmToken());
+        signService.logout(userId, req);
         return new SuccessResDTO<>(null);
     }
 }

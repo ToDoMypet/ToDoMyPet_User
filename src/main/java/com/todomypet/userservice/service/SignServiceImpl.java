@@ -8,6 +8,7 @@ import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.dto.openFeign.AddCategoryResDTO;
 import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
+import com.todomypet.userservice.dto.user.LogOutReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -176,9 +177,9 @@ public class SignServiceImpl implements SignService {
     }
 
     @Override
-    public void logout(String userId, String fcmToken) {
+    public void logout(String userId, LogOutReqDTO req) {
         // todo: access token 블랙리스트 등록
-        notificationServiceClient.deleteFcmToken(fcmToken);
+        notificationServiceClient.deleteFcmToken(req);
     }
 
     @Override

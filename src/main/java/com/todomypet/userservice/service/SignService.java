@@ -5,6 +5,7 @@ import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.dto.TokenResponseDTO;
 import com.todomypet.userservice.dto.user.ChangePasswordReqDTO;
+import com.todomypet.userservice.dto.user.LogOutReqDTO;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,5 +26,5 @@ public interface SignService extends UserDetailsService {
 
     String changePasswordByEmail(ChangePasswordReqDTO req);
 
-    void logout(String userId, String fcmToken);
+    void logout(String userId, LogOutReqDTO req);
 }
