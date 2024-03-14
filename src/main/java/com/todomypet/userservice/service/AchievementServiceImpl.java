@@ -52,27 +52,28 @@ public class AchievementServiceImpl implements AchievementService {
     @Transactional
     @Override
     public String achieve(String userId, AchieveReqDTO achieveReqDTO) {
-        achievementRepository.getAchievementById(achieveReqDTO.getAchievementId())
-                .orElseThrow(() -> new CustomException(ErrorCode.ACHIEVEMENT_NOT_EXISTS));
+        Achievement ach = achievementRepository.isSatisfyAchievementCondition(achieveReqDTO.getType(), achieveReqDTO.getCondition());
+        if (ach == null) {
+            return null;
+        }
+
+        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, ach.getId()) != null) {
+            return null;
+        };
 
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
 
         achieveRepository.createAchieveBetweenUserAndAchievement(userId,
-                achieveReqDTO.getAchievementId(), achievedAt);
+                ach.getId(), achievedAt);
 
         String response = notificationServiceClient.sendNotificationByAction(userId,
                 SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build()).getData();
 
         log.info(">>> 서버간 통신 후 response 수신: " + response);
 
-        if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achieveReqDTO.getAchievementId()) != null) {
-            throw new CustomException(ErrorCode.ALREADY_ACHIEVE);
-        };
-
         userRepository.increaseAchieveCount(userId);
         userRepository.createAvailableByAchieveCondition(userId);
-
 
         return userId;
     }
