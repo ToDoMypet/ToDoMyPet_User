@@ -81,15 +81,15 @@ public class UserController {
         return new SuccessResDTO<Integer>(todoClearCount);
     }
 
-    @Hidden
-    @PutMapping("/increase-and-get-pet-evolve-count")
+    @Operation(description = "진화 카운트 조회")
+    @GetMapping("/increase-and-get-pet-evolve-count")
     public SuccessResDTO<Integer> increasePetEvolveCount(@RequestHeader String userId) {
         int petEvolveCount = userService.increaseAndGetPetEvolveCountByUserId(userId);
         return new SuccessResDTO<Integer>(petEvolveCount);
     }
 
-    @Hidden
-    @PutMapping("/increase-and-get-pet-complete-count")
+    @Operation(description = "졸업 카운트 조회")
+    @GetMapping("/increase-and-get-pet-complete-count")
     public SuccessResDTO<Integer> increasePetCompleteCount(@RequestHeader String userId) {
         int petCompleteCount = userService.increaseAndGetPetCompleteCountByUserId(userId);
         return new SuccessResDTO<Integer>(petCompleteCount);
