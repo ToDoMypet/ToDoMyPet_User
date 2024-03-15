@@ -73,6 +73,7 @@ public class AchievementServiceImpl implements AchievementService {
         log.info(">>> 서버간 통신 후 response 수신: " + response);
 
         userRepository.increaseAchieveCount(userId);
+
         userRepository.createAvailableByAchieveCondition(userId);
 
         return userId;

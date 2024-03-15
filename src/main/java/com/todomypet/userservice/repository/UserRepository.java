@@ -18,7 +18,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.id = $userId RETURN user")
     Optional<User> getOneUserById(String userId);
 
-    @Query("MATCH (user:User) WHERE user.email = $email RETURN user")
+    @Query("MATCH (user:User) WHERE user.email = $email AND user.deleted = false RETURN user")
     Optional<User> getOneUserByEmail(String email);
 
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
