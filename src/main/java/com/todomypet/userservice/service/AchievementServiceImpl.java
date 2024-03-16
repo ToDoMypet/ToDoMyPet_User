@@ -145,9 +145,13 @@ public class AchievementServiceImpl implements AchievementService {
     }
 
     @Override
+    @Transactional
     public void achieveTodoAchievement(String userId) {
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-        achieveRepository.achieveTodoAchievement(userId, achievedAt);
+        achieveRepository.achieveTodoAchievement(userId, AchievementType.ACHIEVE, achievedAt);
+        userRepository.increaseAchieveCount(userId);
+        String response = notificationServiceClient.sendNotificationByAction(userId, SendNotificationByActionReqDTO.builder()
+                .userId(userId).type(NotificationType.ACHIEVE).build()).getData();
     }
 }
