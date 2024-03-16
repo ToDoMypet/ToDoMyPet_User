@@ -12,7 +12,7 @@ public interface PetServiceClient {
     @GetMapping(value = "/get-main-pet-infos", consumes = "application/json")
     FeignClientResDTO<GetMainPetInfosResDTO> getMainPetInfosByUserId(@RequestHeader String userId);
 
-    @PutMapping(value = "/update-exp", consumes = "application/json")
+    @PutMapping(value = "/update-exp", consumes = "application/json", produces = "application/json")
     FeignClientResDTO<UpdateExperiencePointResDTO> updateExperiencePoint(@RequestHeader String userId,
                                                                          @RequestBody UpdateExperiencePointReqDTO req);
 }
