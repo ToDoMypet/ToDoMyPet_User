@@ -27,7 +27,7 @@ public interface AchieveRepository extends Neo4jRepository<Achieve, Long> {
             "RETURN ach{.achievedAt}")
     Achieve findByUserIdAndAchievementId(String userId, String achievementId);
 
-    @Query("MATCH (u:User{id:$userId}) WITH u MATCH (a:ACHIEVEMENT) " +
+    @Query("MATCH (u:User{id:$userId}) WITH u MATCH (a:Achievement) " +
             "WHERE a.achType = $type AND a.achCondition = u.todoClearCount " +
             "CREATE (u)-[:ACHIEVE{achievedAt: $achievedAt}]->(a)")
     void achieveTodoAchievement(String userId, AchievementType type, LocalDateTime achievedAt);
