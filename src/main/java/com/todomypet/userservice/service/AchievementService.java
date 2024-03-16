@@ -10,5 +10,5 @@ public interface AchievementService {
 
     CheckAchieveOrNotResDTO checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req);
 
-    void achieveTodoAchievement(String userId);
+    boolean achieveTodoAchievement(String userId);
 }
