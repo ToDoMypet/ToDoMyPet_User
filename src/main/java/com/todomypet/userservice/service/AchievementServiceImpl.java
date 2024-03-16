@@ -143,4 +143,11 @@ public class AchievementServiceImpl implements AchievementService {
         };
         return CheckAchieveOrNotResDTO.builder().achieveOrNot(false).achievementId(null).build();
     }
+
+    @Override
+    public void achieveTodoAchievement(String userId) {
+        LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
+        achieveRepository.achieveTodoAchievement(userId, achievedAt);
+    }
 }

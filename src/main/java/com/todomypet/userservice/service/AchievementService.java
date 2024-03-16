@@ -9,4 +9,6 @@ public interface AchievementService {
     GetAchievementDetailResDTO getAchievementDetail(String userId, String achievementId);
 
     CheckAchieveOrNotResDTO checkAchievementCondition(String userId, CheckAchieveOrNotReqDTO req);
+
+    void achieveTodoAchievement(String userId);
 }

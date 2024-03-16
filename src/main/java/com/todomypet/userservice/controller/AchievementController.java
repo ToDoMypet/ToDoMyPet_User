@@ -27,6 +27,13 @@ public class AchievementController {
         return new SuccessResDTO<String>(response);
     }
 
+    @Operation(summary = "투두 업적 달성", description = "ACHIEVE 타입의 업적을 달성합니다.")
+    @PostMapping("/todo")
+    public SuccessResDTO<Void> achieveTodoAchievement(@RequestHeader String userId) {
+        achievementService.achieveTodoAchievement(userId);
+        return new SuccessResDTO<Void>(null);
+    }
+
     @Operation(summary = "업적 리스트", description = "마이페이지의 업적 리스트를 불러옵니다.")
     @GetMapping("")
     public SuccessResDTO<GetAchievementListResDTO> getAchievementList(@Parameter(hidden = true) @RequestHeader String userId) {
