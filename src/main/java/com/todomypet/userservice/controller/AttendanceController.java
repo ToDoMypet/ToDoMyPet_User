@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -29,10 +30,17 @@ public class AttendanceController {
         return new SuccessResDTO<GetAttendInfoReqDTO>(response);
     }
 
-    @Operation(summary = "출석 카운트 갱신", description = "출석 카운트를 갱신합니다.")
-    @PutMapping("")
+    @Operation(summary = "출석 카운트 갱신", description = "출석 카운트를 갱신합니다. 경험치를 10 획득합니다.")
+    @PutMapping("/update-count")
     SuccessResDTO<Void> updateAttendanceCount(@RequestHeader String userId) {
         attendanceService.updateAttendanceCount(userId);
+        return new SuccessResDTO<>(null);
+    }
+
+    @Operation(summary = "연속 출석 카운트 갱신", description = "연속 출석 카운트를 갱신합니다.")
+    @PutMapping("/update-continue-count")
+    SuccessResDTO<Void> updateAttendContinueCount(@RequestHeader String userId) {
+        attendanceService.updateAttendContinueCount(userId);
         return new SuccessResDTO<>(null);
     }
 

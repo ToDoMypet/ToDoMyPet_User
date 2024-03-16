@@ -53,9 +53,8 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     @Transactional
-    public void updateAttendanceCount(String userId) {
-        log.info(">>> 출석 일수 갱신 진입: " + userId);
-
+    public void updateAttendContinueCount(String userId) {
+        log.info(">>> 연속 출석 일수 갱신 진입: " + userId);
         User user = userRepository.getOneUserById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
@@ -65,6 +64,21 @@ public class AttendanceServiceImpl implements AttendanceService {
             updateData = user.getAttendContinueCount() + 1;
             log.info(">>> 연속 출석 처리: " + userId + " " + updateData);
         }
+
+        userRepository.updateAttendanceContinueCount(userId, updateData);
+
+        Achievement attendanceContinueAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
+        processAchievement(attendanceContinueAchievement, user, userId);
+    }
+
+    @Override
+    @Transactional
+    public void updateAttendanceCount(String userId) {
+        log.info(">>> 출석 일수 갱신 진입: " + userId);
+
+        User user = userRepository.getOneUserById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_EXISTS));
 
         log.info(">>> 메인 펫 조회: " + userId);
         String petSeq = petServiceClient.getMainPetInfosByUserId(userId).getData().getPetSeq();
@@ -76,15 +90,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         petServiceClient.updateExperiencePoint(userId, reqDTO);
 
-        userRepository.updateAttendanceCount(userId, updateData, LocalDate.now());
+        userRepository.updateAttendanceCount(userId, LocalDate.now());
 
         Achievement attendacneAchievement = achievementRepository
                 .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
         processAchievement(attendacneAchievement, user, userId);
-
-        Achievement attendanceContinueAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
-        processAchievement(attendanceContinueAchievement, user, userId);
     }
 
     private void processAchievement(Achievement achievement, User user, String userId) {
@@ -92,6 +102,7 @@ public class AttendanceServiceImpl implements AttendanceService {
             achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
                     LocalDateTime.now());
             userRepository.increaseAchieveCount(userId);
+            userRepository.createAvailableByAchieveCondition(userId);
             try {
                 notificationServiceClient.sendNotificationByAction(userId,
                         SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
