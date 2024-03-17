@@ -155,8 +155,10 @@ public class AchievementServiceImpl implements AchievementService {
                 user.getTodoClearCount());
         boolean achieveOrNot = achievement != null;
         if (achieveOrNot) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(userId, achievement.getId(), achievedAt);
-            userRepository.increaseAchieveCount(userId);
+            if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievement.getId()) != null) {
+                achieveRepository.createAchieveBetweenUserAndAchievement(userId, achievement.getId(), achievedAt);
+                userRepository.increaseAchieveCount(userId);
+            }
         }
 
         String response = notificationServiceClient.sendNotificationByAction(userId, SendNotificationByActionReqDTO.builder()
