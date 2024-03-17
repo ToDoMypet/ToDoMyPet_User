@@ -90,10 +90,12 @@ public class AttendanceServiceImpl implements AttendanceService {
 
         petServiceClient.updateExperiencePoint(userId, reqDTO);
 
+        int attendCount = user.getAttendCount();
+
         userRepository.updateAttendanceCount(userId, LocalDate.now());
 
         Achievement attendacneAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, user.getAttendCount());
+                .isSatisfyAchievementCondition(AchievementType.ATTENDANCE, attendCount + 1);
         processAchievement(attendacneAchievement, user, userId);
     }
 
