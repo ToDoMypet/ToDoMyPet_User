@@ -147,12 +147,13 @@ public class AchievementServiceImpl implements AchievementService {
     @Override
     @Transactional
     public boolean achieveTodoAchievement(String userId) {
+        User user = userRepository.getOneUserById(userId).orElseThrow();
+        int todoClearCount = user.getTodoClearCount();
         userRepository.increaseTodoClearCount(userId);
         LocalDateTime achievedAt = LocalDateTime.parse(LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
-        User user = userRepository.getOneUserById(userId).orElseThrow();
         Achievement achievement = achievementRepository.isSatisfyAchievementCondition(AchievementType.ACHIEVE,
-                user.getTodoClearCount());
+                todoClearCount + 1);
         boolean achieveOrNot = achievement != null;
         if (achieveOrNot) {
             if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievement.getId()) != null) {
