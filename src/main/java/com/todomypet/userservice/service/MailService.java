@@ -99,7 +99,10 @@ public class MailService {
                                             margin-bottom: 10%;
                                         "
                                     >
-                                        <h2>Bwq455</h2>
+                                        <h2>""" ;
+                htmlContent += eCode;
+                htmlContent += """
+                                    </h2>
                                     </div>
                                 
                                     <div
