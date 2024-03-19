@@ -6,6 +6,7 @@ import jakarta.mail.Message;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -16,6 +17,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MailService {
 
     private final JavaMailSender javaMailSender;
@@ -139,17 +141,18 @@ public class MailService {
                 </html>
                 """;
 
-        // HTML 내용 및 포맷 설정
         helper.setText(htmlContent, true);
 
-        // 보내는 사람 설정
         helper.setFrom(new InternetAddress("todomypet@gmail.com", "To-do My Pet"));
         try {
             javaMailSender.send(message);
         } catch (MailException e) {
-            e.printStackTrace();
+            log.error(">>> 메일 송신 실패: " + to);
             throw new CustomException(ErrorCode.MAIL_SEND_FAIL);
         }
+
+        log.info(">>> 메일 송신 성공: " + to);
+
 
         return eCode;
     }
