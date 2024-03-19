@@ -146,7 +146,7 @@ public class MailService {
         helper.setFrom(new InternetAddress("todomypet@gmail.com", "To-do My Pet"));
         try {
             javaMailSender.send(message);
-        } catch (MailException e) {
+        } catch (Exception e) {
             log.error(">>> 메일 송신 실패: " + to);
             throw new CustomException(ErrorCode.MAIL_SEND_FAIL);
         }
