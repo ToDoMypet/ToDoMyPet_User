@@ -8,6 +8,7 @@ import com.todomypet.userservice.dto.openFeign.SendNotificationByActionReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.exception.ErrorCode;
 import com.todomypet.userservice.mapper.UserMapper;
+import com.todomypet.userservice.repository.BlockRepository;
 import com.todomypet.userservice.repository.FriendRepository;
 import com.todomypet.userservice.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -27,6 +28,7 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final NotificationServiceClient notificationServiceClient;
+    private final BlockRepository blockRepository;
 
     @Override
     @Transactional

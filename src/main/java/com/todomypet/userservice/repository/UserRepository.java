@@ -24,7 +24,9 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (user:User) WHERE user.email = $checkedEmail RETURN count(user)")
     Integer getUserCountByEmail(String checkedEmail);
 
-    @Query("MATCH (user:User{personalCode:$personalCode}) WHERE user.deleted = false RETURN user")
+    @Query("MATCH (user:User{personalCode:$personalCode}) " +
+            "WHERE user.deleted = false AND  " +
+            "RETURN user")
     Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
@@ -93,9 +95,6 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     @Query("MATCH (n:User) RETURN n")
     List<User> getAllUsers();
 
-    @Query("MATCH (n:User{id:$userId}) RETURN n.achieveCount")
-    int getAchieveCountByUserId(String userId);
-
     @Query("MATCH (n:User{id:$userId}) SET n.todoClearCount = n.todoClearCount + 1")
     void increaseTodoClearCount(String userId);
 
@@ -107,9 +106,6 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (n:User{id:$userId}) RETURN n.petEvolveCount")
     int getPetEvolveCountByUserId(String userId);
-
-    @Query("MATCH (u:User{id:$userId}) DETACH DELETE u")
-    void deleteByUserId(String userId);
 
     @Query("MATCH (u:User) WHERE u.deleted = true RETURN u")
     List<User> findByDeletedTrue();
@@ -129,4 +125,9 @@ public interface UserRepository extends Neo4jRepository<User, String> {
 
     @Query("MATCH (u:User{id:$userId}) RETURN u.collectionCount")
     int getCollectionCount(String userId);
+
+    @Query("MATCH (user:User{id:$userId}) WITH user " +
+            "MATCH (user)-[:BLOCK]->(t:User) AND t.deleted = true " +
+            "RETURN collect(t)")
+    List<User> getBlockListByUserId(String userId);
 }

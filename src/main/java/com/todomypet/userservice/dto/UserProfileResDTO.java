@@ -17,4 +17,6 @@ public class UserProfileResDTO {
     private int friendCount;
     private boolean protect;
     private boolean friendRelationship;
+    private boolean blockOrNot;
+    private boolean existsBlockRelationshipOrNot;
 }

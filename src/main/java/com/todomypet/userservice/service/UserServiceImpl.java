@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private final S3Uploader s3Uploader;
     private final PetServiceClient petServiceClient;
     private final BackgroundRepository backgroundRepository;
+    private final BlockRepository blockRepository;
 
     @Override
     public MyPageResDTO getMyPage(String userId) {
@@ -46,6 +47,9 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return null;
         } else {
+            if (blockRepository.existsBlockByUserAndUser(userId, user.getId())) {
+                return null;
+            }
             UserInfoResDTO response = userMapper.userToUserInfoResDTO(user);
             response.setFriendOrNot(friendRepository.existsFriendByUserAndUser(userId, user.getId()));
             return response;
@@ -58,6 +62,8 @@ public class UserServiceImpl implements UserService {
                 -> new CustomException(ErrorCode.USER_NOT_EXISTS));
         UserProfileResDTO userProfileResDTO = userMapper.userToUserProfileResDTO(user);
         userProfileResDTO.setFriendRelationship(friendRepository.existsFriendByUserAndUser(userId, targetId));
+        userProfileResDTO.setBlockOrNot(blockRepository.getBlockOrNot(userId, targetId));
+        userProfileResDTO.setExistsBlockRelationshipOrNot(blockRepository.existsBlockByUserAndUser(userId, targetId));
         return userProfileResDTO;
     }
 

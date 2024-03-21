@@ -11,4 +11,4 @@ public interface FriendService {
 
     List<UserInfoResDTO> getFriendsList(String userId);
     List<UserInfoResDTO> searchFriendsByNickname(String userId, String nickname);
- }
+}
