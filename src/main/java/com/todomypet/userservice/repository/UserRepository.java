@@ -35,7 +35,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     List<User> getFriendListByUserId(String userId);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname AND t.deleted = true " +
+            "MATCH (user)-[:FRIEND]-(t:User) WHERE t.nickname AND t.deleted = false " +
             "CONTAINS $nickname WITH t ORDER BY t.nickname " +
             "RETURN collect(t)")
     List<User> getFriendListByUserIdAndNickname(String userId, String nickname);
@@ -127,7 +127,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     int getCollectionCount(String userId);
 
     @Query("MATCH (user:User{id:$userId}) WITH user " +
-            "MATCH (user)-[:BLOCK]->(t:User) AND t.deleted = true " +
+            "MATCH (user)-[:BLOCK]->(t:User) WHERE t.deleted = false " +
             "RETURN collect(t)")
     List<User> getBlockListByUserId(String userId);
 }
