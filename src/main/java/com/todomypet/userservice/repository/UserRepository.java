@@ -25,7 +25,7 @@ public interface UserRepository extends Neo4jRepository<User, String> {
     Integer getUserCountByEmail(String checkedEmail);
 
     @Query("MATCH (user:User{personalCode:$personalCode}) " +
-            "WHERE user.deleted = false AND  " +
+            "WHERE user.deleted = false " +
             "RETURN user")
     Optional<User> getOneUserByPersonalCode(@Param("personalCode") String personalCode);
 
