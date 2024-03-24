@@ -154,13 +154,16 @@ public class AchievementServiceImpl implements AchievementService {
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")));
         Achievement achievement = achievementRepository.isSatisfyAchievementCondition(AchievementType.ACHIEVE,
                 todoClearCount + 1);
-        boolean achieveOrNot = achievement != null;
+
+        boolean achieveOrNot = achievement != null &&
+                achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievement.getId()) == null;
+
         if (achieveOrNot) {
             achieveRepository.createAchieveBetweenUserAndAchievement(userId, achievement.getId(), achievedAt);
             userRepository.increaseAchieveCount(userId);
             String response = notificationServiceClient.sendNotificationByAction(userId, SendNotificationByActionReqDTO.builder()
                     .userId(userId).type(NotificationType.ACHIEVE).build()).getData();
-        }
+        };
 
         return achieveOrNot;
     }
