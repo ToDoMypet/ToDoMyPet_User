@@ -52,7 +52,8 @@ public class AchievementServiceImpl implements AchievementService {
     @Transactional
     @Override
     public String achieve(String userId, AchieveReqDTO achieveReqDTO) {
-        Achievement ach = achievementRepository.isSatisfyAchievementCondition(achieveReqDTO.getType(), achieveReqDTO.getCondition());
+        Achievement ach = achievementRepository.isSatisfyAchievementCondition(achieveReqDTO.getType(),
+                achieveReqDTO.getCondition());
         if (ach == null) {
             return null;
         }

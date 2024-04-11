@@ -101,16 +101,18 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private void processAchievement(Achievement achievement, User user, String userId) {
         if (achievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
-                    LocalDateTime.now());
-            userRepository.increaseAchieveCount(userId);
-            userRepository.createAvailableByAchieveCondition(userId);
-            try {
-                notificationServiceClient.sendNotificationByAction(userId,
-                        SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
-            } catch (Exception e) {
-                log.error("푸시 알림 전송 실패");
-            }
+            if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievement.getId()) != null) {
+                achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+                        LocalDateTime.now());
+                userRepository.increaseAchieveCount(userId);
+                userRepository.createAvailableByAchieveCondition(userId);
+                try {
+                    notificationServiceClient.sendNotificationByAction(userId,
+                            SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
+                } catch (Exception e) {
+                    log.error("푸시 알림 전송 실패");
+                }
+            };
         }
     }
 }
