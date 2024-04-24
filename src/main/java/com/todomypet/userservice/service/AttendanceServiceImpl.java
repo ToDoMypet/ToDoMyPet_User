@@ -65,10 +65,11 @@ public class AttendanceServiceImpl implements AttendanceService {
             log.info(">>> 연속 출석 처리: " + userId + " " + updateData);
         }
 
+        Achievement attendanceContinueAchievement = achievementRepository
+                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, updateData);
+
         userRepository.updateAttendanceContinueCount(userId, updateData);
 
-        Achievement attendanceContinueAchievement = achievementRepository
-                .isSatisfyAchievementCondition(AchievementType.CONTINUE_ATTENDANCE, user.getAttendContinueCount());
         processAchievement(attendanceContinueAchievement, user, userId);
     }
 
@@ -101,15 +102,17 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     private void processAchievement(Achievement achievement, User user, String userId) {
         if (achievement != null) {
-            achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
-                    LocalDateTime.now());
-            userRepository.increaseAchieveCount(userId);
-            userRepository.createAvailableByAchieveCondition(userId);
-            try {
-                notificationServiceClient.sendNotificationByAction(userId,
-                        SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
-            } catch (Exception e) {
-                log.error("푸시 알림 전송 실패");
+            if (achieveRepository.existsAchieveBetweenUserAndAchievement(userId, achievement.getId()) == null) {
+                achieveRepository.createAchieveBetweenUserAndAchievement(user.getId(), achievement.getId(),
+                        LocalDateTime.now());
+                userRepository.increaseAchieveCount(userId);
+                userRepository.createAvailableByAchieveCondition(userId);
+                try {
+                    notificationServiceClient.sendNotificationByAction(userId,
+                            SendNotificationByActionReqDTO.builder().userId(userId).type(NotificationType.ACHIEVE).build());
+                } catch (Exception e) {
+                    log.error("푸시 알림 전송 실패");
+                }
             }
         }
     }
