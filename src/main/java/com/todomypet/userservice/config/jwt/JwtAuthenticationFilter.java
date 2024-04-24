@@ -56,7 +56,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
         log.info("JwtAuthenticationFilter: successfulAuthentication checking");
         String userEmail = ((User)authResult.getPrincipal()).getUsername();
         GetUserDetailsDTO userDetailsDTO = signService.getUserDetailsByEmail(userEmail);
