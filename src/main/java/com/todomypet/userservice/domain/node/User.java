@@ -9,13 +9,13 @@ import org.springframework.security.core.GrantedAuthority;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 @Node("User")
 @Getter
 @Builder
 public class User {
     @Id
-    @GeneratedValue(generatorClass = UUIDStringGenerator.class)
     private String id;
 
     @Property("email")
