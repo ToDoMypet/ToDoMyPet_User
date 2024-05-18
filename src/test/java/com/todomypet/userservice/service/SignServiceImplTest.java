@@ -3,7 +3,9 @@ package com.todomypet.userservice.service;
 import static org.mockito.Mockito.*;
 
 import com.todomypet.userservice.domain.node.User;
+import com.todomypet.userservice.dto.DuplicationCheckResDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
+import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.mapper.UserMapper;
 import com.todomypet.userservice.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +43,7 @@ class SignServiceImplTest {
     }
 
     @Test
-    void 회원가입() {
+    void given_userInfo_when_signUp_then_returnUserId() {
         SignUpReqDTO signUpInfo = new SignUpReqDTO("test@example.com",
                 "password1234!@@",
                 "닉네임",
@@ -82,41 +84,56 @@ class SignServiceImplTest {
     }
 
     @Test
-    void addAdminInfo() {
+    void given_userExistsAndNotDeleted_when_duplicationCheck_then_returnDuplicationIsTrueAndDeletedIsFalse() {
+        String email = "test@example.com";
+        User user = User.builder().deleted(false).build();
+
+        when(userRepositoryMock.getUserCountByEmail(email)).thenReturn(1);
+        when(userRepositoryMock.getOneUserByEmail(email)).thenReturn(Optional.of(user));
+
+        DuplicationCheckResDTO result = signService.duplicationCheck(email);
+
+        assertTrue(result.getDuplicationOrNot());
+        assertFalse(user.getDeleted());
     }
 
     @Test
-    void 중복_회원_체크() {
-        // given
-        // when
-        // then
+    void given_userNotExists_when_duplicationCheck_then_returnDuplicationIsFalseAndDeletedIsNull() {
+        String email = "test@example.com";
+
+        when(userRepositoryMock.getUserCountByEmail(email)).thenReturn(0);
+
+        DuplicationCheckResDTO result = signService.duplicationCheck(email);
+
+        assertFalse(result.getDuplicationOrNot());
+        assertNull(result.getDeletedOrNot());
     }
 
     @Test
-    void sendCheckEmail() {
+    void given_userExistAndDeleted_when_duplicationCheck_then_returnDuplicationIsTrueAndDeleteIsTrue() {
+        String email = "test@example.com";
+        User user = User.builder().deleted(true).build();
+
+        when(userRepositoryMock.getUserCountByEmail(email)).thenReturn(1);
+        when(userRepositoryMock.getOneUserByEmail(email)).thenReturn(Optional.of(user));
+
+        DuplicationCheckResDTO result = signService.duplicationCheck(email);
+
+        assertTrue(result.getDuplicationOrNot());
+        assertTrue(user.getDeleted());
     }
 
     @Test
-    void getUserDetailsByEmail() {
-    }
+    public void givenUserExistsButNotFound_whenDuplicationCheck_thenThrowsException() {
+        String email = "test@example.com";
 
-    @Test
-    void deleteAccount() {
-    }
+        when(userRepositoryMock.getUserCountByEmail(email)).thenReturn(1);
+        when(userRepositoryMock.getOneUserByEmail(email)).thenReturn(Optional.empty());
 
-    @Test
-    void checkPassword() {
-    }
+        CustomException exception = assertThrows(CustomException.class, () -> {
+            signService.duplicationCheck(email);
+        });
 
-    @Test
-    void changePasswordByEmail() {
-    }
-
-    @Test
-    void logout() {
-    }
-
-    @Test
-    void loadUserByUsername() {
+        assertEquals("U002", exception.getErrorCode().getCode());
     }
 }
