@@ -124,7 +124,7 @@ class SignServiceImplTest {
     }
 
     @Test
-    public void givenUserExistsButNotFound_whenDuplicationCheck_thenThrowsException() {
+    public void given_userExistsButNotFound_when_duplicationCheck_then_throwsException() {
         String email = "test@example.com";
 
         when(userRepositoryMock.getUserCountByEmail(email)).thenReturn(1);
@@ -135,5 +135,33 @@ class SignServiceImplTest {
         });
 
         assertEquals("U002", exception.getErrorCode().getCode());
+    }
+
+    @Test
+    public void given_correctUserIdAndPassword_when_checkPassword_then_returnTrue() {
+        String userId = "123abced-1234-1234-1234-1234abcd123";
+        String rawPassword = "password123";
+        String encodedPassword = "$2a$10$DowJ9w8BzOZiWJbO3W8A1e.Cj/U2SDhZpLcyQO7akZle4yE4yyT5y";
+
+        when(userRepositoryMock.getPasswordByUserId(userId)).thenReturn(encodedPassword);
+        when(passwordEncoderMock.matches(rawPassword, encodedPassword)).thenReturn(true);
+
+        boolean result = signService.checkPassword(userId, rawPassword);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void given_incorrectUserIdAndPassword_when_checkPassword_then_returnFalse() {
+        String userId = "123abced-1234-1234-1234-1234abcd123";
+        String rawPassword = "wrongPassword";
+        String encodedPassword = "$2a$10$DowJ9w8BzOZiWJbO3W8A1e.Cj/U2SDhZpLcyQO7akZle4yE4yyT5y";
+
+        when(userRepositoryMock.getPasswordByUserId(userId)).thenReturn(encodedPassword);
+        when(passwordEncoderMock.matches(rawPassword, encodedPassword)).thenReturn(false);
+
+        boolean result = signService.checkPassword(userId, rawPassword);
+
+        assertFalse(result);
     }
 }
