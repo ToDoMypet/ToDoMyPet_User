@@ -18,5 +18,7 @@ http://13.124.74.130:8000/webjars/swagger-ui/index.html?urls.primaryName=user-se
 
 ## DB 설계도
 ![db1](https://todomypet.s3.ap-northeast-2.amazonaws.com/DB+%EA%B5%AC%EC%A1%B0%EB%8F%84+(1).png)   
-![db2](https://todomypet.s3.ap-northeast-2.amazonaws.com/%ED%88%AC%EB%91%90%EB%A7%88%EC%9D%B4%ED%8E%AB+db+%EC%84%A4%EA%B3%84%EB%8F%84-1.png)   
+![db2](https://todomypet.s3.ap-northeast-2.amazonaws.com/db1.png)   
+![db3](https://todomypet.s3.ap-northeast-2.amazonaws.com/db2.png)   
+![db4](https://todomypet.s3.ap-northeast-2.amazonaws.com/db3.png)  
 
