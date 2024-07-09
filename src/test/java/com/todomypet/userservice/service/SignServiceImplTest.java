@@ -4,6 +4,7 @@ import static org.mockito.Mockito.*;
 
 import com.todomypet.userservice.domain.node.User;
 import com.todomypet.userservice.dto.DuplicationCheckResDTO;
+import com.todomypet.userservice.dto.GetUserDetailsDTO;
 import com.todomypet.userservice.dto.SignUpReqDTO;
 import com.todomypet.userservice.exception.CustomException;
 import com.todomypet.userservice.mapper.UserMapper;
@@ -163,5 +164,23 @@ class SignServiceImplTest {
         boolean result = signService.checkPassword(userId, rawPassword);
 
         assertFalse(result);
+    }
+
+    @Test
+    public void given_correctEmail_when_getUserDetailsByEmail_then_getUserDetailsDTO() {
+        // Given
+        String email = "test@example.com";
+        User user = User.builder().email(email).build();
+        GetUserDetailsDTO getUserDetailsDTO = GetUserDetailsDTO.builder().build();
+        when(userRepositoryMock.getOneUserByEmail(email)).thenReturn(Optional.of(user));
+        when(userMapperMock.userToGetUserDetailsDTO(user)).thenReturn(getUserDetailsDTO);
+
+        // When
+        GetUserDetailsDTO result = signService.getUserDetailsByEmail(email);
+
+        // Then
+        assertNotNull(result);
+        verify(userRepositoryMock).getOneUserByEmail(email);
+        verify(userMapperMock).userToGetUserDetailsDTO(user);
     }
 }
